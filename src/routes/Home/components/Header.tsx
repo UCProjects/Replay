@@ -24,7 +24,7 @@ export default function Header(): ReactNode {
         xs="auto"
       >
         <span>
-          Welcome, &nbsp;
+          Welcome,&nbsp;
           <span id="username">Guest</span>
           .
         </span>

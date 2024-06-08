@@ -9,10 +9,12 @@ import './index.css';
 import App from './routes/App';
 import Game, { loader } from './routes/Game';
 import Home from './routes/Home';
+import Error from './routes/Error';
 
 const router = createBrowserRouter([{
   path: '/',
   element: <App />,
+  errorElement: <Error />,
   children: [{
     path: 'game/:id/:step?',
     element: <Game />,
