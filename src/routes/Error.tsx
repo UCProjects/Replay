@@ -5,7 +5,7 @@ export default function Error(): ReactNode {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {
-      const msg = "This game doesn't exist!";
+      const msg = "This page doesn't exist!";
       return <div>{msg}</div>;
     }
   }
