@@ -18,11 +18,8 @@ export default function App(): ReactNode {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container
+        disableGutters
         maxWidth="md"
-        style={{
-          backgroundColor: '#000',
-          padding: 0,
-        }}
       >
         <Outlet />
       </Container>
