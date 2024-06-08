@@ -6,10 +6,11 @@ import {
 import { ReactNode } from 'react';
 
 import Flex from '../../../components/Flex.tsx';
+import { useUser } from '../../../hooks/useUser.ts';
 
 export default function Header(): ReactNode {
-  // TODO: get user and include logout/login based on user
-  // TODO: Handle login/logout
+  const user = useUser();
+  // TODO: Handle buttons
   return (
     <Flex
       container
@@ -25,12 +26,12 @@ export default function Header(): ReactNode {
       >
         <span>
           Welcome,&nbsp;
-          <span id="username">Guest</span>
+          <span id="username">{user?.displayName || 'Guest'}</span>
           .
         </span>
-        <Logout className="authed" />
-        <Settings className="authed hidden" />
-        <Login className="unauthed" />
+        {user && <Logout />}
+        {user && <Settings className="hidden" />}
+        {!user && <Login />}
       </Flex>
     </Flex>
   );
