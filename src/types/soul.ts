@@ -1,12 +1,12 @@
-export enum Soul {
-  'BRAVERY' = 1,
-  'DETERMINATION',
-  'INTEGRITY',
-  'JUSTICE',
-  'KINDNESS',
-  'KINDNESS',
-  'PERSEVERANCE',
-  'MONSTER', // Legacy
-}
+export const SOUL = {
+  Bravery = 'BRAVERY',
+  Determination = 'DETERMINATION',
+  Integrity = 'INTEGRITY',
+  Justice = 'JUSTICE',
+  Kindness = 'KINDNESS',
+  Patience = 'PATIENCE',
+  Perseverance = 'PERSEVERANCE',
+  Monster = 'MONSTER', // Legacy
+} as const;
 
-export default Soul;
+export type Soul = typeof SOUL[keyof typeof SOUL];

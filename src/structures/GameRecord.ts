@@ -1,7 +1,7 @@
 import { FirestoreDataConverter } from 'firebase/firestore';
 
 import {
-  GameMeta,
+  PlayerMeta,
   GameResult,
   GameType,
 } from '../types/game';
@@ -12,7 +12,7 @@ type GameInfo = {
   cards: DocumentKey;
   date: Date;
   id: number;
-  playermeta: GameMeta;
+  playermeta: PlayerMeta;
   results: GameResult;
   start: Date;
   translation: DocumentKey;
@@ -28,7 +28,7 @@ export class GameRecord {
 
   public readonly key: DocumentKey;
 
-  public readonly meta: GameMeta;
+  public readonly meta: PlayerMeta;
 
   public readonly results: GameResult;
 
