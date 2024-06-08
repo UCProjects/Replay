@@ -1,12 +1,12 @@
-import { Unstable_Grid2 as Grid, Grid2Props as GridProps } from '@mui/material';
-// export { Grid2Props as FlexProps } from '@mui/material';
+import { Unstable_Grid2 as Grid, Grid2Props } from '@mui/material';
+import { ReactNode } from 'react';
 
-export type FlexProps = GridProps;
+export type FlexProps = Grid2Props;
 
 export default function Flex({
   children,
   ...props
-}: FlexProps) {
+}: FlexProps): ReactNode {
   return (
     <Grid
       {...props}

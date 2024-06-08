@@ -7,7 +7,7 @@ import {
 
 import './index.css';
 import App from './routes/App';
-import Game from './routes/Game';
+import Game, { loader } from './routes/Game';
 import Home from './routes/Home';
 
 const router = createBrowserRouter([{
@@ -16,7 +16,7 @@ const router = createBrowserRouter([{
   children: [{
     path: 'game/:id/:step?',
     element: <Game />,
-    loader: Game.loader,
+    loader,
   }, {
     path: '',
     element: <Home />,

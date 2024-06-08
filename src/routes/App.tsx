@@ -1,15 +1,21 @@
-import { Container, CssBaseline } from '@mui/material';
+import {
+  Container,
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+} from '@mui/material';
 import { ReactNode } from 'react';
 import { Outlet, useNavigation } from 'react-router-dom';
 
 import Spinner from '../components/Spinner.tsx';
 
-// TODO: Create theme
+const theme = createTheme();
+
 export default function App(): ReactNode {
   const { state } = useNavigation();
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container
         maxWidth="md"
@@ -23,6 +29,6 @@ export default function App(): ReactNode {
       <Spinner
         isOpen={state !== 'idle'}
       />
-    </>
+    </ThemeProvider>
   );
 }

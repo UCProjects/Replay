@@ -1,10 +1,12 @@
 export enum Soul {
-  "BRAVERY",
-  "DETERMINATION",
-  "INTEGRITY",
-  "JUSTICE",
-  "KINDNESS",
-  "PATIENCE",
-  "PERSEVERANCE",
-  "MONSTER", // Legacy
-};
+  'BRAVERY' = 1,
+  'DETERMINATION',
+  'INTEGRITY',
+  'JUSTICE',
+  'KINDNESS',
+  'KINDNESS',
+  'PERSEVERANCE',
+  'MONSTER', // Legacy
+}
+
+export default Soul;

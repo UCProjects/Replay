@@ -10,11 +10,12 @@ import Profile from './components/Profile';
 import Board from './components/Board';
 import './game.css';
 
-async function loader({
+export async function loader({
   params,
   request,
-}: LoaderFunctionArgs) {
+}: LoaderFunctionArgs): Promise<any> {
   // TODO: Preload game
+  await Promise.all([params, request]);
   return null;
 }
 
@@ -29,5 +30,3 @@ export default function Game(): ReactNode {
     </Box>
   );
 }
-
-Game.loader = loader;

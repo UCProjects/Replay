@@ -1,8 +1,18 @@
-import { Tuple } from './utils';
+import { DocumentKey, Tuple } from './utils';
 import { Card } from './card';
 import { User } from './user';
 
-export type Player = {};
+export type Player = {
+  id: User['id'];
+  artifacts: [];
+  deck: number;
+  hand: number;
+  health: number;
+  maxHealth: number;
+  gold: number;
+  lives?: number;
+  dodge?: number;
+};
 
 export type GameMeta = {
   ids: Tuple<User['id'], 2>;
@@ -17,7 +27,7 @@ export type GameType = 'STANDARD' | 'RANKED' | 'CUSTOM' | 'EVENT';
 export type GameResultTypes = 'game-end-lethal' | 'game-end-surrender' | 'game-end-disconnection' | 'game-end-chara' | 'timeout';
 
 export type GameResult = {
-  type: GameResultTypes | string;
+  type: GameResultTypes;
   winner: User['id'];
 };
 
@@ -33,8 +43,20 @@ export type GameState = {
   extra: unknown;
 };
 
+export type GameInfo = {
+  key: DocumentKey;
+  cards: DocumentKey;
+  date: Date;
+  id: number;
+  playermeta: GameMeta;
+  results: GameResult;
+  start: Date;
+  translation: DocumentKey;
+  type: GameType;
+};
+
 export type GameRaw = {
   cache: Record<string, unknown>;
   index: GameState[];
-  players: {};
+  players: Tuple<User, 2>;
 };
