@@ -5,11 +5,13 @@ export type FlexProps = Grid2Props;
 
 export default function Flex({
   children,
+  ref,
   ...props
 }: FlexProps): ReactNode {
   return (
     <Grid
       {...props}
+      ref={ref}
     >
       {children}
     </Grid>
