@@ -1,4 +1,4 @@
-import { DocumentKey, Tuple } from './utils';
+import { Tuple } from './utils';
 import { Card } from './card';
 import { User } from './user';
 
@@ -41,18 +41,6 @@ export type GameState = {
   players: Tuple<Player, 2>;
   board: GameBoard;
   extra: unknown;
-};
-
-export type GameInfo = {
-  key: DocumentKey;
-  cards: DocumentKey;
-  date: Date;
-  id: number;
-  playermeta: GameMeta;
-  results: GameResult;
-  start: Date;
-  translation: DocumentKey;
-  type: GameType;
 };
 
 export type GameRaw = {
