@@ -8,14 +8,14 @@ import { ReactNode } from 'react';
 import { Outlet, useNavigation } from 'react-router-dom';
 
 import Spinner from '../components/Spinner.tsx';
+import UserProvider from '../providers/UserProvider.tsx';
 
 const theme = createTheme();
 
-export default function App(): ReactNode {
+function Body(): ReactNode {
   const { state } = useNavigation();
-
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <Container
         disableGutters
@@ -26,6 +26,16 @@ export default function App(): ReactNode {
       <Spinner
         isOpen={state !== 'idle'}
       />
+    </>
+  );
+}
+
+export default function App(): ReactNode {
+  return (
+    <ThemeProvider theme={theme}>
+      <UserProvider>
+        <Body />
+      </UserProvider>
     </ThemeProvider>
   );
 }
