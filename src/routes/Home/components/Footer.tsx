@@ -15,24 +15,24 @@ export default function Footer(): ReactNode {
   return (
     <>
       <Flex sx={style}>
-        <a href="https://discord.gg/B9sX8mT" target="_blank" rel="noreferrer">
+        <a href="https://discord.gg/B9sX8mT" rel="noreferrer" target="_blank">
           <img alt="discord" src={DiscordLogo} />
         </a>
       </Flex>
       <Flex sx={style}>
         <iframe
-          src="https://github.com/sponsors/feildmaster/button"
-          title="Sponsor feildmaster"
           height="32"
-          width="114"
+          src="https://github.com/sponsors/feildmaster/button"
           style={{
             border: 0,
             borderRadius: 0,
           }}
+          title="Sponsor feildmaster"
+          width="114"
         />
       </Flex>
       <Flex sx={style}>
-        <a href="https://undercards.net/" target="_blank" rel="noreferrer">Undercards</a>
+        <a href="https://undercards.net/" rel="noreferrer" target="_blank">Undercards</a>
         &nbsp;by Onutrem
       </Flex>
     </>

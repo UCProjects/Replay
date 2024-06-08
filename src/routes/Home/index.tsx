@@ -16,14 +16,14 @@ export default function Home(): ReactNode {
     <Box>
       <Header />
       <Flex
+        alignContent="flex-start"
+        alignItems="flex-start"
         container
         disableEqualOverflow
-        alignItems="flex-start"
-        alignContent="flex-start"
       >
         <Flex
-          xs={12}
           md="auto"
+          xs={12}
         >
           <Navigation />
         </Flex>
@@ -32,11 +32,10 @@ export default function Home(): ReactNode {
         />
       </Flex>
       <Flex
-        xs={12}
-        container
-        component="footer"
-        justifyContent="space-evenly"
         alignItems="center"
+        component="footer"
+        container
+        justifyContent="space-evenly"
         sx={{
           display: {
             xs: 'flex',
@@ -45,6 +44,7 @@ export default function Home(): ReactNode {
           position: 'sticky',
           bottom: 0,
         }}
+        xs={12}
       >
         <Footer />
       </Flex>

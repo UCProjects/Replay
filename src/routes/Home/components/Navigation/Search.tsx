@@ -32,12 +32,12 @@ export default function Search(): ReactNode {
           </Box>
         )}
       >
-        <input type="checkbox" id="showMore" className="toggleMore hidden" />
-        <input type="text" id="searchName" placeholder="Username" maxLength="15" data-bwignore data-lpignore />
+        <input className="toggleMore hidden" id="showMore" type="checkbox" />
+        <input data-bwignore data-lpignore id="searchName" maxLength="15" placeholder="Username" type="text" />
         <div className="flex-break showMore" />
-        <input type="number" id="searchID" placeholder="User ID" className="showMore" data-tippy-content="Overrides Username" min="0" data-bwignore data-lpignore />
+        <input className="showMore" data-bwignore data-lpignore data-tippy-content="Overrides Username" id="searchID" min="0" placeholder="User ID" type="number" />
         <div className="flex-break" />
-        <label htmlFor="searchMode" className="spaced">Mode:</label>
+        <label className="spaced" htmlFor="searchMode">Mode:</label>
         <select id="searchMode">
           <option>Any</option>
           <option>Ranked</option>
@@ -45,10 +45,10 @@ export default function Search(): ReactNode {
           <option>Custom</option>
         </select>
         <div className="flex-break showMore" />
-        <label htmlFor="searchSoul" className="showMore spaced">Soul:</label>
+        <label className="showMore spaced" htmlFor="searchSoul">Soul:</label>
         <select
-          id="searchSoul"
           className="showMore"
+          id="searchSoul"
           onChange={(e) => {
             e.target.dataset.value = e.target.value;
           }}
@@ -63,8 +63,8 @@ export default function Search(): ReactNode {
           <option className="JUSTICE">Justice</option>
         </select>
         <div className="flex-break" />
-        <label htmlFor="showMore" className="stylized" />
-        <input type="submit" id="searchButton" />
+        <label className="stylized" htmlFor="showMore" />
+        <input id="searchButton" type="submit" />
       </Expand>
     </Box>
   );

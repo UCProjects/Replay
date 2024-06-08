@@ -13,10 +13,10 @@ export default function Spinner({
 }: SpinnerProps): ReactNode {
   return (
     <Backdrop
+      open={isOpen}
       sx={{
         color: '#fff',
       }}
-      open={isOpen}
     >
       <CircularProgress color="inherit" />
     </Backdrop>

@@ -16,9 +16,9 @@ export default function Expand({
   const [defaultExpanded] = useState(initialState);
   return (
     <Accordion
-      square
       defaultExpanded={defaultExpanded}
       disableGutters
+      square
       sx={{
         backgroundColor: 'inherit',
       }}

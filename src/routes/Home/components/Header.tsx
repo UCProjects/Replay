@@ -13,8 +13,8 @@ export default function Header(): ReactNode {
   // TODO: Handle buttons
   return (
     <Flex
-      container
       component="header"
+      container
       justifyContent="space-between"
     >
       <Flex xs="auto">
