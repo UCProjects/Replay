@@ -1,0 +1,56 @@
+.showMore {
+  display: none;
+}
+
+input,
+select,
+.stylized {
+  color: var(--font);
+  background-color: var(--bgcolor-2);
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  display: inline-block;
+}
+
+label {
+  margin-right: 5px;
+}
+
+.toggleMore ~ label[for="showMore"]::after {
+  content: 'Show Advanced';
+}
+
+.toggleMore:checked ~ label[for="showMore"]::after {
+  content: 'Hide Advanced';
+}
+
+.toggleMore:checked ~ .showMore {
+  display: revert;
+}
+
+#searchSoul[data-value="Kindness"] {
+  color: var(--kindness);
+}
+#searchSoul[data-value="Determination"] {
+  color: var(--dt);
+}
+#searchSoul[data-value="Patience"] {
+  color: var(--patience);
+}
+#searchSoul[data-value="Bravery"] {
+  color: var(--bravery);
+}
+#searchSoul[data-value="Integrity"] {
+  color: var(--integ);
+}
+#searchSoul[data-value="Perseverance"] {
+  color: var(--pers);
+}
+#searchSoul[data-value="Justice"] {
+  color: var(--justice);
+}

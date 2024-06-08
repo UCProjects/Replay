@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'DTM-Mono';
+  src: url('/fonts/DTM-Mono.otf') format('truetype');
+}
+
+*,
+::after,
+::before {
+  --black: rgb(0, 0, 0);
+  --black-transparent: rgba(0, 0, 0, 0.6);
+  --red: rgb(255, 0, 0);
+  --bgcolor: rgb(0, 0, 0);
+  --bgcolor-2: rgba(0, 0, 0, 0.6);
+  --blue: rgb(0, 184, 255);
+  --dt: rgb(255, 0, 0);
+  --patience: rgb(65, 252, 255);
+  --bravery: rgb(252, 165, 0);
+  --integ: rgb(0, 100, 255);
+  --pers: rgb(213, 53, 217);
+  --kindness: rgb(0, 192, 0);
+  --justice: rgb(255, 255, 0);
+  --border: rgb(255, 255, 255);
+  --font: rgb(255, 255, 255);
+  --opponent: rgba(153, 4, 4, 0.774);
+  --player: rgba(0, 147, 255, 0.692);
+  --copper: rgb(210, 105, 30);
+  --iron: rgb(185, 185, 185);
+  --gold: rgb(255, 228, 85);
+  --emerald: rgb(0, 202, 120);
+  --sapphire: rgb(31, 55, 255);
+  --ruby: rgb(255, 3, 3);
+  --diamond: rgb(0, 206, 210);
+  --amethyst: rgb(255, 0, 255);
+  --onyx: rgb(61, 31, 141);
+  --master: rgb(255, 177, 0);
+  background-color: var(--bgcolor);
+  color: var(--font);
+}
+
+a, a:visited {
+  color: inherit;
+}
+
+body:not(.authed) .authed,
+body.authed .unauthed,
+.hidden {
+  display: none;
+}
+
+.show {
+  display: unset;
+}
+
+.DETERMINATION, [data-soul='DETERMINATION'] { color: var(--dt); }
+.PATIENCE, [data-soul='PATIENCE'] { color: var(--patience); }
+.BRAVERY, [data-soul='BRAVERY'] { color: var(--bravery); }
+.INTEGRITY, [data-soul='INTEGRITY'] { color: var(--integ); }
+.PERSEVERANCE, [data-soul='PERSEVERANCE'] { color: var(--pers); }
+.KINDNESS, [data-soul='KINDNESS'] { color: var(--kindness); }
+.JUSTICE, [data-soul='JUSTICE'] { color: var(--justice); }
