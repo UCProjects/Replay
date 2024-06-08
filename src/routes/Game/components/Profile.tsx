@@ -2,10 +2,6 @@ import { ReactNode } from 'react';
 import Flex from '../../../components/Flex';
 import { Player } from '../../../types/game';
 
-import cardImage from '../../../assets/images/board/cards.png';
-import goldImage from '../../../assets/images/board/gold.png';
-import handImage from '../../../assets/images/board/hand.png';
-
 export type ProfileProps = {
   isOpponent?: boolean;
   player: Player;
@@ -38,11 +34,11 @@ export default function Profile({
       <Flex
         className="player-info"
       >
-        <img alt="cards" src={cardImage} />
+        <img alt="cards" src="/images/board/cards.png" />
         <span className="player-cards rounded-bg" />
-        <img alt="hand" src={handImage} />
+        <img alt="hand" src="/images/board/hand.png" />
         <span className="player-hand rounded-bg" />
-        <img alt="gold" src={goldImage} />
+        <img alt="gold" src="/images/board/gold.png" />
         <span className="player-gold rounded-bg" />
       </Flex>
 

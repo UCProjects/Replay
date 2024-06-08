@@ -16,10 +16,19 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
+    "paths": {
+        "~/*": [
+            "./src/*"
+        ]
+    },
 
     /* Linting */
+    "alwaysStrict": true,
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "strictFunctionTypes": true,
     "strictPropertyInitialization": false,
+    "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
