@@ -12,26 +12,29 @@ export default function Expand({
   initialState,
   title = undefined,
 }: PropsWithChildren<ExpandProps>): ReactNode {
-  const [open, setOpen] = useState(initialState);
+  // We can't change the state dynamically using "default"
+  const [defaultExpanded] = useState(initialState);
   return (
     <Accordion
+      square
+      defaultExpanded={defaultExpanded}
       disableGutters
-      expanded={open}
-      onChange={(_event, expanded) => {
-        setOpen(expanded);
-      }}
       sx={{
-        padding: 0,
         backgroundColor: 'inherit',
       }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreOutlined />}
         sx={{
+          alignContent: 'center',
           minHeight: 0,
           padding: 0,
           '& .MuiAccordionSummary-content': {
             margin: 0,
+          },
+          '& .MuiAccordionSummary-expandIconWrapper': {
+            position: 'absolute',
+            left: 5,
           },
         }}
       >

@@ -3,13 +3,13 @@ import { Box } from '@mui/material';
 
 import Search from './Search.tsx';
 import Footer from '../Footer.tsx';
-
-import './nav.css';
+import { useIsAuthed } from '../../../../hooks/useUser.ts';
 
 export default function Navigation(): ReactNode {
+  const isAuthed = useIsAuthed();
   return (
     <>
-      <Search />
+      {isAuthed && <Search />}
       <Box
         component="footer"
         sx={{
