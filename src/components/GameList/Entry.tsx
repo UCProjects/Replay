@@ -39,7 +39,7 @@ export default function Entry({
     opponent,
   ],
 }: GameRecord): ReactNode {
-  // TODO
+  // TODO: Tippy, link... translation
   const ranked = GAME_MODE[type] === GAME_MODE.RANKED;
   return (
     <Stack key={key}>
@@ -52,6 +52,9 @@ export default function Entry({
         ranked={ranked}
         user={opponent}
       />
+      <Box>
+        {type}
+      </Box>
     </Stack>
   );
 }
