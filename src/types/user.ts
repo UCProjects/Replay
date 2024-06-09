@@ -5,5 +5,5 @@ export type User = {
   name: string;
   level: number;
   rank: string;
-  class: Soul;
+  class: Soul; // TODO: rename class to soul
 };

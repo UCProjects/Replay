@@ -5,7 +5,8 @@ import {
   GameResult,
   GameType,
 } from '../types/game';
-import { DocumentKey } from '../types/utils';
+import { DocumentKey, Tuple } from '../types/utils';
+import metaToUsers from '../utils/metaToUsers';
 
 type GameInfo = {
   key: DocumentKey;
@@ -28,8 +29,6 @@ export class GameRecord {
 
   public readonly key: DocumentKey;
 
-  public readonly meta: PlayerMeta;
-
   public readonly results: GameResult;
 
   public readonly start: Date;
@@ -37,6 +36,8 @@ export class GameRecord {
   public readonly translation: DocumentKey;
 
   public readonly type: GameType;
+
+  public readonly users: Tuple<User, 2>;
 
   constructor({
     cards,
@@ -53,11 +54,11 @@ export class GameRecord {
     this.date = date;
     this.gameId = id;
     this.key = key;
-    this.meta = playermeta;
     this.results = results;
     this.start = start;
     this.translation = translation;
     this.type = type;
+    this.users = metaToUsers(playermeta);
   }
 }
 

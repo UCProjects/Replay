@@ -16,11 +16,13 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
+    /* One day... :(
     "paths": {
         "~/*": [
             "./src/*"
         ]
     },
+    */
 
     /* Linting */
     "alwaysStrict": true,
@@ -32,6 +34,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "src/*.tsx?"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
