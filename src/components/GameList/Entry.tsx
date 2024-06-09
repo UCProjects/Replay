@@ -23,7 +23,6 @@ function UserData({
   return (
     <Box
       className={opponent ? 'opponent' : 'player'}
-      direction="row"
     >
       {ranked && <Box />}
       <span className={soul}>{name}</span>

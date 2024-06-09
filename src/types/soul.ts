@@ -1,12 +1,12 @@
 export const SOUL = {
-  Bravery = 'BRAVERY',
-  Determination = 'DETERMINATION',
-  Integrity = 'INTEGRITY',
-  Justice = 'JUSTICE',
-  Kindness = 'KINDNESS',
-  Patience = 'PATIENCE',
-  Perseverance = 'PERSEVERANCE',
-  Monster = 'MONSTER', // Legacy
+  BRAVERY: 'Bravery',
+  DETERMINATION: 'Determination',
+  INTEGRITY: 'Integrity',
+  JUSTICE: 'Justice',
+  KINDNESS: 'Kindness',
+  PATIENCE: 'Patience',
+  PERSEVERANCE: 'Perseverance',
+  MONSTER: 'Monster', // Legacy
 } as const;
 
-export type Soul = typeof SOUL[keyof typeof SOUL];
+export type Soul = keyof typeof SOUL;

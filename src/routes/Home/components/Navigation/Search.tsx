@@ -33,7 +33,7 @@ export default function Search(): ReactNode {
         )}
       >
         <input className="toggleMore hidden" id="showMore" type="checkbox" />
-        <input data-bwignore data-lpignore id="searchName" maxLength="15" placeholder="Username" type="text" />
+        <input data-bwignore data-lpignore id="searchName" maxLength={15} placeholder="Username" type="text" />
         <div className="flex-break showMore" />
         <input className="showMore" data-bwignore data-lpignore data-tippy-content="Overrides Username" id="searchID" min="0" placeholder="User ID" type="number" />
         <div className="flex-break" />

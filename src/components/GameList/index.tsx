@@ -20,7 +20,7 @@ export default function GameList({
       if (!entries.length) {
         return 'Loading, please wait...';
       }
-      return entries.map((entry) => <Entry entry={entry} />);
+      return entries.map((entry) => <Entry {...entry} />);
     },
     [entries],
   );

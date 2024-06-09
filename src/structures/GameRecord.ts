@@ -1,19 +1,18 @@
 import { FirestoreDataConverter } from 'firebase/firestore';
 
 import {
-  PlayerMeta,
   GameResult,
   GameType,
 } from '../types/game';
-import { DocumentKey, Tuple } from '../types/utils';
+import { DocumentKey } from '../types/utils';
 import metaToUsers from '../utils/metaToUsers';
+import { UserMeta, Users } from '../types/user';
 
 type GameInfo = {
-  key: DocumentKey;
   cards: DocumentKey;
   date: Date;
   id: number;
-  playermeta: PlayerMeta;
+  playermeta: UserMeta;
   results: GameResult;
   start: Date;
   translation: DocumentKey;
@@ -37,19 +36,21 @@ export class GameRecord {
 
   public readonly type: GameType;
 
-  public readonly users: Tuple<User, 2>;
+  public readonly users: Users;
 
-  constructor({
-    cards,
-    date,
-    id,
-    key,
-    playermeta,
-    results,
-    start,
-    translation,
-    type,
-  }: GameInfo) {
+  constructor(
+    {
+      cards,
+      date,
+      id,
+      playermeta,
+      results,
+      start,
+      translation,
+      type,
+    }: GameInfo,
+    key: DocumentKey,
+  ) {
     this.cards = cards;
     this.date = date;
     this.gameId = id;
@@ -62,10 +63,13 @@ export class GameRecord {
   }
 }
 
-export const converter: FirestoreDataConverter<typeof GameRecord> = {
+export const converter: FirestoreDataConverter<GameRecord, GameInfo> = {
+  toFirestore(_record) {
+    return {} as GameInfo;
+  },
   fromFirestore(snapshot, options) {
-    const data = snapshot.data(options);
+    const data = snapshot.data(options) as GameInfo;
     const key = snapshot.id;
-    return new GameRecord({ key, ...data });
+    return new GameRecord(data, key);
   },
 };

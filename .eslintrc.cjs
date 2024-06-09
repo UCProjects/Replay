@@ -74,6 +74,7 @@ module.exports = {
     ],
     'semi': 'error',
     'no-shadow': 'off',
+    'no-undef': 'error',
   },
   settings: {
     "import/parsers": {

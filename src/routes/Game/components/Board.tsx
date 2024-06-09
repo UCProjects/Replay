@@ -15,5 +15,5 @@ export default function Board({
   board,
 }: BoardProps): ReactNode {
   // TODO: Render card
-  return board.map((card) => <Slot>{card}</Slot>);
+  return board.map((_card) => <Slot>{null}</Slot>);
 }

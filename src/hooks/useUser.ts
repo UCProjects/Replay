@@ -4,7 +4,7 @@ import {
 } from 'react';
 import { User } from 'firebase/auth';
 
-export const UserContext = createContext<User | null>(undefined);
+export const UserContext = createContext<User | null | undefined>(undefined);
 
 export function useUser(): User | null {
   const user = useContext(UserContext);
