@@ -1,37 +1,73 @@
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
-import { ReactNode, useMemo } from 'react';
-import { GameRecord } from '../../structures/GameRecord';
+import { ReactNode, useCallback, useMemo } from 'react';
+import { GameRecords } from '../../structures/GameRecord';
 import Entry from './Entry';
 import Flex from '../Flex';
 
 export type GameListParams = {
   title?: string;
-  entries?: GameRecord[];
+  entries?: GameRecords;
+  onRefresh?: () => void;
 };
 
-// TODO: Allow passing in game entries
 export default function GameList({
   title = '',
   entries = [],
+  onRefresh = undefined,
 }: GameListParams): ReactNode {
   const list = useMemo(
     () => {
       if (!entries.length) {
         return 'Loading, please wait...';
       }
-      return entries.map((entry) => <Entry {...entry} />);
+      return entries.map((entry) => (
+        <Entry
+          key={entry.key}
+          record={entry}
+        />
+      ));
     },
     [entries],
   );
+  const handleClick = useCallback(() => {
+    onRefresh?.();
+  }, [
+    onRefresh,
+  ]);
   return (
-    <Box>
-      <Flex container>
+    <Box
+      sx={{
+        flexGrow: '1',
+        textAlign: 'left',
+      }}
+    >
+      <Flex
+        container
+        sx={{
+          height: 40,
+          alignContent: 'center',
+        }}
+      >
         <span>
           {title}
           :&nbsp;
         </span>
-        <Refresh />
+        <IconButton
+          disableRipple
+          onClick={handleClick}
+          onKeyUp={handleClick}
+          sx={{
+            color: 'inherit',
+            minWidth: 0,
+            padding: 0,
+            ':focus-visible': {
+              border: '1px solid white',
+            },
+          }}
+        >
+          <Refresh />
+        </IconButton>
       </Flex>
       {list}
     </Box>

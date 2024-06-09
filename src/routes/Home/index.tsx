@@ -1,5 +1,8 @@
 import {
   ReactNode,
+  useCallback,
+  useEffect,
+  useState,
 } from 'react';
 import { Box } from '@mui/material';
 
@@ -9,9 +12,46 @@ import Flex from '../../components/Flex.tsx';
 import GameList from '../../components/GameList/index.tsx';
 import Navigation from './components/Navigation/index.tsx';
 import './home.css';
+import searchRecent from './searchRecent.ts';
+import { GameRecords } from '../../structures/GameRecord.ts';
+
+function RecentGames(): ReactNode {
+  const [entries, setEntries] = useState<GameRecords>([]);
+  const [refresh, setRefresh] = useState(false);
+  // TODO: Add cooldown
+
+  useEffect(() => {
+    if (!refresh) return;
+    (async () => {
+      try {
+        const games = await searchRecent();
+        setEntries(games);
+      } finally {
+        setRefresh(false);
+      }
+    })();
+  }, [
+    refresh,
+  ]);
+
+  const handleRefresh = useCallback(() => {
+    setRefresh(true);
+  }, []);
+
+  useEffect(() => {
+    setRefresh(true);
+  }, []);
+
+  return (
+    <GameList
+      entries={entries}
+      onRefresh={handleRefresh}
+      title="Recent Games"
+    />
+  );
+}
 
 export default function Home(): ReactNode {
-  // TODO: Provide GameList with "default" results
   return (
     <Box>
       <Header />
@@ -27,9 +67,7 @@ export default function Home(): ReactNode {
         >
           <Navigation />
         </Flex>
-        <GameList
-          title="Recent Games"
-        />
+        <RecentGames />
       </Flex>
       <Flex
         alignItems="center"

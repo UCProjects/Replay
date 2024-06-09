@@ -1,7 +1,8 @@
+import { Box, Button } from '@mui/material';
 import { ReactNode } from 'react';
 import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
 
-export default function Error(): ReactNode {
+function ErrorMessage(): ReactNode {
   const error = useRouteError();
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {
@@ -10,4 +11,13 @@ export default function Error(): ReactNode {
     }
   }
   return <div>Something went wrong!</div>;
+}
+
+export default function Error(): ReactNode {
+  return (
+    <Box>
+      <ErrorMessage />
+      <Button href="/">Return Home</Button>
+    </Box>
+  );
 }

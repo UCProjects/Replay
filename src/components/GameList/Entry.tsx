@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { Box, Stack } from '@mui/material';
 import { GameRecord } from '../../structures/GameRecord';
 import { User } from '../../types/user';
-import { GAME_MODE } from '../../types/game';
+import { MODE } from '../../types/game';
+import Link from '../Link';
 
 type UserDataProps = {
   user: User,
@@ -30,31 +31,50 @@ function UserData({
   );
 }
 
+export type EntryProps = {
+  record: GameRecord;
+};
+
 export default function Entry({
-  date: _date,
-  key,
-  type,
-  users: [
-    player,
-    opponent,
-  ],
-}: GameRecord): ReactNode {
+  record: {
+    date: _date,
+    key,
+    type,
+    users: [
+      player,
+      opponent,
+    ],
+  },
+}: EntryProps): ReactNode {
   // TODO: Tippy, link... translation
-  const ranked = GAME_MODE[type] === GAME_MODE.RANKED;
+  const ranked = MODE[type] === MODE.RANKED;
   return (
-    <Stack key={key}>
-      <UserData
-        ranked={ranked}
-        user={player}
-      />
-      <UserData
-        opponent
-        ranked={ranked}
-        user={opponent}
-      />
-      <Box>
-        {type}
-      </Box>
-    </Stack>
+    <Link
+      to={`/game/${key}`}
+    >
+      <Stack
+        direction="row"
+      >
+        <UserData
+          ranked={ranked}
+          user={player}
+        />
+        <UserData
+          opponent
+          ranked={ranked}
+          user={opponent}
+        />
+        <Box
+          sx={{
+            textAlign: 'right',
+            width: 200,
+          }}
+        >
+          [
+          {type}
+          ]
+        </Box>
+      </Stack>
+    </Link>
   );
 }

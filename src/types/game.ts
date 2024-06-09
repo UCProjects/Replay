@@ -1,4 +1,3 @@
-import { Tuple } from './utils';
 import { Card } from './card';
 import { User, Users } from './user';
 
@@ -16,7 +15,7 @@ export type Player = {
   dodge?: number;
 };
 
-export const GAME_MODE = {
+export const MODE = {
   ANY: 'Any',
   STANDARD: 'Standard',
   RANKED: 'Ranked',
@@ -24,7 +23,7 @@ export const GAME_MODE = {
   EVENT: 'Event',
 } as const;
 
-export type GameMode = keyof typeof GAME_MODE;
+export type GameMode = keyof typeof MODE;
 
 export type GameType = Exclude<GameMode, 'ANY'>;
 

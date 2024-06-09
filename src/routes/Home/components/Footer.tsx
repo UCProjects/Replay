@@ -19,7 +19,10 @@ export default function Footer(): ReactNode {
           <img alt="discord" src={DiscordLogo} />
         </a>
       </Flex>
-      <Flex sx={style}>
+      <Flex
+        key="sponsor button"
+        sx={style}
+      >
         <iframe
           height="32"
           src="https://github.com/sponsors/feildmaster/button"

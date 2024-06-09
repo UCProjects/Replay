@@ -4,7 +4,6 @@ import {
   GameResult,
   GameType,
 } from '../types/game';
-import { DocumentKey } from '../types/utils';
 import metaToUsers from '../utils/metaToUsers';
 import { UserMeta, Users } from '../types/user';
 
@@ -62,6 +61,8 @@ export class GameRecord {
     this.users = metaToUsers(playermeta);
   }
 }
+
+export type GameRecords = GameRecord[];
 
 export const converter: FirestoreDataConverter<GameRecord, GameInfo> = {
   toFirestore(_record) {

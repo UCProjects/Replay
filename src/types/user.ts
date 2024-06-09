@@ -1,5 +1,4 @@
 import { Soul } from './soul';
-import { Tuple } from './utils';
 
 export type User = {
   id: number;

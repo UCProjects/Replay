@@ -27,8 +27,12 @@ module.exports = {
   },
   plugins: ['react-refresh', '@typescript-eslint'],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': 'error',
+    '@typescript-eslint/explicit-function-return-type': ['error', {
+      allowHigherOrderFunctions: true,
+      allowIIFEs: true,
+    }],
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/no-shadow': 'error',
     '@typescript-eslint/no-unused-vars': [
         'error',
@@ -74,7 +78,6 @@ module.exports = {
     ],
     'semi': 'error',
     'no-shadow': 'off',
-    'no-undef': 'error',
   },
   settings: {
     "import/parsers": {

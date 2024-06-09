@@ -13,9 +13,9 @@ export default function Game(): ReactNode {
   // TODO: Context to provide game controller
   return (
     <Box>
-      <Profile player={null as unknown as Player} />
+      <Profile isOpponent player={{} as Player} />
       <Board board={[] as unknown as GameBoard} />
-      <Profile player={null as unknown as Player} />
+      <Profile player={{} as Player} />
     </Box>
   );
 }

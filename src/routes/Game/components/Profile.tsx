@@ -13,6 +13,7 @@ export default function Profile({
 }: ProfileProps): ReactNode {
   // TODO: getUser by id
   // TODO: MUI-fy
+  if (!player.id) return null;
   return (
     <Flex
       className={isOpponent ? 'opponent' : 'player'}
@@ -41,7 +42,6 @@ export default function Profile({
         <img alt="gold" src="/images/board/gold.png" />
         <span className="player-gold rounded-bg" />
       </Flex>
-
     </Flex>
   );
 }
