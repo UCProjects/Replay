@@ -3,36 +3,39 @@ import {
   CssBaseline,
   ThemeProvider,
 } from '@mui/material';
-import { ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { Outlet, useNavigation } from 'react-router-dom';
 
 import Spinner from '../components/Spinner.tsx';
 import UserProvider from '../providers/UserProvider.tsx';
 import theme from './theme.ts';
 
-function Body(): ReactNode {
+function Body({ children }: PropsWithChildren): ReactNode {
   const { state } = useNavigation();
   return (
     <>
       <CssBaseline />
+      <Spinner
+        isOpen={state !== 'idle'}
+      />
       <Container
         disableGutters
         maxWidth="md"
       >
         <Outlet />
+        {children}
       </Container>
-      <Spinner
-        isOpen={state !== 'idle'}
-      />
     </>
   );
 }
 
-export default function App(): ReactNode {
+export default function App({ children }: PropsWithChildren): ReactNode {
   return (
     <ThemeProvider theme={theme}>
       <UserProvider>
-        <Body />
+        <Body>
+          {children}
+        </Body>
       </UserProvider>
     </ThemeProvider>
   );
