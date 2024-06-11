@@ -1,0 +1,15 @@
+.player,
+.opponent {
+  padding: 5px 10px;
+}
+.player {
+  background-color: var(--player);
+}
+.opponent {
+  background-color: var(--opponent);
+}
+.user {
+  background-color: var(--bgcolor-2);
+  border-radius: 5px;
+  padding: 2px 5px;
+}

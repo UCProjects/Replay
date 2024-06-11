@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { GameRecord } from '../../structures/GameRecord';
 import { User } from '../../types/user';
 import { MODE } from '../../types/game';
 import Link from '../Link';
+
+import './style.css';
 
 type UserDataProps = {
   user: User,
@@ -17,6 +19,7 @@ function UserData({
   user: {
     name,
     class: soul,
+    rank,
   },
   opponent = false,
   ranked = false,
@@ -24,8 +27,9 @@ function UserData({
   return (
     <Box
       className={opponent ? 'opponent' : 'player'}
+      flex={1}
     >
-      {ranked && <Box />}
+      {ranked && <Typography component="span">{rank.substring(0, 1)}</Typography>}
       <span className={soul}>{name}</span>
     </Box>
   );
@@ -46,7 +50,7 @@ export default function Entry({
     ],
   },
 }: EntryProps): ReactNode {
-  // TODO: Tippy, link... translation
+  // TODO: Tippy, translation
   const ranked = MODE[type] === MODE.RANKED;
   return (
     <Link
@@ -67,7 +71,7 @@ export default function Entry({
         <Box
           sx={{
             textAlign: 'right',
-            width: 200,
+            flexBasis: '120px',
           }}
         >
           [

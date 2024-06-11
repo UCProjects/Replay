@@ -15,10 +15,16 @@ import './home.css';
 import searchRecent from './searchRecent.ts';
 import { GameRecords } from '../../structures/GameRecord.ts';
 
+const initialSearch = searchRecent();
+
 function RecentGames(): ReactNode {
   const [entries, setEntries] = useState<GameRecords>([]);
   const [refresh, setRefresh] = useState(false);
-  // TODO: Add cooldown
+  // TODO: Add refresh cooldown
+
+  useEffect(() => {
+    initialSearch.then(setEntries);
+  }, []);
 
   useEffect(() => {
     if (!refresh) return;
@@ -34,13 +40,7 @@ function RecentGames(): ReactNode {
     refresh,
   ]);
 
-  const handleRefresh = useCallback(() => {
-    setRefresh(true);
-  }, []);
-
-  useEffect(() => {
-    setRefresh(true);
-  }, []);
+  const handleRefresh = useCallback(() => setRefresh(true), []);
 
   return (
     <GameList

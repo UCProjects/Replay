@@ -40,6 +40,7 @@ export default function GameList({
       sx={{
         flexGrow: '1',
         textAlign: 'left',
+        paddingX: '5px',
       }}
     >
       <Flex

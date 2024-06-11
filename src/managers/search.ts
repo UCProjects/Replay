@@ -37,7 +37,11 @@ export default function search({
 }: SearchParams = {}): Promise<QuerySnapshot<GameRecord>> {
   const date = new Date();
   // date.setDate(date.getDate() - 1); // FIXME: Supposed to allow 7 days
-  const constraints: QueryConstraint[] = [];
+
+  const constraints: QueryConstraint[] = [
+    where('date', '>=', date),
+    orderBy('date', 'desc'),
+  ];
 
   if (id !== '0') {
     const number = Number(id);
@@ -63,8 +67,6 @@ export default function search({
   const q = query(
     collection(db, 'gamehistory'),
     ...constraints,
-    where('date', '>=', date),
-    orderBy('date', 'desc'),
     // TODO: custom limit depending on guest, sponsor, admin
     limit(20),
   ).withConverter(converter);
