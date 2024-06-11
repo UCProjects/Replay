@@ -2,15 +2,13 @@ import {
   Container,
   CssBaseline,
   ThemeProvider,
-  createTheme,
 } from '@mui/material';
 import { ReactNode } from 'react';
 import { Outlet, useNavigation } from 'react-router-dom';
 
 import Spinner from '../components/Spinner.tsx';
 import UserProvider from '../providers/UserProvider.tsx';
-
-const theme = createTheme();
+import theme from './theme.ts';
 
 function Body(): ReactNode {
   const { state } = useNavigation();

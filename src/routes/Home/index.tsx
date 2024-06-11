@@ -60,6 +60,9 @@ export default function Home(): ReactNode {
         alignItems="flex-start"
         container
         disableEqualOverflow
+        sx={{
+          overflowX: 'auto',
+        }}
       >
         <Flex
           md="auto"
@@ -74,14 +77,15 @@ export default function Home(): ReactNode {
         component="footer"
         container
         justifyContent="space-evenly"
-        sx={{
+        sx={(theme) => ({
           display: {
             xs: 'flex',
             md: 'none',
           },
           position: 'sticky',
+          backgroundColor: theme.palette.background.default,
           bottom: 0,
-        }}
+        })}
         xs={12}
       >
         <Footer />

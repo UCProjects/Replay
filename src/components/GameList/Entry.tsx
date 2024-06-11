@@ -1,5 +1,10 @@
 import { ReactNode } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Divider,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { GameRecord } from '../../structures/GameRecord';
 import { User } from '../../types/user';
 import { MODE } from '../../types/game';
@@ -19,6 +24,7 @@ function UserData({
   user: {
     name,
     class: soul,
+    level,
     rank,
   },
   opponent = false,
@@ -29,8 +35,14 @@ function UserData({
       className={opponent ? 'opponent' : 'player'}
       flex={1}
     >
-      {ranked && <Typography component="span">{rank.substring(0, 1)}</Typography>}
-      <span className={soul}>{name}</span>
+      <Typography
+        className={`user ${soul}`}
+        component="span"
+        data-level={level}
+        data-rank={ranked ? rank.substring(0, 1) : undefined}
+      >
+        {name}
+      </Typography>
     </Box>
   );
 }
@@ -53,32 +65,37 @@ export default function Entry({
   // TODO: Tippy, translation
   const ranked = MODE[type] === MODE.RANKED;
   return (
-    <Link
-      to={`/game/${key}`}
-    >
-      <Stack
-        direction="row"
+    <>
+      <Divider />
+      <Link
+        to={`/game/${key}`}
       >
-        <UserData
-          ranked={ranked}
-          user={player}
-        />
-        <UserData
-          opponent
-          ranked={ranked}
-          user={opponent}
-        />
-        <Box
-          sx={{
-            textAlign: 'right',
-            flexBasis: '120px',
-          }}
+        <Stack
+          direction="row"
         >
-          [
-          {type}
-          ]
-        </Box>
-      </Stack>
-    </Link>
+          <UserData
+            ranked={ranked}
+            user={player}
+          />
+          <UserData
+            opponent
+            ranked={ranked}
+            user={opponent}
+          />
+          <Typography
+            component="span"
+            sx={{
+              textAlign: 'right',
+              flexBasis: '120px',
+              alignSelf: 'center',
+            }}
+          >
+            [
+            {type}
+            ]
+          </Typography>
+        </Stack>
+      </Link>
+    </>
   );
 }

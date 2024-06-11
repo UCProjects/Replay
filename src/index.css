@@ -33,8 +33,6 @@
   --amethyst: rgb(255, 0, 255);
   --onyx: rgb(61, 31, 141);
   --master: rgb(255, 177, 0);
-  background-color: var(--bgcolor);
-  color: var(--font);
 }
 
 a, a:visited {
@@ -49,6 +47,11 @@ body.authed .unauthed,
 
 .show {
   display: unset;
+}
+
+.user[data-level]::after {
+  content: ' LV ' attr(data-level);
+  color: var(--blue);
 }
 
 .DETERMINATION, [data-soul='DETERMINATION'] { color: var(--dt); }

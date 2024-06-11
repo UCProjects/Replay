@@ -20,5 +20,5 @@ export default async function searchRecent(): Promise<GameRecords> {
     await loadLanguage(history[0].translation);
   }
 
-  return history;
+  return [...history];
 }
