@@ -1,19 +1,24 @@
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 import search from '../../managers/search';
 import { GameRecord, GameRecords } from '../../structures/GameRecord';
+import { hasLoaded, loadLanguage } from '../../managers/lang';
 
-const history: QueryDocumentSnapshot<GameRecord>[] = [];
-
-function getHistory(): GameRecords {
-  return history.map((snap) => snap.data());
-}
+const history: GameRecord[] = [];
+let last: QueryDocumentSnapshot<GameRecord>;
 
 export default async function searchRecent(): Promise<GameRecords> {
   const results = await search({
-    previous: history[0],
+    previous: last,
   });
-  history.unshift(...results.docs);
-  // TODO: load default translation
 
-  return getHistory();
+  const records: GameRecord[] = [];
+  results.forEach((record) => records.push(record.data()));
+  history.unshift(...records);
+
+  // TODO: Can I get away without this?
+  if (history.length && !hasLoaded()) {
+    await loadLanguage(history[0].translation);
+  }
+
+  return history;
 }
