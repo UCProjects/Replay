@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import Flex from '../../../components/Flex';
-import { Player } from '../../../types/game';
+import Flex from '~/components/Flex';
+import { Player } from '~/types/game';
 
 export type ProfileProps = {
   isOpponent?: boolean;

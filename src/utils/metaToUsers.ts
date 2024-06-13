@@ -1,4 +1,4 @@
-import { UserMeta, Users } from '../types/user';
+import { UserMeta, Users } from '~/types/user';
 
 export default function metaToUsers({
   ids,

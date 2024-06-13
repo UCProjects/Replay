@@ -1,4 +1,4 @@
-import getOptional from '../../utils/getOptional';
+import getOptional from '~/utils/getOptional';
 import banana from './banana';
 import getFile from './getFile';
 import { plugins } from './plugins';

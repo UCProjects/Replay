@@ -3,7 +3,7 @@ import {
   ReactNode,
 } from 'react';
 
-import { GameBoard, Player } from '../../types/game';
+import { GameBoard, Player } from '~/types/game';
 import Profile from './components/Profile';
 import Board from './components/Board';
 import './game.css';

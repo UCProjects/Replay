@@ -7,7 +7,7 @@ import {
   ReactNode,
 } from 'react';
 
-import Expand from '../../../../components/Expand';
+import Expand from '~/components/Expand';
 import './nav.css';
 
 export default function Search(): ReactNode {

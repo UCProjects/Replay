@@ -1,7 +1,7 @@
 import { Box, IconButton } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { ReactNode, useCallback, useMemo } from 'react';
-import { GameRecords } from '../../structures/GameRecord';
+import { GameRecords } from '~/structures/GameRecord';
 import Entry from './Entry';
 import Flex from '../Flex';
 import { PagedList } from '../PagedList';

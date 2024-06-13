@@ -5,8 +5,8 @@ import {
   useState,
 } from 'react';
 import { getAuth } from 'firebase/auth';
-import app from '../managers/firebase';
-import { UserContext } from '../hooks/useUser';
+import { UserContext } from '~/hooks/useUser';
+import app from '~/managers/firebase';
 
 const auth = getAuth(app);
 

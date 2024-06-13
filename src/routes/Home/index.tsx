@@ -6,14 +6,14 @@ import {
 } from 'react';
 import { Box } from '@mui/material';
 
+import Flex from '~/components/Flex.tsx';
+import GameList from '~/components/GameList/index.tsx';
+import { GameRecords } from '~/structures/GameRecord.ts';
 import Footer from './components/Footer.tsx';
 import Header from './components/Header.tsx';
-import Flex from '../../components/Flex.tsx';
-import GameList from '../../components/GameList/index.tsx';
 import Navigation from './components/Navigation/index.tsx';
 import './home.css';
 import searchRecent from './searchRecent.ts';
-import { GameRecords } from '../../structures/GameRecord.ts';
 
 const initialSearch = searchRecent();
 

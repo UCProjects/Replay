@@ -6,8 +6,8 @@ import {
 import { PropsWithChildren, ReactNode } from 'react';
 import { Outlet, useNavigation } from 'react-router-dom';
 
-import Spinner from '../components/Spinner.tsx';
-import UserProvider from '../providers/UserProvider.tsx';
+import Spinner from '~/components/Spinner.tsx';
+import UserProvider from '~/providers/UserProvider.tsx';
 import theme from './theme.ts';
 
 function Body({ children }: PropsWithChildren): ReactNode {

@@ -11,10 +11,10 @@ import {
   QuerySnapshot,
   where,
 } from 'firebase/firestore';
+import { converter, GameRecord } from '~/structures/GameRecord';
+import { MODE, GameMode } from '~/types/game';
+import { SOUL, Soul } from '~/types/soul';
 import firebase from './firebase';
-import { converter, GameRecord } from '../structures/GameRecord';
-import { SOUL, Soul } from '../types/soul';
-import { MODE, GameMode } from '../types/game';
 
 export type Snapshot = DocumentSnapshot<GameRecord>;
 

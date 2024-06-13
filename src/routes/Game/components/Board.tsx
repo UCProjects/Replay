@@ -1,7 +1,7 @@
 import { styled } from '@mui/material';
 import { ReactNode } from 'react';
-import { GameBoard } from '../../../types/game';
-import Flex from '../../../components/Flex';
+import Flex from '~/components/Flex';
+import { GameBoard } from '~/types/game';
 
 export type BoardProps = {
   board: GameBoard;

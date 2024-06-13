@@ -5,9 +5,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { GameRecord } from '../../structures/GameRecord';
-import { User } from '../../types/user';
-import { MODE } from '../../types/game';
+import { GameRecord } from '~/structures/GameRecord';
+import { User } from '~/types/user';
+import { MODE } from '~/types/game';
 import Link from '../Link';
 
 import './style.css';

@@ -3,9 +3,9 @@ import { FirestoreDataConverter } from 'firebase/firestore';
 import {
   GameResult,
   GameType,
-} from '../types/game';
-import metaToUsers from '../utils/metaToUsers';
-import { UserMeta, Users } from '../types/user';
+} from '~/types/game';
+import metaToUsers from '~/utils/metaToUsers';
+import { UserMeta, Users } from '~/types/user';
 
 type GameInfo = {
   cards: DocumentKey;

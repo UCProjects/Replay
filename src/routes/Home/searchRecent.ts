@@ -1,7 +1,7 @@
 import { QueryDocumentSnapshot } from 'firebase/firestore';
-import search from '../../managers/search';
-import { GameRecord, GameRecords } from '../../structures/GameRecord';
-import { hasLoaded, loadLanguage } from '../../managers/lang';
+import { hasLoaded, loadLanguage } from '~/managers/lang';
+import search from '~/managers/search';
+import { GameRecord, GameRecords } from '~/structures/GameRecord';
 
 const history: GameRecord[] = [];
 let last: QueryDocumentSnapshot<GameRecord>;

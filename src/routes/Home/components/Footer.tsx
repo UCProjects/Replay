@@ -1,9 +1,9 @@
 import { ReactNode, useMemo } from 'react';
 import { SxProps, useMediaQuery, useTheme } from '@mui/material';
 
-import Flex from '../../../components/Flex.tsx';
-import DiscordLogo from '../../../assets/images/discord+word.svg';
-import DiscordAlt from '../../../assets/images/discord.svg';
+import Flex from '~/components/Flex.tsx';
+import DiscordLogo from '~/assets/images/discord+word.svg';
+import DiscordAlt from '~/assets/images/discord.svg';
 
 const style: SxProps = {
   flexBasis: {

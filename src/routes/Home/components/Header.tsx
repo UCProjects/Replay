@@ -5,8 +5,8 @@ import {
 } from '@mui/icons-material';
 import { ReactNode } from 'react';
 
-import Flex from '../../../components/Flex.tsx';
-import { useUser } from '../../../hooks/useUser.ts';
+import Flex from '~/components/Flex.tsx';
+import { useUser } from '~/hooks/useUser.ts';
 
 export default function Header(): ReactNode {
   const user = useUser();
