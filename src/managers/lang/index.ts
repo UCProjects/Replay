@@ -18,7 +18,6 @@ export async function loadLanguage(key: DocumentKey): Promise<void> {
   try {
     const data = await getFile(key);
     cache.set(key, data);
-    console.log('Loaded:', key);
     return banana.load(data);
   } catch (err) {
     console.error(err);
@@ -31,7 +30,7 @@ export type TranslateOptions = {
 };
 export function translate(message: string, ...args: Optional<string[], TranslateOptions>): string {
   const {
-    fallback,
+    fallback = '',
   } = getOptional<TranslateOptions, typeof args>(args);
   try {
     const text = banana.i18n(message, ...args);
@@ -42,10 +41,8 @@ export function translate(message: string, ...args: Optional<string[], Translate
   }
 }
 
-(() => {
-  Object.keys(plugins).forEach((key) => {
-    const val = plugins[key];
-    if (typeof val !== 'function') return;
-    banana.registerParserPlugin(key, (nodes) => val(nodes as Nodes, translate));
-  });
-})();
+Object.keys(plugins).forEach((key) => {
+  const val = plugins[key];
+  if (typeof val !== 'function') return;
+  banana.registerParserPlugin(key, (nodes) => val(nodes as Nodes, translate));
+});
