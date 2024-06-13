@@ -8,6 +8,14 @@
     "outDir": "dist",
     "removeComments": true,
     "rootDir": ".",
+    "paths": {
+        "~/*": [
+            "./src/*"
+        ]
+    },
+    "plugins": [{
+        "transform": "typescript-transform-paths"
+    }],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -16,13 +24,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    /* One day... :(
-    "paths": {
-        "~/*": [
-            "./src/*"
-        ]
-    },
-    */
 
     /* Linting */
     "alwaysStrict": true,

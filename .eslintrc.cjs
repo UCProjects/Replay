@@ -4,6 +4,9 @@ module.exports = {
     browser: true,
     es2020: true,
   },
+  globals: {
+    JTX: false,
+  },
   extends: [
     'airbnb',
     'airbnb/hooks',
@@ -24,6 +27,16 @@ module.exports = {
     ],
     sourceType: 'module',
     tsconfigRootDir: __dirname,
+  },
+  settings: {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"],
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
   },
   plugins: ['react-refresh', '@typescript-eslint'],
   rules: {
@@ -78,15 +91,5 @@ module.exports = {
     ],
     'semi': 'error',
     'no-shadow': 'off',
-  },
-  settings: {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"],
-    },
-    'import/resolver': {
-      typescript: {
-        alwaysTryTypes: true,
-      },
-    },
   },
 }
