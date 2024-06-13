@@ -96,14 +96,12 @@ export function PagedList<C extends Component>({
 
   const container = createElement(component, componentProps, content);
 
-  const count = useMemo(() => items.length, [items.length]);
-
   return (
     <>
       {container}
       <TablePagination
         component="div"
-        count={count}
+        count={items.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleSelectRows}
         page={page}
