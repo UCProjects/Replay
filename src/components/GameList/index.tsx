@@ -4,6 +4,7 @@ import { ReactNode, useCallback, useMemo } from 'react';
 import { GameRecords } from '../../structures/GameRecord';
 import Entry from './Entry';
 import Flex from '../Flex';
+import { PagedList } from '../PagedList';
 
 export type GameListParams = {
   title?: string;
@@ -17,17 +18,12 @@ export default function GameList({
   onRefresh = undefined,
 }: GameListParams): ReactNode {
   const list = useMemo(
-    () => {
-      if (!entries.length) {
-        return 'Loading, please wait...';
-      }
-      return entries.map((entry) => (
-        <Entry
-          key={entry.key}
-          record={entry}
-        />
-      ));
-    },
+    () => entries.map((entry) => (
+      <Entry
+        key={entry.key}
+        record={entry}
+      />
+    )),
     [entries],
   );
   const handleClick = useCallback(() => {
@@ -70,7 +66,12 @@ export default function GameList({
           <Refresh />
         </IconButton>
       </Flex>
-      {list}
+      <PagedList
+        component={Box}
+        emptyMessage="Loading, please wait..."
+        items={list}
+        itemsPerPage={20}
+      />
     </Box>
   );
 }
