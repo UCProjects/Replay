@@ -11,6 +11,10 @@ export default async function searchRecent(): Promise<GameRecords> {
     previous: last,
   });
 
+  if (!results.empty) {
+    [last] = results.docs;
+  }
+
   const records: GameRecord[] = [];
   results.forEach((record) => records.push(record.data()));
   history.unshift(...records);
