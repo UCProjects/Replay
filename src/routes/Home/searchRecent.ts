@@ -1,4 +1,3 @@
-import { hasLoaded, loadLanguage } from '~/managers/lang';
 import search from '~/managers/search';
 import { GameRecord, GameRecords } from '~/structures/GameRecord';
 
@@ -10,11 +9,6 @@ export default async function searchRecent(): Promise<GameRecords> {
   });
 
   history.unshift(...results);
-
-  // TODO: Can I get away without this?
-  if (history.length && !hasLoaded()) {
-    await loadLanguage(history[0].translation);
-  }
 
   return [...history];
 }

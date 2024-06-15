@@ -1,3 +1,6 @@
 {
-  "en": {}
+  "en": {
+    "replay-loading": "Loading, please wait...",
+    "replay-welcome": "Welcome, $1."
+  }
 }

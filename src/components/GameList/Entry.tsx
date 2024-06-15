@@ -5,6 +5,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { useTranslation } from '~/hooks/useTranslation';
 import { GameRecord } from '~/structures/GameRecord';
 import { User } from '~/types/user';
 import { MODE } from '~/types/game';
@@ -34,6 +35,7 @@ function UserData({
     <Box
       className={opponent ? 'opponent' : 'player'}
       flex={1}
+      overflow="hidden"
     >
       <Typography
         className={`user ${soul}`}
@@ -62,6 +64,7 @@ export default function Entry({
     ],
   },
 }: EntryProps): ReactNode {
+  const t = useTranslation();
   // TODO: Tippy, translation
   const ranked = MODE[type] === MODE.RANKED;
   return (
@@ -91,7 +94,7 @@ export default function Entry({
             }}
           >
             [
-            {type}
+            {t(`game-type-${type.toLowerCase()}`, { fallback: type })}
             ]
           </Typography>
         </Stack>

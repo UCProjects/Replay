@@ -9,6 +9,7 @@ import { Box } from '@mui/material';
 import Flex from '~/components/Flex.tsx';
 import GameList from '~/components/GameList/index.tsx';
 import { GameRecords } from '~/structures/GameRecord.ts';
+import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import Footer from './components/Footer.tsx';
 import Header from './components/Header.tsx';
 import Navigation from './components/Navigation/index.tsx';
@@ -20,11 +21,22 @@ const initialSearch = searchRecent();
 function RecentGames(): ReactNode {
   const [entries, setEntries] = useState<GameRecords>([]);
   const [refresh, setRefresh] = useState(false);
+  const loadLanguage = useLoadLanguage();
   // TODO: Add refresh cooldown
 
   useEffect(() => {
-    initialSearch.then(setEntries);
-  }, []);
+    initialSearch.then((results) => {
+      setEntries((prev) => {
+        if (prev.length) return prev;
+
+        // This would benefit from `useEffectEvent`
+        if (results.length) {
+          loadLanguage(results[0].translation);
+        }
+        return [...results];
+      });
+    });
+  }, [loadLanguage]);
 
   useEffect(() => {
     if (!refresh) return;
@@ -65,7 +77,12 @@ export default function Home(): ReactNode {
         }}
       >
         <Flex
-          md="auto"
+          sx={{
+            maxWidth: {
+              md: '200px',
+              xs: '100%',
+            },
+          }}
           xs={12}
         >
           <Navigation />

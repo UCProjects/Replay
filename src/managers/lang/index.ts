@@ -26,19 +26,33 @@ export async function loadLanguage(key: DocumentKey): Promise<void> {
 }
 
 export type TranslateOptions = {
-  fallback: string,
+  decode?: boolean;
+  fallback?: string,
 };
 export function translate(message: string, ...args: Optional<string[], TranslateOptions>): string {
   const {
+    decode = true,
     fallback = '',
   } = getOptional<TranslateOptions, typeof args>(args);
   try {
     const text = banana.i18n(message, ...args);
-    return text === message ? fallback : text;
+    const raw = text === message ? fallback : text;
+    if (!decode) return raw;
+    const el = document.createElement('textarea');
+    el.innerHTML = raw;
+    return el.value;
   } catch (e) {
     console.error(e);
     return 'Translation error';
   }
+}
+
+export function getLocale() {
+  return banana.locale;
+}
+
+export function setLocale(locale: string) {
+  banana.setLocale(locale);
 }
 
 Object.keys(plugins).forEach((key) => {

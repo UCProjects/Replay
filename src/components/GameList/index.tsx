@@ -2,6 +2,7 @@ import { Box, IconButton } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
 import { ReactNode, useCallback, useMemo } from 'react';
 import { GameRecords } from '~/structures/GameRecord';
+import { useTranslation } from '~/hooks/useTranslation';
 import Entry from './Entry';
 import Flex from '../Flex';
 import { PagedList } from '../PagedList';
@@ -17,6 +18,7 @@ export default function GameList({
   entries = [],
   onRefresh = undefined,
 }: GameListParams): ReactNode {
+  const t = useTranslation();
   const list = useMemo(
     () => entries.map((entry) => (
       <Entry
@@ -69,7 +71,7 @@ export default function GameList({
       </Flex>
       <PagedList
         component={Box}
-        emptyMessage="Loading, please wait..."
+        emptyMessage={t('replay-loading')}
         items={list}
         itemsPerPage={20}
       />

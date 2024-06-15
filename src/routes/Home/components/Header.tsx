@@ -6,9 +6,11 @@ import {
 import { ReactNode } from 'react';
 
 import Flex from '~/components/Flex.tsx';
+import { useTranslation } from '~/hooks/useTranslation';
 import { useUser } from '~/hooks/useUser.ts';
 
 export default function Header(): ReactNode {
+  const t = useTranslation();
   const user = useUser();
   // TODO: Handle buttons
   return (
@@ -25,9 +27,7 @@ export default function Header(): ReactNode {
         xs="auto"
       >
         <span>
-          Welcome,&nbsp;
-          <span id="username">{user?.displayName || 'Guest'}</span>
-          .
+          {t('replay-welcome', user?.displayName || 'Guest')}
         </span>
         {user && <Logout />}
         {user && <Settings className="hidden" />}

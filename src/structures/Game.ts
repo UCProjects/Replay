@@ -6,7 +6,9 @@ import {
 } from '~/types/game';
 import { GameRecord } from './GameRecord';
 
-export default function parseGame(record: GameRecord, data: GameRaw): Game {
+export type LoadedGame = GameRecord & Game;
+
+export function parseGame(record: GameRecord, data: GameRaw): LoadedGame {
   const index: GameState[] = data.index.map((state) => ({
     ...state,
     turnPlayer: record.getUser(state.turnPlayer),
@@ -20,5 +22,8 @@ export default function parseGame(record: GameRecord, data: GameRaw): Game {
     ...record,
     ...data,
     index,
+    getUser(userId) {
+      return record.getUser(userId);
+    },
   };
 }

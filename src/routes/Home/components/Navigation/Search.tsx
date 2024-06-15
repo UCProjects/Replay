@@ -8,14 +8,20 @@ import {
 } from 'react';
 
 import Expand from '~/components/Expand';
+import { useIsAuthed } from '~/hooks/useUser';
 import './nav.css';
 
 export default function Search(): ReactNode {
-  // TODO: convert showMore to useState
   // TODO: Make search work
   // TODO: MUIfy
   const theme = useTheme();
   const open = useMediaQuery(theme.breakpoints.up('md'));
+  const isAuthed = useIsAuthed();
+
+  // TODO: convert showMore to useState
+  // const [extended, setExtended] = useState(false);
+
+  if (!isAuthed) return null;
   return (
     <Box
       component="section"
