@@ -1,19 +1,13 @@
-import { QueryDocumentSnapshot } from 'firebase/firestore';
 import { hasLoaded, loadLanguage } from '~/managers/lang';
 import search from '~/managers/search';
 import { GameRecord, GameRecords } from '~/structures/GameRecord';
 
 const history: GameRecord[] = [];
-let last: QueryDocumentSnapshot<GameRecord>;
 
 export default async function searchRecent(): Promise<GameRecords> {
   const results = await search({
-    previous: last,
+    previous: history[0]?.date,
   });
-
-  if (!results.empty) {
-    [last] = results.docs;
-  }
 
   const records: GameRecord[] = [];
   results.forEach((record) => records.push(record.data()));

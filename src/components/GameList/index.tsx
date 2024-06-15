@@ -55,11 +55,12 @@ export default function GameList({
           onClick={handleClick}
           onKeyUp={handleClick}
           sx={{
+            border: '1px solid black',
             color: 'inherit',
             minWidth: 0,
             padding: 0,
             ':focus-visible': {
-              border: '1px solid white',
+              borderColor: 'white',
             },
           }}
         >

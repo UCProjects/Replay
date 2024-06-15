@@ -61,3 +61,10 @@ body.authed .unauthed,
 .PERSEVERANCE, [data-soul='PERSEVERANCE'] { color: var(--pers); }
 .KINDNESS, [data-soul='KINDNESS'] { color: var(--kindness); }
 .JUSTICE, [data-soul='JUSTICE'] { color: var(--justice); }
+
+.LEGENDARY { color: rgb(255, 215, 0); }
+.EPIC { color: var(--pers); }
+.RARE { color: rgb(0, 184, 255); }
+.COMMON { color: var(--font); }
+.BASE { color: rgb(128, 128, 128); }
+.GENERATED, .TOKEN { color: rgb(0, 200, 0); }

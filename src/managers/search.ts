@@ -25,7 +25,7 @@ export type SearchParams = {
   mode?: GameMode;
   name?: string;
   soul?: 'ANY' | Soul;
-  previous?: Snapshot;
+  previous?: Date;
 };
 
 export default function search({

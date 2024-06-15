@@ -1,3 +1,5 @@
+export type Soul = keyof typeof SOUL;
+
 export const SOUL = {
   BRAVERY: 'Bravery',
   DETERMINATION: 'Determination',
@@ -8,5 +10,3 @@ export const SOUL = {
   PERSEVERANCE: 'Perseverance',
   MONSTER: 'Monster', // Legacy
 } as const;
-
-export type Soul = keyof typeof SOUL;

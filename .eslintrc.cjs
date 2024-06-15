@@ -40,10 +40,7 @@ module.exports = {
   },
   plugins: ['react-refresh', '@typescript-eslint'],
   rules: {
-    '@typescript-eslint/explicit-function-return-type': ['error', {
-      allowHigherOrderFunctions: true,
-      allowIIFEs: true,
-    }],
+    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/no-shadow': 'error',
@@ -90,6 +87,9 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'semi': 'error',
+    'no-empty-function': ['error', { allow: ['constructors'] }],
     'no-shadow': 'off',
+    'no-use-before-define': 'off',
+    'no-useless-constructor': 'off',
   },
 }

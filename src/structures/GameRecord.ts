@@ -5,7 +5,7 @@ import {
   GameType,
 } from '~/types/game';
 import metaToUsers from '~/utils/metaToUsers';
-import { UserMeta, Users } from '~/types/user';
+import { User, UserMeta, Users } from '~/types/user';
 
 type GameInfo = {
   cards: DocumentKey;
@@ -59,6 +59,14 @@ export class GameRecord {
     this.translation = translation;
     this.type = type;
     this.users = metaToUsers(playermeta);
+  }
+
+  getUser(userId: User['id']): User {
+    const user = this.users.find(({ id }) => id === userId);
+    if (!user) {
+      throw new Error(`[${this.key}] User doesn't exist: ${userId}`);
+    }
+    return user;
   }
 }
 
