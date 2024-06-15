@@ -8,6 +8,7 @@ import { ReactNode } from 'react';
 import Flex from '~/components/Flex.tsx';
 import { useTranslation } from '~/hooks/useTranslation';
 import { useUser } from '~/hooks/useUser.ts';
+import Link from './Link';
 
 export default function Header(): ReactNode {
   const t = useTranslation();
@@ -20,7 +21,11 @@ export default function Header(): ReactNode {
       justifyContent="space-between"
     >
       <Flex xs="auto">
-        Undercards Replay
+        <Link
+          to="/"
+        >
+          Undercards Replay
+        </Link>
       </Flex>
       <Flex
         container

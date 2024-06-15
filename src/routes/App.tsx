@@ -6,6 +6,7 @@ import {
 import { PropsWithChildren, ReactNode } from 'react';
 import { Outlet, useNavigation } from 'react-router-dom';
 
+import Header from '~/components/Header.tsx';
 import Spinner from '~/components/Spinner.tsx';
 import TranslationProvider from '~/providers/TranslationProvider.tsx';
 import UserProvider from '~/providers/UserProvider.tsx';
@@ -23,6 +24,7 @@ function Body({ children }: PropsWithChildren): ReactNode {
         disableGutters
         maxWidth="lg"
       >
+        <Header />
         <Outlet />
         {children}
       </Container>

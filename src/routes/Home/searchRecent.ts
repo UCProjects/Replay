@@ -1,7 +1,7 @@
 import search from '~/managers/search';
 import { GameRecord, GameRecords } from '~/structures/GameRecord';
 
-const history: GameRecord[] = [];
+export const history: GameRecord[] = [];
 
 export default async function searchRecent(): Promise<GameRecords> {
   const results = await search({

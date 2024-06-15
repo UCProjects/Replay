@@ -11,15 +11,14 @@ import GameList from '~/components/GameList/index.tsx';
 import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import Footer from './components/Footer.tsx';
-import Header from './components/Header.tsx';
 import Navigation from './components/Navigation/index.tsx';
 import './home.css';
-import searchRecent from './searchRecent.ts';
+import searchRecent, { history } from './searchRecent.ts';
 
 const initialSearch = searchRecent();
 
 function RecentGames(): ReactNode {
-  const [entries, setEntries] = useState<GameRecords>([]);
+  const [entries, setEntries] = useState<GameRecords>(history);
   const [refresh, setRefresh] = useState(false);
   const loadLanguage = useLoadLanguage();
   // TODO: Add refresh cooldown
@@ -66,7 +65,6 @@ function RecentGames(): ReactNode {
 export default function Home(): ReactNode {
   return (
     <Box>
-      <Header />
       <Flex
         alignContent="flex-start"
         alignItems="flex-start"
