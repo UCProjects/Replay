@@ -9,9 +9,7 @@ export default async function searchRecent(): Promise<GameRecords> {
     previous: history[0]?.date,
   });
 
-  const records: GameRecord[] = [];
-  results.forEach((record) => records.push(record.data()));
-  history.unshift(...records);
+  history.unshift(...results);
 
   // TODO: Can I get away without this?
   if (history.length && !hasLoaded()) {
