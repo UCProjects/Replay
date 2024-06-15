@@ -5,6 +5,7 @@ import App from './App';
 
 function ErrorMessage(): ReactNode {
   const error = useRouteError();
+  console.error(error);
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {
       const msg = "This page doesn't exist!";

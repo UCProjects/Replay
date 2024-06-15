@@ -33,25 +33,33 @@ export type Slot = Card | null;
 
 export type GameBoard = Tuple<Slot, 8>;
 
+type HASH = string;
+type DateString = string;
+
 export type GameStateRaw = {
   action: string;
-  time: Date;
+  time: DateString;
   turn: number;
   turnPlayer: User['id'];
-  players: Tuple<PlayerRaw, 2>;
-  board: GameBoard;
+  players: HASH;
+  board: HASH;
   extra: unknown;
 };
 
 export type GameState = Modify<GameStateRaw, {
-  turnPlayer: User;
+  time: Date; // Convert to data
+  turnPlayer: User; // Convert to user
+}>;
+
+export type GameStateExpanded = Modify<GameState, {
+  board: GameBoard;
   players: Tuple<Player, 2>;
 }>;
 
 export type GameRaw = {
-  cache: Record<string, unknown>;
+  cache: Record<HASH, unknown>;
   index: GameStateRaw[];
-  players: Users;
+  players: Record<string, User>;
 };
 
 export type Game = Modify<GameRaw, {

@@ -82,7 +82,7 @@ export default async function search({
 export async function get(key: GameRecord['key']): Promise<GameRecord> {
   const cached = cache.get(key);
   if (cached) {
-    return Promise.resolve(cached);
+    return cached;
   }
 
   const ref = doc(db, 'gamehistory', key)
