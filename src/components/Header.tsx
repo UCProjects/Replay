@@ -19,6 +19,7 @@ export default function Header(): ReactNode {
       component="header"
       container
       justifyContent="space-between"
+      marginY="5px"
     >
       <Flex xs="auto">
         <Link

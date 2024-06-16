@@ -88,8 +88,8 @@ export default function Entry({
           <Typography
             component="span"
             sx={{
-              textAlign: 'right',
-              flexBasis: '120px',
+              textAlign: 'center',
+              flexBasis: '200px',
               alignSelf: 'center',
             }}
           >

@@ -28,6 +28,7 @@ export default function GameList({
     )),
     [entries],
   );
+  // TODO: Ignore tab events
   const handleClick = useCallback(() => {
     onRefresh?.();
   }, [

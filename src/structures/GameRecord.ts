@@ -1,4 +1,4 @@
-import { FirestoreDataConverter } from 'firebase/firestore';
+import { FirestoreDataConverter, Timestamp } from 'firebase/firestore';
 
 import {
   GameResult,
@@ -9,11 +9,11 @@ import { User, UserMeta, Users } from '~/types/user';
 
 type GameInfo = {
   cards: DocumentKey;
-  date: Date;
+  date: Timestamp;
   id: number;
   playermeta: UserMeta;
   results: GameResult;
-  start: Date;
+  start: Timestamp;
   translation: DocumentKey;
   type: GameType;
 };
@@ -27,7 +27,9 @@ export class GameRecord {
 
   public readonly key: DocumentKey;
 
-  public readonly results: GameResult;
+  public readonly results: Modify<GameResult, {
+    winner: User | null,
+  }>;
 
   public readonly start: Date;
 
@@ -51,14 +53,24 @@ export class GameRecord {
     key: DocumentKey,
   ) {
     this.cards = cards;
-    this.date = date;
+    this.date = date.toDate();
     this.gameId = id;
     this.key = key;
-    this.results = results;
-    this.start = start;
+    this.start = start.toDate();
     this.translation = translation;
     this.type = type;
     this.users = metaToUsers(playermeta);
+    if (results === null) {
+      this.results = {
+        type: 'timeout',
+        winner: null,
+      };
+    } else {
+      this.results = {
+        ...results,
+        winner: this.getUser(results.winner),
+      };
+    }
   }
 
   getUser(userId: User['id']): User {

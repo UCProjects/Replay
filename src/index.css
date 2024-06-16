@@ -35,6 +35,27 @@
   --master: rgb(255, 177, 0);
 }
 
+body {
+  text-align: center;
+}
+
+header {
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+h1 {
+  margin: 0;
+}
+
+section {
+  padding: 5px;
+  border: 1px solid var(--border);
+  margin: 5px;
+  margin-bottom: 10px;
+}
+
 a, a:visited {
   color: inherit;
 }
@@ -64,7 +85,7 @@ body.authed .unauthed,
 
 .LEGENDARY { color: rgb(255, 215, 0); }
 .EPIC { color: var(--pers); }
-.RARE { color: rgb(0, 184, 255); }
+.RARE { color: var(--blue); }
 .COMMON { color: var(--font); }
 .BASE { color: rgb(128, 128, 128); }
 .GENERATED, .TOKEN { color: rgb(0, 200, 0); }

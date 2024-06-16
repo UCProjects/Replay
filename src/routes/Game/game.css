@@ -1,0 +1,95 @@
+.gameBoard {
+  font-family: 'DTM-Mono';
+}
+
+.hpBar {
+  background: rgb(255, 0, 0);
+  color: rgb(255, 255, 0);
+  width: 80px;
+  height: 18px;
+  border: none;
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* HP layers: #6d9ef8 -> Orange -> Yellow -> Red */
+.hpBar[data-lives]:not([data-lives="0"])::after {
+  position: absolute;
+  top: 0;
+  right: 82px;
+  content: attr(data-lives);
+}
+
+.hpBar[data-dodge]:not([data-dodge="0"])::after {
+  position: absolute;
+  top: 0;
+  right: 82px;
+  content: attr(data-dodge);
+}
+
+.hpBar::before {
+  content: attr(data-health) '/' attr(max);
+  position: absolute;
+  transform: translateX(-50%);
+  color: rgb(0, 0, 0);
+  text-shadow: none;
+  margin-top: -1px;
+}
+
+.user-targeted .hpBar {
+  border: 2px solid rgb(206, 6, 233);
+}
+.user-targeted .hpBar::before {
+  margin-top: -3px;
+}
+
+.hpBar::-webkit-progress-bar {
+  background: rgb(255, 0, 0);
+}
+
+.hpBar::-webkit-progress-value {
+  background: rgb(255, 255, 0);
+}
+
+.hpBar::-moz-progress-bar {
+  background: rgb(255, 255, 0);
+}
+
+.hpBar[data-lives="1"] {
+  background: rgb(255, 255, 0);
+  color: rgb(255, 165, 0);
+}
+
+.hpBar[data-lives="1"]::-webkit-progress-bar {
+  background: rgb(255, 255, 0);
+}
+
+.hpBar[data-lives="1"]::-webkit-progress-value {
+  background: rgb(255, 165, 0);
+}
+
+.hpBar[data-lives="1"]::-moz-progress-bar {
+  background: rgb(255, 165, 0);
+}
+
+/* Extra lives are not currently possible */
+.hpBar[data-lives="2"] {
+  background: rgb(255, 165, 0);
+  color: rgb(109, 158, 248);
+}
+
+.hpBar[data-lives="2"]::-webkit-progress-bar {
+  background: rgb(255, 165, 0);
+}
+
+.hpBar[data-lives="2"]::-webkit-progress-value {
+  background: rgb(109, 158, 248);
+}
+
+.hpBar[data-lives="2"]::-moz-progress-bar {
+  background: rgb(109, 158, 248);
+}

@@ -1,5 +1,5 @@
 import { Card } from './card';
-import { User, Users } from './user';
+import { User } from './user';
 
 export type PlayerRaw = {
   id: User['id'];
@@ -47,6 +47,7 @@ export type GameStateRaw = {
 };
 
 export type GameState = Modify<GameStateRaw, {
+  id: number;
   time: Date; // Convert to data
   turnPlayer: User; // Convert to user
 }>;

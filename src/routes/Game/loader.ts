@@ -9,10 +9,14 @@ export default async function GameLoader({
     id,
     step,
   },
-  request,
+  // request,
 }: LoaderFunctionArgs): Promise<any> {
   if (!id) throw new Error('Failed to find game');
-  const [game] = await Promise.all([load(id)]);
-  await loadLanguage(game.translation);
-  return game;
+  const game = await load(id);
+  return Promise.all([
+    game,
+    step,
+    loadLanguage(game.translation),
+    // loadAllCards(game.cards)
+  ]);
 }

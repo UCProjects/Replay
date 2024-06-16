@@ -1,7 +1,8 @@
-import { Badge } from '@mui/material';
 import { ReactNode } from 'react';
 import Flex from '~/components/Flex';
 import { Player } from '~/types/game';
+import Badge from '~/components/Badge';
+import { styled } from '@mui/material';
 
 export type ProfileProps = {
   isCurrentTurn?: boolean;
@@ -9,6 +10,10 @@ export type ProfileProps = {
   isVictor?: boolean;
   player: Player;
 };
+
+const Img = styled('img')({
+  height: 20,
+});
 
 export default function Profile({
   isOpponent = false, // FIXME: We should be able to dynamically detect these values
@@ -31,12 +36,22 @@ export default function Profile({
 
   return (
     <Flex
+      alignItems="center"
       className={isOpponent ? 'opponent' : 'player'}
       container
-      data-userId={id}
+      data-user-id={id}
+      justifyContent="space-between"
+      position="relative"
+      sx={{
+        border: {
+          sm: '1px solid var(--bgcolor)',
+          xs: 0,
+        },
+      }}
     >
       <Flex
         className="user-info"
+        flexGrow={0}
       >
         <span className="name">{user.name}</span>
         <span className="artifacts" />
@@ -57,24 +72,34 @@ export default function Profile({
       </Flex>
       <Flex
         className="player-info"
+        flexGrow={0}
       >
         <Badge
+          anchorOrigin={{
+            vertical: isOpponent ? 'top' : 'bottom',
+            horizontal: isOpponent ? 'left' : 'left',
+          }}
           badgeContent={deck}
-          showZero
         >
-          <img alt="cards" src="/images/board/cards.png" />
+          <Img alt="cards" src="/images/board/cards.png" />
         </Badge>
         <Badge
+          anchorOrigin={{
+            vertical: isOpponent ? 'top' : 'bottom',
+            horizontal: isOpponent ? 'left' : 'left',
+          }}
           badgeContent={hand}
-          showZero
         >
-          <img alt="hand" src="/images/board/hand.png" />
+          <Img alt="hand" src="/images/board/hand.png" />
         </Badge>
         <Badge
+          anchorOrigin={{
+            vertical: isOpponent ? 'top' : 'bottom',
+            horizontal: isOpponent ? 'left' : 'left',
+          }}
           badgeContent={gold}
-          showZero
         >
-          <img alt="gold" src="/images/board/gold.png" />
+          <Img alt="gold" src="/images/board/gold.png" />
         </Badge>
       </Flex>
     </Flex>

@@ -15,8 +15,9 @@ export function loadGame(record: GameRecord, data: GameRaw): LoadedGame {
   function getUser(userId: User['id']): User {
     return data.players[userId];
   }
-  const index: GameState[] = data.index.map((state) => ({
+  const index: GameState[] = data.index.map((state, id) => ({
     ...state,
+    id,
     time: new Date(state.time),
     turnPlayer: getUser(state.turnPlayer),
   }));

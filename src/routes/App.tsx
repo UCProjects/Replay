@@ -1,16 +1,13 @@
 import {
   Container,
   CssBaseline,
-  ThemeProvider,
 } from '@mui/material';
 import { PropsWithChildren, ReactNode } from 'react';
 import { Outlet, useNavigation } from 'react-router-dom';
 
 import Header from '~/components/Header.tsx';
 import Spinner from '~/components/Spinner.tsx';
-import TranslationProvider from '~/providers/TranslationProvider.tsx';
-import UserProvider from '~/providers/UserProvider.tsx';
-import theme from './theme.ts';
+import GlobalProviders from '~/providers/GlobalProviders.tsx';
 
 function Body({ children }: PropsWithChildren): ReactNode {
   const { state } = useNavigation();
@@ -34,14 +31,10 @@ function Body({ children }: PropsWithChildren): ReactNode {
 
 export default function App({ children }: PropsWithChildren): ReactNode {
   return (
-    <ThemeProvider theme={theme}>
-      <TranslationProvider>
-        <UserProvider>
-          <Body>
-            {children}
-          </Body>
-        </UserProvider>
-      </TranslationProvider>
-    </ThemeProvider>
+    <GlobalProviders>
+      <Body>
+        {children}
+      </Body>
+    </GlobalProviders>
   );
 }

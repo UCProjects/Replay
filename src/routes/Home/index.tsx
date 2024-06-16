@@ -12,13 +12,12 @@ import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import Footer from './components/Footer.tsx';
 import Navigation from './components/Navigation/index.tsx';
-import './home.css';
 import searchRecent, { history } from './searchRecent.ts';
 
 const initialSearch = searchRecent();
 
 function RecentGames(): ReactNode {
-  const [entries, setEntries] = useState<GameRecords>(history);
+  const [entries, setEntries] = useState<GameRecords>([...history]);
   const [refresh, setRefresh] = useState(false);
   const loadLanguage = useLoadLanguage();
   // TODO: Add refresh cooldown
@@ -26,7 +25,12 @@ function RecentGames(): ReactNode {
   useEffect(() => {
     initialSearch.then((results) => {
       setEntries((prev) => {
-        if (prev.length) return prev;
+        if (prev.length) {
+          if (prev.length !== results.length) {
+            setRefresh(true);
+          }
+          return prev;
+        }
 
         // This would benefit from `useEffectEvent`
         if (results.length) {
