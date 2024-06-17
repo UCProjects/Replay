@@ -1,0 +1,251 @@
+.center-v {
+  display: flex;
+  align-items: center;
+}
+.center-h {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  border: 2px solid var(--border);
+  color: var(--font);
+  width: 162px;
+  overflow: hidden;
+  box-sizing: border-box;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+.card * {
+  margin: 0;
+}
+
+.card-top, .card-bottom {
+  height: 30px;
+}
+
+.card-top > * {
+  border-bottom: 2px solid var(--border);
+}
+
+.card-name {
+  flex-grow: 2;
+  padding-left: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.card-cost {
+  width: 40px;
+  border-left: 2px solid var(--border);
+  font-size: 1.2rem;
+  margin-top: -4px;
+  color: rgb(52, 185, 254);
+}
+
+.card-image {
+  position: relative;
+  height: 88px;
+}
+
+.card-description {
+  border-top: 2px solid var(--border);
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 2px 1px;
+  height: 80px;
+}
+
+.card-bottom > * {
+  border-top: 2px solid var(--border);
+}
+
+.card-attack {
+  width: 40px;
+  border-right: 2px solid var(--border);
+  color: rgb(255, 0, 0);
+  font-size: 20px;
+}
+
+.card-rarity {
+  flex-grow: 2;
+  padding: 5px 0;
+}
+
+.card-health {
+  width: 40px;
+  border-left: 2px solid var(--border);
+  color: rgb(107, 204, 0);
+  font-size: 20px;
+}
+
+.card-damaged .card-health {
+  color: rgb(255, 204, 0);
+}
+
+.card-status, .card-tribes {
+  position: absolute;
+  right: 2px;
+}
+
+.card-status {
+  top: 4px;
+}
+
+.card-tribes {
+  bottom: 0px;
+}
+
+.card-status > img,
+.card-tribes > img,
+.card-status > span {
+  margin-left: 2px;
+}
+
+.card-status img, .card-tribes img {
+  width: 16px;
+}
+
+.card-avatar {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bgcolor);
+}
+
+.card-spell .card-health, .card-spell .card-attack {
+  display: none;
+}
+
+.card-image > .name {
+  display: none;
+  position: absolute;
+  background-color: rgba(75, 168, 255, 0.582);
+  bottom: 5px;
+  left: 0px;
+  opacity: 0.9;
+  padding: 2px 5px;
+  padding-right: 12px;
+  border-bottom-right-radius: 20px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Borders */
+.card-shiny {
+  background-color: rgb(255, 216, 89);
+  background-image: linear-gradient(
+    45deg,
+    rgb(138, 114, 40) 0%,
+    rgb(255, 216, 89) 50%,
+    rgb(138, 114, 40) 100%
+  );
+  background-size: 1500px 100%;
+  animation: shimmer 5s ease infinite;
+  box-shadow: 0 0 10px rgb(255, 216, 89);
+}
+
+.no-animation .card-shiny {
+  animation: none;
+  background-size: 100%;
+}
+
+.card-shiny .card-avatar {
+  mix-blend-mode: multiply;
+}
+
+.card-attacking,
+.card-attacking .black-bg {
+  border-color: rgb(255, 0, 84);
+}
+
+.card-shiny.card-attacking {
+  background-color: rgb(255, 0, 84);
+  background-image: linear-gradient(
+    45deg,
+    rgb(255, 0, 84) 0%,
+    rgb(247, 119, 162) 50%,
+    rgb(255, 0, 84) 100%
+  );
+  animation-duration: 7s;
+}
+
+.card-defending,
+.card-defending .black-bg {
+  border-color: rgb(63, 43, 150);
+}
+
+.card-shiny.card-defending {
+  background-color: rgb(63, 43, 150);
+  background-image: linear-gradient(
+    45deg,
+    rgb(63, 43, 150) 0%,
+    rgb(168, 192, 255) 50%,
+    rgb(63, 43, 150) 100%
+  );
+  animation-duration: 7s;
+}
+
+.card-playable,
+.card-playable .black-bg {
+  border-color: rgb(0, 95, 0);
+}
+
+.card-shiny.card-playable {
+  background-color: rgb(0, 95, 0);
+  background-image: linear-gradient(
+    45deg,
+    rgb(0, 95, 0) 0%,
+    rgba(41, 255, 41, 0.829) 50%,
+    rgb(0, 95, 0) 100%
+  );
+  animation-duration: 7s;
+}
+
+.card-shiny,
+.card-shiny .black-bg {
+  border-color: transparent;
+}
+
+.card.effectActive,
+.card.effectActive .black-bg,
+.card-effect,
+.card-effect .black-bg {
+  border-color: rgb(42, 171, 210);
+}
+
+.card-target,
+.card-target .black-bg {
+  border-color: rgb(255, 0, 255);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position-x: 1%;
+  }
+
+  50% {
+    background-position-x: 99%;
+  }
+
+  100% {
+    background-position-x: 1%;
+  }
+}
+
+/* Remove description for smaller screens */
+@media only screen and (max-height: 1200px) and (orientation: portrait) and (max-width: 750px),
+  only screen and (max-height: 560px) and (orientation: landscape) {
+  .card-description { display: none; }
+  .card-full .card-description { display: flex; }
+}
+
+/* Remove header for tiny screens */
+@media only screen and (orientation: portrait) and (max-height: 700px),
+  only screen and (max-height: 400px) {
+  .card-top { display: none; }
+  .card-image > .name { display: block; }
+  .card-full .card-top { display: flex; }
+  .card-full .card-image > .name { display: none; }
+}

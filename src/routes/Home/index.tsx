@@ -11,7 +11,7 @@ import GameList from '~/components/GameList/index.tsx';
 import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import Footer from './components/Footer.tsx';
-import Navigation from './components/Navigation/index.tsx';
+import Navigation from './components/Navigation';
 import searchRecent from './searchRecent.ts';
 
 function RecentGames(): ReactNode {

@@ -9,7 +9,7 @@ export type Rarity = 'GENERATED' | 'BASE' | 'COMMON' | 'RARE' | 'EPIC' | 'LEGEND
 
 export enum Family {
   UT = 'BASE',
-  DT = 'DELTARUNE',
+  DR = 'DELTARUNE',
   UTY = 'UTY',
 }
 
