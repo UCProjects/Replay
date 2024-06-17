@@ -12,48 +12,34 @@ import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import Footer from './components/Footer.tsx';
 import Navigation from './components/Navigation/index.tsx';
-import searchRecent, { history } from './searchRecent.ts';
-
-const initialSearch = searchRecent();
+import searchRecent from './searchRecent.ts';
 
 function RecentGames(): ReactNode {
-  const [entries, setEntries] = useState<GameRecords>([...history]);
+  const [entries, setEntries] = useState<GameRecords>([]);
   const [refresh, setRefresh] = useState(false);
   const loadLanguage = useLoadLanguage();
   // TODO: Add refresh cooldown
-
-  useEffect(() => {
-    initialSearch.then((results) => {
-      setEntries((prev) => {
-        if (prev.length) {
-          if (prev.length !== results.length) {
-            setRefresh(true);
-          }
-          return prev;
-        }
-
-        // This would benefit from `useEffectEvent`
-        if (results.length) {
-          loadLanguage(results[0].translation);
-        }
-        return [...results];
-      });
-    });
-  }, [loadLanguage]);
 
   useEffect(() => {
     if (!refresh) return;
     (async () => {
       try {
         const games = await searchRecent();
+        // This could benefit from `useEffectEvent`
+        if (games.length) {
+          loadLanguage(games[0].translation);
+        }
         setEntries(games);
       } finally {
         setRefresh(false);
       }
     })();
   }, [
+    loadLanguage,
     refresh,
   ]);
+
+  useEffect(() => setRefresh(true), []);
 
   const handleRefresh = useCallback(() => setRefresh(true), []);
 

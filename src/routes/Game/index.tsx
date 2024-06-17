@@ -31,7 +31,21 @@ function Render(): ReactNode {
       className="gameBoard"
     >
       <Profile isOpponent player={state.players[1]} />
-      <Flex container>
+      <Flex
+        container
+        sx={{
+          '@media (orientation: portrait)': {
+            sm: {
+              flexDirection: 'row',
+              maxHeight: 'unset',
+            },
+            xs: {
+              flexDirection: 'column',
+              maxHeight: '600px',
+            },
+          },
+        }}
+      >
         {board}
       </Flex>
       <Profile player={state.players[0]} />

@@ -12,13 +12,22 @@ export type SlotProps = StyledSlotProps & {
 };
 
 const StyledSlot = styled('div')<StyledSlotProps>(({ isOpponent, theme }) => theme.unstable_sx({
+  order: 0,
   width: '25%',
   padding: 5,
   backgroundColor: `var(--${isOpponent ? 'opponent' : 'player'})`,
-  border: {
-    sm: '1px solid var(--bgcolor)',
+  border: '1px solid var(--bgcolor)',
+  '@media (orientation: portrait)': {
+    sm: {
+      borderWidth: 1,
+      width: '25%',
+      order: 0,
+    },
     xs: {
-      '(orientation: portrait)': 0,
+      borderWidth: 0,
+      width: '50%',
+      height: 148,
+      order: isOpponent ? 1 : 0,
     },
   },
 }));

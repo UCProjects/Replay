@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import Flex from '~/components/Flex';
 import { Player } from '~/types/game';
 import Badge from '~/components/Badge';
-import { styled } from '@mui/material';
+import { BadgeProps, styled } from '@mui/material';
 
 export type ProfileProps = {
   isCurrentTurn?: boolean;
@@ -12,7 +12,7 @@ export type ProfileProps = {
 };
 
 const Img = styled('img')({
-  height: 20,
+  height: 28,
 });
 
 export default function Profile({
@@ -34,6 +34,11 @@ export default function Profile({
   // TODO: getGameState()
   // TODO: MUI-fy
 
+  const anchor: BadgeProps['anchorOrigin'] = {
+    horizontal: isOpponent ? 'left' : 'left',
+    vertical: !isOpponent ? 'top' : 'bottom',
+  };
+
   return (
     <Flex
       alignItems="center"
@@ -41,6 +46,7 @@ export default function Profile({
       container
       data-user-id={id}
       justifyContent="space-between"
+      overflow="hidden"
       position="relative"
       sx={{
         border: {
@@ -75,28 +81,19 @@ export default function Profile({
         flexGrow={0}
       >
         <Badge
-          anchorOrigin={{
-            vertical: isOpponent ? 'top' : 'bottom',
-            horizontal: isOpponent ? 'left' : 'left',
-          }}
+          anchorOrigin={anchor}
           badgeContent={deck}
         >
           <Img alt="cards" src="/images/board/cards.png" />
         </Badge>
         <Badge
-          anchorOrigin={{
-            vertical: isOpponent ? 'top' : 'bottom',
-            horizontal: isOpponent ? 'left' : 'left',
-          }}
+          anchorOrigin={anchor}
           badgeContent={hand}
         >
           <Img alt="hand" src="/images/board/hand.png" />
         </Badge>
         <Badge
-          anchorOrigin={{
-            vertical: isOpponent ? 'top' : 'bottom',
-            horizontal: isOpponent ? 'left' : 'left',
-          }}
+          anchorOrigin={anchor}
           badgeContent={gold}
         >
           <Img alt="gold" src="/images/board/gold.png" />

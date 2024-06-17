@@ -3,6 +3,8 @@
 }
 
 .hpBar {
+  font-size: 16px;
+  line-height: normal;
   background: rgb(255, 0, 0);
   color: rgb(255, 255, 0);
   width: 80px;
