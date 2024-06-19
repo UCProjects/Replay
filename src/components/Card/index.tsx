@@ -1,10 +1,11 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import { useTranslation } from '~/hooks/useTranslation';
 import { Slot } from '~/types/game';
 import { Status } from './Status';
 import { Tribes } from './Tribes';
 import './card.css';
+import { Footer } from './Footer';
 
 export type CardProps = {
   data: Slot;
@@ -17,6 +18,7 @@ export function Card({
   const t = useTranslation();
   return (
     <Stack
+      bgcolor="var(--bgcolor)"
       className="card"
       visibility={data ? 'visible' : 'hidden'}
     >
@@ -24,9 +26,13 @@ export function Card({
         className="card-top"
         direction="row"
       >
-        <div className="card-name">
-          {data && t(`card-name-${data.id}`)}
-        </div>
+        <Box
+          className="card-name"
+          dangerouslySetInnerHTML={data ? {
+            __html: t(`card-name-${data.fixedId}`, '1'),
+          } : undefined}
+          textAlign="left"
+        />
         <div className="card-cost">
           {data?.cost}
         </div>
@@ -38,15 +44,23 @@ export function Card({
           draggable="false"
           src={data ? `/images/cards/${data.name}.png` : ''}
         />
-        <div className="name outlined">
-          {data && t(`card-name-${data.id}`)}
-        </div>
+        <Box
+          className="name outlined"
+          dangerouslySetInnerHTML={data ? {
+            __html: t(`card-name-${data.fixedId}`, '1'),
+          } : undefined}
+        />
         <Status data={data} />
         <Tribes data={data} />
       </div>
       <div className="card-description center-v center-h">
-        <span>{data ? t(`card-${data.id}`) : ''}</span>
+        <Box
+          dangerouslySetInnerHTML={data ? {
+            __html: t(`card-${data.fixedId}`),
+          } : undefined}
+        />
       </div>
+      <Footer data={data} />
     </Stack>
   );
 }

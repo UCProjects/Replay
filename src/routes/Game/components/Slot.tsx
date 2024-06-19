@@ -31,6 +31,9 @@ const StyledSlot = styled('div')<StyledSlotProps>(({ isOpponent, theme }) => the
       order: isOpponent ? 1 : 0,
     },
   },
+  justifyContent: 'center',
+  alignItems: 'center',
+  display: 'flex',
 }));
 
 export function Slot({

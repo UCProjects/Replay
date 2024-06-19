@@ -22,12 +22,17 @@
   margin: 0;
 }
 
-.card-top, .card-bottom {
-  height: 30px;
+.card-top {
+  border-bottom: 2px solid var(--border);
 }
 
-.card-top > * {
-  border-bottom: 2px solid var(--border);
+.card-bottom {
+  border-top: 2px solid var(--border);
+}
+
+.card-top, .card-bottom {
+  align-items: center;
+  height: 30px;
 }
 
 .card-name {
@@ -41,7 +46,6 @@
   width: 40px;
   border-left: 2px solid var(--border);
   font-size: 1.2rem;
-  margin-top: -4px;
   color: rgb(52, 185, 254);
 }
 
@@ -56,10 +60,6 @@
   font-size: 0.8rem;
   padding: 2px 1px;
   height: 80px;
-}
-
-.card-bottom > * {
-  border-top: 2px solid var(--border);
 }
 
 .card-attack {

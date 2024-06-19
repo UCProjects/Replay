@@ -63,6 +63,7 @@ export type Card<Type extends CardType = CardType.MONSTER> = (
   Type extends CardType.MONSTER ? MonsterInfo : CardInfo
 ) & {
   id: number;
+  fixedId: number;
   type: Type;
   name: string;
   image: string;

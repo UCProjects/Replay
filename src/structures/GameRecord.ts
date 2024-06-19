@@ -68,7 +68,7 @@ export class GameRecord {
     } else {
       this.results = {
         ...results,
-        winner: this.getUser(results.winner),
+        winner: results.winner ? this.getUser(results.winner) : null,
       };
     }
   }

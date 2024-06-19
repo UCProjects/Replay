@@ -11,7 +11,8 @@ export type FooterProps = {
 export function Footer({
   data,
 }: FooterProps): ReactNode {
-  const isMonster = data?.type === CardType.MONSTER;
+  const { type = CardType.MONSTER } = data ?? {};
+  const isMonster = data && type === CardType.MONSTER;
   return (
     <Stack
       className="card-bottom"
