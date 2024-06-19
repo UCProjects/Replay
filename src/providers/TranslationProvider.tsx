@@ -8,6 +8,7 @@ import {
 import { TranslationContent, TranslationContext } from '~/hooks/useTranslation';
 import {
   getLocale,
+  hasLoaded,
   loadLanguage,
   setLocale as setLang,
   translate,
@@ -17,7 +18,7 @@ export default function TranslationProvider({
   children,
 }: PropsWithChildren): ReactNode {
   const [locale, setLocale] = useState(getLocale());
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(hasLoaded());
 
   const handleLocaleChange = useCallback((newLocale: TranslationContent['locale']) => {
     setLang(newLocale);

@@ -32,7 +32,7 @@ export function useTranslation(): TranslationContent['t'] {
   const { t, locale, ready } = content;
   return useCallback(
     (...args: Parameters<TranslationContent['t']>) => {
-      if (!locale && !ready) return '';
+      if (!locale || !ready) return '';
       return t(...args);
     },
     [
