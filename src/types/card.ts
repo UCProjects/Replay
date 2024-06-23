@@ -1,6 +1,7 @@
 import { Soul } from './soul';
 
 export enum CardType {
+  UNKNOWN = -1,
   MONSTER,
   SPELL,
 }

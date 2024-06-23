@@ -4,6 +4,11 @@ import getFile from './getFile';
 import { plugins } from './plugins';
 import { Nodes } from './utils';
 
+export type TranslateOptions = {
+  decode?: boolean;
+  fallback?: string,
+};
+
 const cache = new Map<string, Record<string, string>>();
 
 export function hasLoaded(): boolean {
@@ -25,10 +30,6 @@ export async function loadLanguage(key: DocumentKey): Promise<void> {
   }
 }
 
-export type TranslateOptions = {
-  decode?: boolean;
-  fallback?: string,
-};
 export function translate(message: string, ...args: Optional<string[], TranslateOptions>): string {
   const {
     decode = true,

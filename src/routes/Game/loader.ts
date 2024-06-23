@@ -7,7 +7,6 @@ import { loadLanguage } from '~/managers/lang';
 export default async function GameLoader({
   params: {
     id,
-    step,
   },
   // request,
 }: LoaderFunctionArgs): Promise<any> {
@@ -15,7 +14,6 @@ export default async function GameLoader({
   const game = await load(id);
   return Promise.all([
     game,
-    step,
     loadLanguage(game.translation),
     // loadAllCards(game.cards)
   ]);

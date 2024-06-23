@@ -34,6 +34,7 @@ function Render(): ReactNode {
       <Flex
         container
         sx={{
+          // TODO: This needs more restrictions
           '@media (orientation: portrait)': {
             sm: {
               flexDirection: 'row',
@@ -41,7 +42,7 @@ function Render(): ReactNode {
             },
             xs: {
               flexDirection: 'column',
-              maxHeight: '600px',
+              maxHeight: '608px',
             },
           },
         }}

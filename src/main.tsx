@@ -17,7 +17,7 @@ const router = createBrowserRouter([{
   element: <App />,
   errorElement: <Error />,
   children: [{
-    path: 'game/:id/:step?',
+    path: 'game/:id/',
     element: <Game />,
     loader: gameLoader,
   }, {

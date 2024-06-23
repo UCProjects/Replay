@@ -55,8 +55,9 @@ export type EntryProps = {
 
 export default function Entry({
   record: {
-    date: _date,
+    date,
     key,
+    start,
     type,
     users: [
       player,
@@ -71,9 +72,11 @@ export default function Entry({
     <>
       <Divider />
       <Link
-        to={`/game/${key}`}
+        to={`/game/${key}/`}
       >
         <Stack
+          data-date={date}
+          data-start={start}
           direction="row"
         >
           <UserData

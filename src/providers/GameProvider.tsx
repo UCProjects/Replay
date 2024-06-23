@@ -11,10 +11,10 @@ import { GameContext } from '~/hooks/useGame';
 import { LoadedGame, expand } from '~/structures/LoadedGame';
 import { GameState, GameStateExpanded } from '~/types/game';
 
-export type LoaderDataType = [LoadedGame, string];
+export type LoaderDataType = [LoadedGame];
 
 export function GameProvider({ children }: PropsWithChildren): ReactNode {
-  const [[game, step]] = useState<LoaderDataType>(useLoaderData() as LoaderDataType);
+  const [[game]] = useState(useLoaderData() as LoaderDataType);
 
   const processGameState = useCallback((state: GameStateExpanded) => {
     state.players.forEach((acc) => {
@@ -32,16 +32,12 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
       const expanded = expand(newState, game.cache);
       return processGameState(expanded);
     });
-  }, [game.cache, processGameState]);
+  }, [game, processGameState]);
 
-  useEffect(() => {
-    const id = Number(step) || 0;
-    handleSetGameState(game.index[id]);
-  }, [
-    game,
-    handleSetGameState,
-    step,
-  ]);
+  useEffect(
+    () => handleSetGameState(game.index[0]),
+    [game, handleSetGameState],
+  );
 
   const content = useMemo(() => ({
     game,

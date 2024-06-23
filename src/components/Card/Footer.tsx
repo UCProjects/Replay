@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import { CardType, Family } from '~/types/card';
 import { Slot } from '~/types/game';
@@ -11,8 +11,21 @@ export type FooterProps = {
 export function Footer({
   data,
 }: FooterProps): ReactNode {
-  const { type = CardType.MONSTER } = data ?? {};
-  const isMonster = data && type === CardType.MONSTER;
+  if (!data) {
+    // Spoof a footer so the board spacing is correct
+    return (
+      <Stack
+        className="card-bottom"
+        direction="row"
+      />
+    );
+  }
+
+  const {
+    // I strip "0" from the game data... so we need to give it a default.
+    type = CardType.MONSTER,
+  } = data;
+  const isMonster = type === CardType.MONSTER;
   return (
     <Stack
       className="card-bottom"
@@ -21,14 +34,21 @@ export function Footer({
       {isMonster && (
         <div className="card-attack">{data.attack}</div>
       )}
-      <div className="card-rarity center-v center-h">
+      <Box
+        className="card-rarity"
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         <img
-          alt={data?.rarity || 'rarity'}
+          alt={data.rarity}
           className="rarity"
           draggable="false"
-          src={data ? `/images/rarity/${data.rarity}${getType(data.extension)}.png` : ''}
+          src={`/images/rarity/${data.rarity}${getType(data.extension)}.png`}
         />
-      </div>
+      </Box>
       {isMonster && (
         <div className="card-health">{data.hp}</div>
       )}

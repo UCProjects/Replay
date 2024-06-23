@@ -1,11 +1,12 @@
-import { Box, Stack } from '@mui/material';
-import { ReactNode } from 'react';
+import { Stack } from '@mui/material';
+import { ReactNode, useMemo } from 'react';
 import { useTranslation } from '~/hooks/useTranslation';
 import { Slot } from '~/types/game';
 import { Status } from './Status';
 import { Tribes } from './Tribes';
 import './card.css';
 import { Footer } from './Footer';
+import { FitText } from '../FitText';
 
 export type CardProps = {
   data: Slot;
@@ -16,6 +17,14 @@ export function Card({
   data,
 }: CardProps): ReactNode {
   const t = useTranslation();
+  const name = useMemo(() => {
+    if (data?.fixedId) return t(`card-name-${data.fixedId}`, '1');
+    return '';
+  }, [
+    data?.fixedId,
+    t,
+  ]);
+
   return (
     <Stack
       bgcolor="var(--bgcolor)"
@@ -25,14 +34,19 @@ export function Card({
       <Stack
         className="card-top"
         direction="row"
+        display={{
+          sm: 'flex',
+          xs: 'none',
+        }}
       >
-        <Box
+        <FitText
           className="card-name"
-          dangerouslySetInnerHTML={data ? {
-            __html: t(`card-name-${data.fixedId}`, '1'),
-          } : undefined}
+          fitHeight={false}
+          size={15}
           textAlign="left"
-        />
+        >
+          {name}
+        </FitText>
         <div className="card-cost">
           {data?.cost}
         </div>
@@ -42,22 +56,22 @@ export function Card({
           alt="avatar"
           className="card-avatar"
           draggable="false"
-          src={data ? `/images/cards/${data.name}.png` : ''}
+          src={data ? `/images/cards/${data.name.replace(/ /g, '_')}.png` : ''}
         />
-        <Box
+        <FitText
           className="name outlined"
-          dangerouslySetInnerHTML={data ? {
-            __html: t(`card-name-${data.fixedId}`, '1'),
-          } : undefined}
-        />
+          fitHeight={false}
+          size={13}
+        >
+          {name}
+        </FitText>
         <Status data={data} />
         <Tribes data={data} />
       </div>
       <div className="card-description center-v center-h">
-        <Box
-          dangerouslySetInnerHTML={data ? {
-            __html: t(`card-${data.fixedId}`),
-          } : undefined}
+        <FitText
+          fitBoth
+          html={data ? t(`card-${data.fixedId}`) : ''}
         />
       </div>
       <Footer data={data} />

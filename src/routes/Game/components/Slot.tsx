@@ -21,13 +21,13 @@ const StyledSlot = styled('div')<StyledSlotProps>(({ isOpponent, theme }) => the
     sm: {
       borderWidth: 1,
       width: '25%',
-      height: 'unset',
+      maxHeight: 'unset',
       order: 0,
     },
     xs: {
       borderWidth: 0,
       width: '50%',
-      height: 148,
+      maxHeight: 152,
       order: isOpponent ? 1 : 0,
     },
   },

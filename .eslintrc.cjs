@@ -72,9 +72,7 @@ module.exports = {
           unnamedComponents: 'arrow-function',
         },
     ],
-    'react/require-default-props': ['error', {
-      functions: 'defaultArguments',
-    }],
+    'react/require-default-props': ['off'],
     'react/jsx-props-no-spreading': 'off',
     'react/jsx-sort-props': [
       'warn',

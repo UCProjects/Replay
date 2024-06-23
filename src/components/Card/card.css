@@ -37,6 +37,7 @@
 
 .card-name {
   flex-grow: 2;
+  font-size: 15px;
   padding-left: 3px;
   white-space: nowrap;
   overflow: hidden;
@@ -47,6 +48,7 @@
   border-left: 2px solid var(--border);
   font-size: 1.2rem;
   color: rgb(52, 185, 254);
+  flex-shrink: 0;
 }
 
 .card-image {
