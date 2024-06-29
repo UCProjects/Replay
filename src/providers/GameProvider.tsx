@@ -9,16 +9,23 @@ import {
 import { useLoaderData } from 'react-router-dom';
 import { GameContext } from '~/hooks/useGame';
 import { LoadedGame, expand } from '~/structures/LoadedGame';
-import { GameState, GameStateExpanded } from '~/types/game';
+import {
+  GameState,
+  GameStateExpanded,
+  Slot,
+} from '~/types/game';
 
 export type LoaderDataType = [LoadedGame];
 
 export function GameProvider({ children }: PropsWithChildren): ReactNode {
   const [[game]] = useState(useLoaderData() as LoaderDataType);
+  const [activeSlot, setActiveSlot] = useState<Slot>(null);
 
   const processGameState = useCallback((state: GameStateExpanded) => {
     state.players.forEach((acc) => {
-      acc.user = game.getUser(acc.id);
+      const user = game.getUser(acc.id);
+      acc.user = user;
+      acc.isOpponent = user === game.users[1];
     });
     return state;
   }, [game]);
@@ -40,10 +47,13 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
   );
 
   const content = useMemo(() => ({
+    activeSlot,
+    setActiveSlot,
     game,
     gameState,
     setGameState: handleSetGameState,
   }), [
+    activeSlot,
     game,
     gameState,
     handleSetGameState,

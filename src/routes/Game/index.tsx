@@ -6,6 +6,7 @@ import {
 import Flex from '~/components/Flex';
 import { useGameState } from '~/hooks/useGame';
 import { GameProvider } from '~/providers/GameProvider';
+import ActiveCard from './components/ActiveCard';
 import Profile from './components/Profile';
 import { Slot } from './components/Slot';
 import './game.css';
@@ -49,6 +50,7 @@ function Render(): ReactNode {
         {board}
       </Flex>
       <Profile player={state.players[0]} />
+      <ActiveCard />
     </Box>
   );
 }
