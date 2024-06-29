@@ -3,7 +3,7 @@ import {
   ReactNode,
   useMemo,
 } from 'react';
-import Flex from '~/components/Flex';
+import { Flex } from '~/components/Flex';
 import { useGameState } from '~/hooks/useGame';
 import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';

@@ -6,11 +6,11 @@ import {
   useMemo,
   useRef,
 } from 'react';
+import { Flex } from '~/components/Flex';
+import { PagedList } from '~/components/PagedList';
 import { GameRecords } from '~/structures/GameRecord';
 import { useTranslation } from '~/hooks/useTranslation';
 import Entry from './Entry';
-import Flex from '../Flex';
-import { PagedList } from '../PagedList';
 
 export type GameListParams = {
   title?: string;

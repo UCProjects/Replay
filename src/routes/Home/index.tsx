@@ -6,7 +6,7 @@ import {
 } from 'react';
 import { Box } from '@mui/material';
 
-import Flex from '~/components/Flex.tsx';
+import { Flex } from '~/components/Flex.tsx';
 import GameList from '~/components/GameList/index.tsx';
 import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';

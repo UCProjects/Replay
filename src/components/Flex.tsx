@@ -14,5 +14,3 @@ export const Flex = forwardRef<HTMLDivElement, FlexProps>(({
     {children}
   </Grid>
 ));
-
-export default Flex;

@@ -1,6 +1,6 @@
 import { BadgeProps, styled } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
-import Flex from '~/components/Flex';
+import { Flex } from '~/components/Flex';
 import { Player } from '~/types/game';
 import Badge from '~/components/Badge';
 import { useGame, useGameState } from '~/hooks/useGame';

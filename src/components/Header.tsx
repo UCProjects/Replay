@@ -5,7 +5,7 @@ import {
 } from '@mui/icons-material';
 import { ReactNode } from 'react';
 
-import Flex from '~/components/Flex.tsx';
+import { Flex } from '~/components/Flex.tsx';
 import { useTranslation } from '~/hooks/useTranslation';
 import { useUser } from '~/hooks/useUser.ts';
 import Link from './Link';
