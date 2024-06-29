@@ -9,6 +9,11 @@ import {
   Slot,
 } from '~/types/game';
 
+const IGNORED_EVENTS: Array<GameStateExpanded['action']> = [
+  'log',
+  'update',
+];
+
 function getActiveCard(state: GameStateExpanded): Slot {
   switch (state.action) {
     case 'discard':
@@ -24,6 +29,8 @@ export default function useEvents() {
   const setActiveSlot = useSetActiveSlot();
 
   useEffect(() => {
+    if (IGNORED_EVENTS.includes(state.action)) return;
+
     setActiveSlot(getActiveCard(state));
   }, [setActiveSlot, state]);
 }
