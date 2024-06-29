@@ -54,6 +54,7 @@ module.exports = {
         },
     ],
     'import/extensions': 'off',
+    'import/prefer-default-export': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     'react/jsx-filename-extension': ['error', {
       "allow": "as-needed",

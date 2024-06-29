@@ -1,65 +1,62 @@
-import { Box, Stack } from '@mui/material';
-import { ReactNode } from 'react';
-import { CardType, Family } from '~/types/card';
-import { Slot } from '~/types/game';
+import { Box, styled } from '@mui/material';
+import {
+  PropsWithChildren,
+  ReactNode,
+  useMemo,
+} from 'react';
+import { Monster } from '~/types/card';
+import { WithSlot } from '~/types/game';
+import { isMonster } from '~/utils/isCard';
+import { getType } from './utils';
 
-export type FooterProps = {
-  data: Slot;
-};
+const Rarity = styled(Box)({
+  alignItems: 'center',
+  className: 'card-rarity',
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+function MonsterBar({
+  children,
+  monster: {
+    attack = 0,
+    hp = 0,
+  },
+}: PropsWithChildren<{ monster: Monster }>) {
+  return (
+    <>
+      <div className="card-attack">{attack}</div>
+      {children}
+      <div className="card-health">{hp}</div>
+    </>
+  );
+}
 
 // TODO: HP can have status effects
 export function Footer({
   data,
-}: FooterProps): ReactNode {
-  if (!data) {
-    // Spoof a footer so the board spacing is correct
+}: WithSlot): ReactNode {
+  const rarity = useMemo(() => {
+    if (!data) return null;
     return (
-      <Stack
-        className="card-bottom"
-        direction="row"
-      />
-    );
-  }
-
-  const {
-    // I strip "0" from the game data... so we need to give it a default.
-    type = CardType.MONSTER,
-  } = data;
-  const isMonster = type === CardType.MONSTER;
-  return (
-    <Stack
-      className="card-bottom"
-      direction="row"
-    >
-      {isMonster && (
-        <div className="card-attack">{data.attack}</div>
-      )}
-      <Box
-        className="card-rarity"
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+      <Rarity>
         <img
           alt={data.rarity}
           className="rarity"
           draggable="false"
           src={`/images/rarity/${data.rarity}${getType(data.extension)}.png`}
         />
-      </Box>
-      {isMonster && (
-        <div className="card-health">{data.hp}</div>
-      )}
-    </Stack>
-  );
-}
+      </Rarity>
+    );
+  }, [data]);
 
-function getType(type: Family): string {
-  switch (type) {
-    case Family.UT: return '';
-    case Family.DR: return '_DR';
-    default: return `_${type}`;
-  }
+  if (!data) return null;
+
+  return (isMonster(data) ? (
+    <MonsterBar monster={data}>
+      {rarity}
+    </MonsterBar>
+  ) : (
+    rarity
+  ));
 }

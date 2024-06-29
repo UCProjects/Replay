@@ -1,4 +1,4 @@
-import { Card } from './card';
+import { Card, Monster, Spell } from './card';
 import { User } from './user';
 
 export type PlayerRaw = {
@@ -15,6 +15,7 @@ export type PlayerRaw = {
 };
 
 export type Player = PlayerRaw & {
+  isOpponent: boolean;
   user: User;
 };
 
@@ -31,13 +32,17 @@ export type GameResult = {
 
 export type Slot = Card | null;
 
+export type WithSlot<W = unknown> = W & {
+  data: Slot;
+};
+
 export type GameBoard = Tuple<Slot, 8>;
 
 type HASH = string;
 type DateString = string;
 
 export type GameStateRaw = {
-  action: string;
+  action: keyof Actions;
   time: DateString;
   turn: number;
   turnPlayer: User['id'];
@@ -66,6 +71,44 @@ export type GameRaw = {
 export type Game = Modify<GameRaw, {
   index: GameState[];
 }>;
+
+type EventEffect = {
+  trigger: Card | PlayerRaw;
+  affected: {
+    cards: [];
+    players: [];
+  }
+};
+
+type EventAttack = {
+  attacker: Card;
+  damage: number;
+  defender: Card;
+};
+
+export type Actions = {
+  animation: unknown;
+  artifactEffect: EventEffect;
+  attack: EventAttack;
+  attackPlayer: Modify<EventAttack, { defender: PlayerRaw }>;
+  cardEffect: EventEffect;
+  damaged: unknown;
+  discard: Card;
+  exposed: Card;
+  finished: never;
+  gameTurn: never;
+  healed: unknown;
+  init: never;
+  killed: Monster;
+  log: unknown;
+  monster: Monster;
+  playerTurn: never;
+  respawn: Monster;
+  soulEffect: EventEffect;
+  spell: Spell;
+  unknown: { action: string; [key: string]: unknown; };
+  update: never;
+}
 
 export const MODE = {
   ANY: 'Any',

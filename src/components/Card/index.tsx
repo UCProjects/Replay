@@ -1,21 +1,17 @@
 import { Stack } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { useTranslation } from '~/hooks/useTranslation';
-import { Slot } from '~/types/game';
+import { FitText } from '~/components/FitText';
+import { WithSlot } from '~/types/game';
 import { Status } from './Status';
 import { Tribes } from './Tribes';
-import './card.css';
 import { Footer } from './Footer';
-import { FitText } from '../FitText';
-
-export type CardProps = {
-  data: Slot;
-};
+import './card.css';
 
 // TODO: Resizable component for name/description
 export function Card({
   data,
-}: CardProps): ReactNode {
+}: WithSlot): ReactNode {
   const t = useTranslation();
   const name = useMemo(() => {
     if (data?.fixedId) return t(`card-name-${data.fixedId}`, '1');
@@ -74,7 +70,12 @@ export function Card({
           html={data ? t(`card-${data.fixedId}`) : ''}
         />
       </div>
-      <Footer data={data} />
+      <Stack
+        className="card-bottom"
+        direction="row"
+      >
+        <Footer data={data} />
+      </Stack>
     </Stack>
   );
 }

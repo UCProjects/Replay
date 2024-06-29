@@ -1,7 +1,6 @@
 import { Soul } from './soul';
 
 export enum CardType {
-  UNKNOWN = -1,
   MONSTER,
   SPELL,
 }
@@ -20,18 +19,14 @@ export enum CreatorType {
   SOUL,
 }
 
+// TODO: This is broken too
 export type CreatorInfo<Type extends CreatorType = CreatorType.CARD> = {
   typeCreator: Type;
   id: Type extends CreatorType.SOUL ? never : number;
   name: Type extends CreatorType.SOUL ? string : never;
 };
 
-export type CardInfo = {
-  loop?: number;
-  creatorInfo?: CreatorInfo;
-};
-
-export type MonsterInfo = CardInfo & {
+export type MonsterInfo = {
   hp: number;
   maxHp: number;
   attack: number;
@@ -60,12 +55,10 @@ export type MonsterInfo = CardInfo & {
   ex_defending?: boolean;
 };
 
-export type Card<Type extends CardType = CardType.MONSTER> = (
-  Type extends CardType.MONSTER ? MonsterInfo : CardInfo
-) & {
+export type Card = {
   id: number;
   fixedId: number;
-  type: Type;
+  type: CardType;
   name: string;
   image: string;
   rarity: Rarity;
@@ -73,5 +66,11 @@ export type Card<Type extends CardType = CardType.MONSTER> = (
   cost: number;
   shiny: boolean;
   tribes?: string[];
-  soul: Type extends CardType.SPELL ? Soul : never;
+  loop?: number;
+  creatorInfo?: CreatorInfo;
 };
+
+export type Monster = Card & MonsterInfo;
+export type Spell = Card & {
+  soul: Soul;
+}

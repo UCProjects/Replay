@@ -1,13 +1,9 @@
 import { ReactNode } from 'react';
-import { Slot } from '~/types/game';
-
-export type TribeProps = {
-  data?: Slot;
-};
+import { WithSlot } from '~/types/game';
 
 export function Tribes({
   data = null,
-}: TribeProps): ReactNode {
+}: WithSlot): ReactNode {
   if (!data) return null;
   return (
     <div className="card-tribes" />

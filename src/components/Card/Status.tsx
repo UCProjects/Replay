@@ -1,13 +1,9 @@
 import { ReactNode } from 'react';
-import { Slot } from '~/types/game';
-
-export type StatusProps = {
-  data?: Slot;
-};
+import { WithSlot } from '~/types/game';
 
 export function Status({
   data = null,
-}: StatusProps): ReactNode {
+}: WithSlot): ReactNode {
   if (!data) return null;
   return (
     <div className="card-status" />
