@@ -13,7 +13,7 @@ const hash = /^[a-f0-9]{40}$/;
 
 export function loadGame(record: GameRecord, data: GameRaw): LoadedGame {
   function getUser(userId: User['id']): User {
-    return data.players[userId];
+    return record.getUser(userId);
   }
   const index: GameState[] = data.index.map((state, id) => ({
     ...state,
