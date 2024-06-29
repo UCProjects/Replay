@@ -24,6 +24,7 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
   const [gameState, setGameState] = useState<GameStateExpanded>(
     () => processGameState(game.index[0]),
   );
+  const [playing, setPlaying] = useState(true);
 
   const handleSetGameState = useCallback((newState: GameState) => {
     setGameState((prev) => {
@@ -38,11 +39,14 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     game,
     gameState,
     setGameState: handleSetGameState,
+    playing,
+    setPlaying,
   }), [
     activeSlot,
     game,
     gameState,
     handleSetGameState,
+    playing,
   ]);
 
   return (
