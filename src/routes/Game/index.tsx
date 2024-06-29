@@ -3,7 +3,6 @@ import {
   ReactNode,
   useMemo,
 } from 'react';
-
 import Flex from '~/components/Flex';
 import { useGameState } from '~/hooks/useGame';
 import { GameProvider } from '~/providers/GameProvider';
@@ -30,7 +29,7 @@ function Render(): ReactNode {
     <Box
       className="gameBoard"
     >
-      <Profile isOpponent player={state.players[1]} />
+      <Profile player={state.players[1]} />
       <Flex
         container
         sx={{

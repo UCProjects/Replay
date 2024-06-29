@@ -1,15 +1,13 @@
 import { styled } from '@mui/material';
 import { ReactNode } from 'react';
 import { Card } from '~/components/Card';
-import { Slot as SlotData } from '~/types/game';
+import { WithSlot } from '~/types/game';
 
 type StyledSlotProps = {
   isOpponent: boolean;
 };
 
-export type SlotProps = StyledSlotProps & {
-  data: SlotData;
-};
+export type SlotProps = WithSlot<StyledSlotProps>;
 
 const StyledSlot = styled('div')<StyledSlotProps>(({ isOpponent, theme }) => theme.unstable_sx({
   order: 0,
