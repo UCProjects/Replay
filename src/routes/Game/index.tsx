@@ -9,12 +9,12 @@ import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';
 import Profile from './components/Profile';
 import { Slot } from './components/Slot';
-import useEvents from './hooks/useEvents';
+import useUpdateActiveCard from './hooks/useUpdateActiveCard';
 import './game.css';
 
 // TODO: Add controls... somehow?
 function Render(): ReactNode {
-  useEvents(); // TODO: This is broken?
+  useUpdateActiveCard();
   const state = useGameState();
 
   const board = useMemo(

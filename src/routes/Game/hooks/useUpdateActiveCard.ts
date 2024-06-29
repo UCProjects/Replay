@@ -16,7 +16,7 @@ const IGNORED_EVENTS: Array<GameStateExpanded['action']> = [
 
 function getActiveCard(state: GameStateExpanded): Slot {
   switch (state.action) {
-    case 'discard':
+    case 'discard': // TODO: Explode card
     case 'exposed':
     case 'spell':
       return state.extra as Card;
@@ -24,7 +24,7 @@ function getActiveCard(state: GameStateExpanded): Slot {
   }
 }
 
-export default function useEvents() {
+export default function useUpdateActiveCard() {
   const state = useGameState();
   const setActiveSlot = useSetActiveSlot();
 
