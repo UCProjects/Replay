@@ -1,19 +1,18 @@
 import { Unstable_Grid2 as Grid, Grid2Props } from '@mui/material';
-import { ReactNode } from 'react';
+import { forwardRef } from 'react';
 
 export type FlexProps = Grid2Props;
 
-export default function Flex({
+export const Flex = forwardRef<HTMLDivElement, FlexProps>(({
   children,
-  ref,
   ...props
-}: FlexProps): ReactNode {
-  return (
-    <Grid
-      {...props}
-      ref={ref}
-    >
-      {children}
-    </Grid>
-  );
-}
+}, ref) => (
+  <Grid
+    {...props}
+    ref={ref}
+  >
+    {children}
+  </Grid>
+));
+
+export default Flex;

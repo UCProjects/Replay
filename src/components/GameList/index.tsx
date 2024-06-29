@@ -1,6 +1,11 @@
 import { Box, IconButton } from '@mui/material';
 import { Refresh } from '@mui/icons-material';
-import { ReactNode, useCallback, useMemo } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useMemo,
+  useRef,
+} from 'react';
 import { GameRecords } from '~/structures/GameRecord';
 import { useTranslation } from '~/hooks/useTranslation';
 import Entry from './Entry';
@@ -18,6 +23,7 @@ export default function GameList({
   entries = [],
   onRefresh = undefined,
 }: GameListParams): ReactNode {
+  const ref = useRef<HTMLDivElement | null>(null);
   const t = useTranslation();
   const list = useMemo(
     () => entries.map((entry) => (
@@ -43,38 +49,44 @@ export default function GameList({
       }}
     >
       <Flex
+        alignItems="center"
         container
+        justifyContent="space-between"
         sx={{
           height: 40,
           alignContent: 'center',
         }}
       >
-        <span>
-          {title}
-          :&nbsp;
-        </span>
-        <IconButton
-          disableRipple
-          onClick={handleClick}
-          onKeyUp={handleClick}
-          sx={{
-            border: '1px solid black',
-            color: 'inherit',
-            minWidth: 0,
-            padding: 0,
-            ':focus-visible': {
-              borderColor: 'white',
-            },
-          }}
-        >
-          <Refresh />
-        </IconButton>
+        <Flex>
+          <span>
+            {title}
+            :&nbsp;
+          </span>
+          <IconButton
+            disableRipple
+            onClick={handleClick}
+            onKeyUp={handleClick}
+            sx={{
+              border: '1px solid black',
+              color: 'inherit',
+              minWidth: 0,
+              padding: 0,
+              ':focus-visible': {
+                borderColor: 'white',
+              },
+            }}
+          >
+            <Refresh />
+          </IconButton>
+        </Flex>
+        <Flex ref={ref} />
       </Flex>
       <PagedList
         component={Box}
         emptyMessage={t('replay-loading')}
         items={list}
         itemsPerPage={20}
+        paginateTopRef={ref}
       />
     </Box>
   );

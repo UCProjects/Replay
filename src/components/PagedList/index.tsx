@@ -1,4 +1,5 @@
 import {
+  Portal,
   TablePagination,
   TablePaginationProps,
 } from '@mui/material';
@@ -14,6 +15,7 @@ import {
   JSXElementConstructor,
   ElementType,
   useEffect,
+  MutableRefObject,
 } from 'react';
 
 type BaseElement = keyof JSX.IntrinsicElements;
@@ -24,7 +26,7 @@ export type Component =
   | ComponentClass<ComponentProps<BaseElement>>
   | BaseElement;
 
-export type PagedListProps<C extends Component> = {
+export type PagedListProps<C extends Component, T extends Element = HTMLElement> = {
   component: C;
   componentProps?: Omit<ComponentProps<C>, 'children'>;
   emptyMessage?: ReactNode;
@@ -32,8 +34,8 @@ export type PagedListProps<C extends Component> = {
   itemsPerPage?: TablePaginationProps['rowsPerPage'];
   itemsPerPageOptions?: TablePaginationProps['rowsPerPageOptions'];
   // paginateBottom?: boolean;
-  // paginateTop?: boolean;
-  // paginateTopRef?: MutableRefObject<T>;
+  paginateTop?: boolean;
+  paginateTopRef?: MutableRefObject<T | null>;
   resetPage?: unknown;
 };
 
@@ -45,8 +47,8 @@ export function PagedList<C extends Component>({
   itemsPerPage = -1,
   itemsPerPageOptions = [],
   // paginateBottom = true,
-  // paginateTop = false,
-  // paginateTopRef = undefined,
+  paginateTop = false,
+  paginateTopRef = undefined,
   resetPage = undefined,
 }: PagedListProps<C>): ReactNode {
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
@@ -98,6 +100,22 @@ export function PagedList<C extends Component>({
 
   return (
     <>
+      {paginateTop || paginateTopRef ? (
+        <Portal
+          container={() => paginateTopRef?.current ?? null}
+          disablePortal={!paginateTopRef}
+        >
+          <TablePagination
+            component="div"
+            count={items.length}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleSelectRows}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={rowsPerPageOptions}
+          />
+        </Portal>
+      ) : null}
       {container}
       <TablePagination
         component="div"
