@@ -52,6 +52,6 @@ export function useActiveSlot(): Slot {
 
 export function useSetActiveSlot(): GameContent['setActiveSlot'] {
   const { setActiveSlot } = useContext(GameContext) || {};
-  if (setActiveSlot === undefined) throw new Error('Used outside of provider');
+  if (!setActiveSlot) throw new Error('Used outside of provider');
   return setActiveSlot;
 }
