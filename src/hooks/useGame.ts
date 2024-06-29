@@ -24,27 +24,29 @@ export type GameContent = {
 
 export const GameContext = createContext<GameContent | null>(null);
 
+function useGameContent(): GameContent {
+  const context = useContext(GameContext);
+  if (!context) throw new Error('Used outside of provider');
+  return context;
+}
+
 export function useGame(): LoadedGame {
-  const { game } = useContext(GameContext) || {};
-  if (!game) throw new Error('Used outside of provider');
+  const { game } = useGameContent();
   return game;
 }
 
 export function useGameState(): GameStateExpanded {
-  const { gameState } = useContext(GameContext) || {};
-  if (!gameState) throw new Error('Used outside of provider');
+  const { gameState } = useGameContent();
   return gameState;
 }
 
 export function useSetGameState(): GameContent['setGameState'] {
-  const { setGameState } = useContext(GameContext) || {};
-  if (!setGameState) throw new Error('Used outside of provider');
+  const { setGameState } = useGameContent();
   return setGameState;
 }
 
 export function useGameBoard(): GameBoard {
-  const { gameState } = useContext(GameContext) || {};
-  if (!gameState) throw new Error('Used outside of provider');
+  const { gameState } = useGameContent();
   return useMemo(
     () => gameState.board,
     [gameState.board],
@@ -52,26 +54,22 @@ export function useGameBoard(): GameBoard {
 }
 
 export function useActiveSlot(): Slot {
-  const { activeSlot } = useContext(GameContext) || {};
-  if (activeSlot === undefined) throw new Error('Used outside of provider');
+  const { activeSlot } = useGameContent();
   return activeSlot;
 }
 
 export function useSetActiveSlot(): GameContent['setActiveSlot'] {
-  const { setActiveSlot } = useContext(GameContext) || {};
-  if (!setActiveSlot) throw new Error('Used outside of provider');
+  const { setActiveSlot } = useGameContent();
   return setActiveSlot;
 }
 
 export function usePlaying(): GameContent['playing'] {
-  const { playing } = useContext(GameContext) || {};
-  if (playing === undefined) throw new Error('Used outside of provider');
+  const { playing } = useGameContent();
   return playing;
 }
 
 export function useSetPlaying(): GameContent['setPlaying'] {
-  const { setPlaying } = useContext(GameContext) || {};
-  if (!setPlaying) throw new Error('Used outside of provider');
+  const { setPlaying } = useGameContent();
   return setPlaying;
 }
 
