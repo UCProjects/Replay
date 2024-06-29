@@ -7,7 +7,8 @@ import {
 } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { GameContext } from '~/hooks/useGame';
-import { LoadedGame, expand } from '~/structures/LoadedGame';
+import { useProcessGameState } from '~/hooks/useProcessGameState';
+import { LoadedGame } from '~/structures/LoadedGame';
 import {
   GameState,
   GameStateExpanded,
@@ -18,27 +19,18 @@ export type LoaderDataType = [LoadedGame];
 
 export function GameProvider({ children }: PropsWithChildren): ReactNode {
   const [[game]] = useState(useLoaderData() as LoaderDataType);
+  const processGameState = useProcessGameState(game);
   const [activeSlot, setActiveSlot] = useState<Slot>(null);
-  const [gameState, setGameState] = useState<GameStateExpanded>(() => (
-    processGameState(expand(game.index[0], game.cache))
-  ));
-
-  const processGameState = useCallback((state: GameStateExpanded) => {
-    state.players.forEach((acc) => {
-      const user = game.getUser(acc.id);
-      acc.user = user;
-      acc.isOpponent = user === game.users[1];
-    });
-    return state;
-  }, [game]);
+  const [gameState, setGameState] = useState<GameStateExpanded>(
+    () => processGameState(game.index[0]),
+  );
 
   const handleSetGameState = useCallback((newState: GameState) => {
     setGameState((prev) => {
       if (prev?.id === newState.id) return prev;
-      const expanded = expand(newState, game.cache);
-      return processGameState(expanded);
+      return processGameState(newState);
     });
-  }, [game, processGameState]);
+  }, [processGameState]);
 
   const content = useMemo(() => ({
     activeSlot,
