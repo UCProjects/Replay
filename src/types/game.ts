@@ -1,10 +1,15 @@
 import { Card, Monster, Spell } from './card';
 import { User } from './user';
 
+export type Artifact = {
+  id: number;
+  image: string;
+  custom?: string;
+};
+
 export type PlayerRaw = {
   id: User['id'];
-  // TODO: Artifact structure
-  artifacts: [];
+  artifacts: Artifact[];
   deck: number;
   hand: number;
   health: number;
