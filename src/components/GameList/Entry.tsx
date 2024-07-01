@@ -34,14 +34,15 @@ function UserData({
   return (
     <Box
       className={opponent ? 'opponent' : 'player'}
+      data-rank={ranked ? rank.substring(0, 1) : undefined}
       flex={1}
       overflow="hidden"
     >
       <Typography
-        className={`user ${soul}`}
+        className="user"
         component="span"
         data-level={level}
-        data-rank={ranked ? rank.substring(0, 1) : undefined}
+        data-soul={soul}
       >
         {name}
       </Typography>

@@ -90,3 +90,30 @@ body.authed .unauthed,
 .COMMON { color: var(--font); }
 .BASE { color: rgb(128, 128, 128); }
 .GENERATED, .TOKEN { color: rgb(0, 200, 0); }
+
+.user-info .name,
+.user {
+  align-items: center;
+  display: inline-flex;
+}
+[data-soul]::before {
+  --size: 20px;
+  content: '';
+  background-size: var(--size);
+  display: inline-block;
+  width: var(--size);
+  height: var(--size);
+  margin-right: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.user[data-soul]::before {
+  --size: 12px;
+}
+[data-soul='DETERMINATION']::before { background-image: url(/images/souls/DETERMINATION.png); }
+[data-soul='PATIENCE']::before { background-image: url(/images/souls/PATIENCE.png); }
+[data-soul='BRAVERY']::before { background-image: url(/images/souls/BRAVERY.png); }
+[data-soul='INTEGRITY']::before { background-image: url(/images/souls/INTEGRITY.png); }
+[data-soul='PERSEVERANCE']::before { background-image: url(/images/souls/PERSEVERANCE.png); }
+[data-soul='KINDNESS']::before { background-image: url(/images/souls/KINDNESS.png); }
+[data-soul='JUSTICE']::before { background-image: url(/images/souls/JUSTICE.png); }
