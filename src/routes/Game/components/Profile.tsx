@@ -1,3 +1,4 @@
+import { EmojiEvents, Star } from '@mui/icons-material';
 import { BadgeProps, styled } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { Flex } from '~/components/Flex';
@@ -19,9 +20,9 @@ export default function Profile({
     dodge = 0, // TODO: Convert to react element?
     gold = 0,
     hand = 0,
+    health = 0,
     id = 0,
     isOpponent = false,
-    health = 0,
     lives = 0,
     maxHealth,
     user,
@@ -35,16 +36,14 @@ export default function Profile({
     [id, state.turnPlayer],
   );
 
-  const isVictor = useMemo(() => {
-    if (state.action === 'finished') {
-      return results.winner?.id === id;
-    }
-    return false;
-  }, [
-    results,
-    state.action,
-    id,
-  ]);
+  const isVictor = useMemo(
+    () => state.action === 'finished' && results.winner?.id === id,
+    [
+      results,
+      state.action,
+      id,
+    ],
+  );
 
   const anchor: BadgeProps['anchorOrigin'] = {
     horizontal: isOpponent ? 'left' : 'left',
@@ -69,13 +68,32 @@ export default function Profile({
       }}
     >
       <Flex
+        alignItems="center"
         className="user-info"
+        container
         flexGrow={0}
       >
-        <span className="name">{user.name}</span>
+        <span
+          className={`name ${user.class}`}
+        >
+          {user.name}
+        </span>
         <span className="artifacts" />
-        {isCurrentTurn && <span className="turn-icon material-icons">star</span>}
-        {isVictor && <span className="victor material-icons">emoji_events</span>}
+        {isCurrentTurn && (
+          <Star
+            sx={{
+              color: 'yellow',
+              marginLeft: '5px',
+            }}
+          />
+        )}
+        {isVictor && (
+          <EmojiEvents
+            sx={{
+              marginLeft: '5px',
+            }}
+          />
+        )}
       </Flex>
       <Flex
         className="playerHealth"
