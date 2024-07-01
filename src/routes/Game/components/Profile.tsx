@@ -5,6 +5,7 @@ import { Flex } from '~/components/Flex';
 import { Player } from '~/types/game';
 import Badge from '~/components/Badge';
 import { useGame, useGameState } from '~/hooks/useGame';
+import { Artifacts } from './Artifacts';
 
 export type ProfileProps = {
   player: Player;
@@ -16,6 +17,7 @@ const Img = styled('img')({
 
 export default function Profile({
   player: {
+    artifacts,
     deck = 0,
     dodge = 0, // TODO: Convert to react element?
     gold = 0,
@@ -74,18 +76,29 @@ export default function Profile({
         flexGrow={0}
       >
         <span
-          className={`name ${user.class}`}
+          className="name"
+          data-soul={user.class}
         >
           {user.name}
         </span>
-        <span className="artifacts" />
+        <Artifacts
+          artifacts={artifacts}
+          isOpponent={isOpponent}
+        />
         {isCurrentTurn && (
-          <Star
-            sx={{
-              color: 'yellow',
-              marginLeft: '5px',
+          <Badge
+            anchorOrigin={{
+              horizontal: 'right',
+              vertical: !isOpponent ? 'top' : 'bottom',
             }}
-          />
+            badgeContent={state.turn}
+          >
+            <Star
+              sx={{
+                color: 'yellow',
+              }}
+            />
+          </Badge>
         )}
         {isVictor && (
           <EmojiEvents
