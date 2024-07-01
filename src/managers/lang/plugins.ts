@@ -32,10 +32,10 @@ export const plugins: Record<string, Plugin> = {
     return getText(text, 'underlined');
   },
   artifact(nodes: Nodes, translate: TranslateType): string {
-    const { args, override, empty } = parse(nodes);
+    const { args: [id, desc = false], override, empty } = parse(nodes);
     if (empty) return '';
-    const text = override || translate(getKey('artifact-name', args[0]));
-    return getText(text, 'underlined');
+    const text = override || translate(getKey(`artifact${desc ? '' : '-name'}`, id));
+    return getText(text, desc ? '' : 'underlined');
   },
   hp(nodes: Nodes, translate: TranslateType): string {
     const { args: [number], override } = parse(nodes);
