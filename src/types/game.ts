@@ -5,6 +5,7 @@ export type Artifact = {
   id: number;
   image: string;
   custom?: string;
+  legendary?: boolean;
 };
 
 export type PlayerRaw = {
@@ -121,4 +122,6 @@ export const MODE = {
   RANKED: 'Ranked',
   CUSTOM: 'Custom',
   EVENT: 'Event',
+  BOSS: 'Boss',
+  TOURNAMENT: 'Tourny',
 } as const;
