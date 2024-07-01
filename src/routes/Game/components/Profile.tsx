@@ -4,6 +4,7 @@ import { ReactNode, useMemo } from 'react';
 import { Flex } from '~/components/Flex';
 import { Player } from '~/types/game';
 import Badge from '~/components/Badge';
+import { Tip } from '~/components/Tip';
 import { useGame, useGameState } from '~/hooks/useGame';
 import { Artifacts } from './Artifacts';
 
@@ -30,7 +31,7 @@ export default function Profile({
     user,
   },
 }: ProfileProps): ReactNode {
-  const { results } = useGame();
+  const { results, type } = useGame();
   const state = useGameState();
 
   const isCurrentTurn = useMemo(
@@ -73,6 +74,7 @@ export default function Profile({
         alignItems="center"
         className="user-info"
         container
+        data-rank={type === 'RANKED' ? user.rank.substring(0, 1) : undefined}
         flexGrow={0}
       >
         <span
@@ -128,19 +130,34 @@ export default function Profile({
           anchorOrigin={anchor}
           badgeContent={deck}
         >
-          <Img alt="deck" src="/images/board/cards.png" />
+          <Tip
+            placement={anchor.vertical}
+            title="Deck"
+          >
+            <Img alt="deck" src="/images/board/cards.png" />
+          </Tip>
         </Badge>
         <Badge
           anchorOrigin={anchor}
           badgeContent={hand}
         >
-          <Img alt="hand" src="/images/board/hand.png" />
+          <Tip
+            placement={anchor.vertical}
+            title="Hand"
+          >
+            <Img alt="hand" src="/images/board/hand.png" />
+          </Tip>
         </Badge>
         <Badge
           anchorOrigin={anchor}
           badgeContent={gold}
         >
-          <Img alt="gold" src="/images/board/gold.png" />
+          <Tip
+            placement={anchor.vertical}
+            title="Gold"
+          >
+            <Img alt="gold" src="/images/board/gold.png" />
+          </Tip>
         </Badge>
       </Flex>
     </Flex>

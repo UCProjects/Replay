@@ -19,7 +19,10 @@ type ArtProps = {
 
 function Art({
   art: {
-    custom, id, image,
+    custom,
+    id,
+    image,
+    legendary,
   },
   isOpponent: _,
 }: ArtProps): ReactNode {
@@ -38,7 +41,7 @@ function Art({
         }}
         title={(
           <Box>
-            <Text html={t(`{{ARTIFACT:${id}}}`)} />
+            <Text html={t(`{{ARTIFACT:${id}${legendary ? '|LEGEND' : ''}}}`)} />
             <Divider />
             <Text html={t(`{{ARTIFACT:${id}|desc}}`)} />
           </Box>

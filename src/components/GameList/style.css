@@ -8,9 +8,3 @@
 .opponent {
   background-color: var(--opponent);
 }
-.user {
-  background-color: var(--bgcolor-2);
-  border-radius: 5px;
-  padding: 2px 5px;
-  word-break: break-word;
-}

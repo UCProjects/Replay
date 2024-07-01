@@ -65,6 +65,7 @@ body.authed .unauthed,
 .hidden { display: none; }
 
 .show { display: unset; }
+.bold { font-weight: bold; }
 .underlined { text-decoration: underline; }
 .green { color: rgb(102, 204, 0); }
 .red { color: rgb(255, 0, 0); }
@@ -94,7 +95,11 @@ body.authed .unauthed,
 .user-info .name,
 .user {
   align-items: center;
+  background-color: var(--bgcolor-2);
+  border-radius: 5px;
   display: inline-flex;
+  padding: 2px 5px;
+  word-break: break-word;
 }
 [data-soul]::before {
   --size: 20px;

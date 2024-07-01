@@ -33,6 +33,9 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     });
   }, [processGameState]);
 
+  // useEffect(() => console.log(game), [game]);
+  // useEffect(() => console.log(gameState), [gameState]);
+
   const content = useMemo(() => ({
     activeSlot,
     setActiveSlot,

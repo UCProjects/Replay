@@ -31,10 +31,11 @@ export const plugins: Record<string, Plugin> = {
     return getText(text, 'underlined');
   },
   artifact(nodes, translate) {
-    const { args: [id, desc = false], override, empty } = parse(nodes);
+    const { args: [id, ex = false], override, empty } = parse(nodes);
     if (empty) return '';
+    const desc = ex === 'desc';
     const text = override || translate(getKey(`artifact${desc ? '' : '-name'}`, id));
-    return getText(text, desc ? '' : 'underlined');
+    return getText(text, desc ? '' : `underlined${ex ? ' bold LEGENDARY' : ''}`);
   },
   hp(nodes, translate) {
     const { args: [number], override } = parse(nodes);
