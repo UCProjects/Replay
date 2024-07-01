@@ -13,6 +13,7 @@ const Rarity = styled(Box)({
   alignItems: 'center',
   className: 'card-rarity',
   display: 'flex',
+  flexGrow: 1,
   justifyContent: 'center',
 });
 
