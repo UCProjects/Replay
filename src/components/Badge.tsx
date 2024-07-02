@@ -14,6 +14,9 @@ export default function Badge({
       showZero
       sx={{
         marginX: '5px',
+        '& .MuiBadge-badge': {
+          backgroundColor: 'var(--bgcolor-2)',
+        },
       }}
       {...props}
     >

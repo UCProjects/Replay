@@ -9,7 +9,7 @@ export const Tip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: 'var(--bgcolor-2)',
     fontSize: theme.typography.pxToRem(16),
     border: '1px solid #dadde9',
   },
