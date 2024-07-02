@@ -1,11 +1,13 @@
 import { EmojiEvents, Star } from '@mui/icons-material';
-import { BadgeProps, styled } from '@mui/material';
+import { BadgeProps, Divider, styled } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { Flex } from '~/components/Flex';
 import { Player } from '~/types/game';
 import Badge from '~/components/Badge';
+import { Text } from '~/components/Text';
 import { Tip } from '~/components/Tip';
 import { useGame, useGameState } from '~/hooks/useGame';
+import { useTranslation } from '~/hooks/useTranslation';
 import { Artifacts } from './Artifacts';
 
 export type ProfileProps = {
@@ -33,6 +35,7 @@ export default function Profile({
 }: ProfileProps): ReactNode {
   const { results, type } = useGame();
   const state = useGameState();
+  const t = useTranslation();
 
   const isCurrentTurn = useMemo(
     () => state.turnPlayer.id === id,
@@ -77,12 +80,23 @@ export default function Profile({
         data-rank={type === 'RANKED' ? user.rank.substring(0, 1) : undefined}
         flexGrow={0}
       >
-        <span
-          className="name"
-          data-soul={user.class}
+        <Tip
+          placement="top"
+          title={(
+            <Flex>
+              <Text html={t(`{{SOUL:${user.class}}}`)} />
+              <Divider />
+              <Text html={t(`{{SOUL:${user.class}-desc}}`)} />
+            </Flex>
+          )}
         >
-          {user.name}
-        </span>
+          <span
+            className="name"
+            data-soul={user.class}
+          >
+            {user.name}
+          </span>
+        </Tip>
         <Artifacts
           artifacts={artifacts}
           isOpponent={isOpponent}
