@@ -2,6 +2,7 @@ import {
   PropsWithChildren,
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -33,8 +34,12 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     });
   }, [processGameState]);
 
-  // useEffect(() => console.log(game), [game]);
-  // useEffect(() => console.log(gameState), [gameState]);
+  useEffect(() => {
+    // console.log(game);
+  }, [game]);
+  useEffect(() => {
+    // console.log(gameState);
+  }, [gameState]);
 
   const content = useMemo(() => ({
     activeSlot,
