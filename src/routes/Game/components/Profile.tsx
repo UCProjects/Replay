@@ -1,9 +1,14 @@
 import { EmojiEvents, Star } from '@mui/icons-material';
-import { BadgeProps, Divider, styled } from '@mui/material';
+import {
+  BadgeProps,
+  Divider,
+  TooltipProps,
+  styled,
+} from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { Flex } from '~/components/Flex';
 import { Player } from '~/types/game';
-import Badge from '~/components/Badge';
+import { Badge } from '~/components/Badge';
 import { Text } from '~/components/Text';
 import { Tip } from '~/components/Tip';
 import { useGame, useGameState } from '~/hooks/useGame';
@@ -14,9 +19,71 @@ export type ProfileProps = {
   player: Player;
 };
 
+type ProfileIconProps ={
+  anchor?: BadgeProps['anchorOrigin'];
+  badge: BadgeProps['badgeContent'];
+  children: TooltipProps['children'];
+  tip?: TooltipProps['title'];
+  tipAnchor?: TooltipProps['placement'];
+};
+
+type UsernameProps = {
+  name: string;
+  soul: string;
+};
+
 const Img = styled('img')({
   height: 28,
 });
+
+function Username({
+  name,
+  soul,
+}: UsernameProps): ReactNode {
+  const t = useTranslation();
+  return (
+    <Tip
+      placement="top"
+      title={(
+        <Flex>
+          <Text html={t(`{{SOUL:${soul}}}`)} />
+          <Divider />
+          <Text html={t(`{{SOUL:${soul}-desc}}`)} />
+        </Flex>
+      )}
+    >
+      <span
+        className="name"
+        data-soul={soul}
+      >
+        {name}
+      </span>
+    </Tip>
+  );
+}
+
+function ProfileIcon({
+  anchor,
+  badge,
+  children,
+  tip,
+  tipAnchor = anchor?.vertical,
+}: ProfileIconProps): ReactNode {
+  const t = useTranslation();
+  return (
+    <Tip
+      placement={tipAnchor}
+      title={typeof tip === 'string' ? t(tip) : tip}
+    >
+      <Badge
+        anchorOrigin={anchor}
+        badgeContent={badge}
+      >
+        {children}
+      </Badge>
+    </Tip>
+  );
+}
 
 export default function Profile({
   player: {
@@ -35,7 +102,6 @@ export default function Profile({
 }: ProfileProps): ReactNode {
   const { results, type } = useGame();
   const state = useGameState();
-  const t = useTranslation();
 
   const isCurrentTurn = useMemo(
     () => state.turnPlayer.id === id,
@@ -51,10 +117,10 @@ export default function Profile({
     ],
   );
 
-  const anchor: BadgeProps['anchorOrigin'] = {
+  const anchor: BadgeProps['anchorOrigin'] = useMemo(() => ({
     horizontal: isOpponent ? 'left' : 'left',
     vertical: !isOpponent ? 'top' : 'bottom',
-  };
+  }), [isOpponent]);
 
   // TODO: MUI-fy
   return (
@@ -80,41 +146,28 @@ export default function Profile({
         data-rank={type === 'RANKED' ? user.rank.substring(0, 1) : undefined}
         flexGrow={0}
       >
-        <Tip
-          placement="top"
-          title={(
-            <Flex>
-              <Text html={t(`{{SOUL:${user.class}}}`)} />
-              <Divider />
-              <Text html={t(`{{SOUL:${user.class}-desc}}`)} />
-            </Flex>
-          )}
-        >
-          <span
-            className="name"
-            data-soul={user.class}
-          >
-            {user.name}
-          </span>
-        </Tip>
+        <Username
+          name={user.name}
+          soul={user.class}
+        />
         <Artifacts
           artifacts={artifacts}
           isOpponent={isOpponent}
         />
         {isCurrentTurn && (
-          <Badge
-            anchorOrigin={{
+          <ProfileIcon
+            anchor={{
               horizontal: 'right',
-              vertical: !isOpponent ? 'top' : 'bottom',
+              vertical: anchor.vertical,
             }}
-            badgeContent={state.turn}
+            badge={state.turn}
           >
             <Star
               sx={{
                 color: 'yellow',
               }}
             />
-          </Badge>
+          </ProfileIcon>
         )}
         {isVictor && (
           <EmojiEvents
@@ -140,39 +193,27 @@ export default function Profile({
         className="player-info"
         flexGrow={0}
       >
-        <Badge
-          anchorOrigin={anchor}
-          badgeContent={deck}
+        <ProfileIcon
+          anchor={anchor}
+          badge={deck}
+          tip="replay.deck"
         >
-          <Tip
-            placement={anchor.vertical}
-            title="Deck"
-          >
-            <Img alt="deck" src="/images/board/cards.png" />
-          </Tip>
-        </Badge>
-        <Badge
-          anchorOrigin={anchor}
-          badgeContent={hand}
+          <Img alt="deck" src="/images/board/cards.png" />
+        </ProfileIcon>
+        <ProfileIcon
+          anchor={anchor}
+          badge={hand}
+          tip="replay.hand"
         >
-          <Tip
-            placement={anchor.vertical}
-            title="Hand"
-          >
-            <Img alt="hand" src="/images/board/hand.png" />
-          </Tip>
-        </Badge>
-        <Badge
-          anchorOrigin={anchor}
-          badgeContent={gold}
+          <Img alt="hand" src="/images/board/hand.png" />
+        </ProfileIcon>
+        <ProfileIcon
+          anchor={anchor}
+          badge={gold}
+          tip="replay.gold"
         >
-          <Tip
-            placement={anchor.vertical}
-            title="Gold"
-          >
-            <Img alt="gold" src="/images/board/gold.png" />
-          </Tip>
-        </Badge>
+          <Img alt="gold" src="/images/board/gold.png" />
+        </ProfileIcon>
       </Flex>
     </Flex>
   );
