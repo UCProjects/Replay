@@ -2,6 +2,7 @@ import {
   PropsWithChildren,
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -42,6 +43,10 @@ export default function TranslationProvider({
     locale,
     ready,
   ]);
+
+  useEffect(() => {
+    // console.log(value);
+  }, [value]);
 
   return (
     <TranslationContext.Provider value={value}>

@@ -35,6 +35,7 @@ function UserData({
 }: UserDataProps): ReactNode {
   return (
     <Box
+      alignContent="center"
       className={opponent ? 'opponent' : 'player'}
       data-rank={ranked ? rank.substring(0, 1) : undefined}
       flex={1}

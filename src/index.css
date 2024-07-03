@@ -75,6 +75,7 @@ body.authed .unauthed,
 .user[data-level]::after {
   content: ' LV ' attr(data-level);
   color: var(--blue);
+  margin-left: 5px;
 }
 
 .DETERMINATION, [data-soul='DETERMINATION'] { color: var(--dt); }
