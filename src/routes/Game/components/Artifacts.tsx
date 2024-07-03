@@ -1,11 +1,10 @@
 import { Box, Divider, styled } from '@mui/material';
 import { ReactNode } from 'react';
-import { Badge } from '~/components/Badge';
 import { Flex } from '~/components/Flex';
 import { Text } from '~/components/Text';
-import { Tip } from '~/components/Tip';
 import { useTranslation } from '~/hooks/useTranslation';
 import { Artifact, Player } from '~/types/game';
+import { ProfileIcon } from './ProfileIcon';
 
 const Image = styled('img')({
   height: 20,
@@ -28,30 +27,26 @@ function Art({
 }: ArtProps): ReactNode {
   const t = useTranslation();
   return (
-    <Badge
-      badgeContent={custom}
-      key={id}
-    >
-      <Tip
-        placement="top"
-        PopperProps={{
+    <ProfileIcon
+      badge={custom}
+      props={{
+        popper: {
           sx: {
             maxWidth: '500px',
           },
-        }}
-        title={(
-          <Box>
-            <Text html={t(`{{ARTIFACT:${id}${legendary ? '|LEGEND' : ''}}}`)} />
-            <Divider />
-            <Text html={t(`{{ARTIFACT:${id}|desc}}`)} />
-          </Box>
-        )}
-      >
-        <Image
-          src={`/images/artifacts/${image}.png`}
-        />
-      </Tip>
-    </Badge>
+        },
+      }}
+      tip={(
+        <Box>
+          <Text html={t(`{{ARTIFACT:${id}${legendary ? '|LEGEND' : ''}}}`)} />
+          <Divider />
+          <Text html={t(`{{ARTIFACT:${id}|desc}}`)} />
+        </Box>
+      )}
+      tipAnchor="top"
+    >
+      <Image src={`/images/artifacts/${image}.png`} />
+    </ProfileIcon>
   );
 }
 

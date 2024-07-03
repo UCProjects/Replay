@@ -2,29 +2,20 @@ import { EmojiEvents, Star } from '@mui/icons-material';
 import {
   BadgeProps,
   Divider,
-  TooltipProps,
   styled,
 } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 import { Flex } from '~/components/Flex';
 import { Player } from '~/types/game';
-import { Badge } from '~/components/Badge';
 import { Text } from '~/components/Text';
 import { Tip } from '~/components/Tip';
 import { useGame, useGameState } from '~/hooks/useGame';
 import { useTranslation } from '~/hooks/useTranslation';
 import { Artifacts } from './Artifacts';
+import { ProfileIcon } from './ProfileIcon';
 
 export type ProfileProps = {
   player: Player;
-};
-
-type ProfileIconProps ={
-  anchor?: BadgeProps['anchorOrigin'];
-  badge: BadgeProps['badgeContent'];
-  children: TooltipProps['children'];
-  tip?: TooltipProps['title'];
-  tipAnchor?: TooltipProps['placement'];
 };
 
 type UsernameProps = {
@@ -62,29 +53,6 @@ function Username({
   );
 }
 
-function ProfileIcon({
-  anchor,
-  badge,
-  children,
-  tip,
-  tipAnchor = anchor?.vertical,
-}: ProfileIconProps): ReactNode {
-  const t = useTranslation();
-  return (
-    <Tip
-      placement={tipAnchor}
-      title={typeof tip === 'string' ? t(tip) : tip}
-    >
-      <Badge
-        anchorOrigin={anchor}
-        badgeContent={badge}
-      >
-        {children}
-      </Badge>
-    </Tip>
-  );
-}
-
 export default function Profile({
   player: {
     artifacts,
@@ -93,7 +61,7 @@ export default function Profile({
     gold = 0,
     hand = 0,
     health = 0,
-    id = 0,
+    id,
     isOpponent = false,
     lives = 0,
     maxHealth,
