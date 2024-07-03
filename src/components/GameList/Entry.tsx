@@ -13,13 +13,15 @@ import Link from '../Link';
 
 import './style.css';
 
+export type EntryProps = {
+  record: GameRecord;
+};
+
 type UserDataProps = {
   user: User,
   opponent?: boolean,
   ranked?: boolean,
 };
-
-// TODO: UserRank, UserName
 
 function UserData({
   user: {
@@ -50,10 +52,6 @@ function UserData({
   );
 }
 
-export type EntryProps = {
-  record: GameRecord;
-};
-
 export default function Entry({
   record: {
     date,
@@ -67,7 +65,7 @@ export default function Entry({
   },
 }: EntryProps): ReactNode {
   const t = useTranslation();
-  // TODO: Tippy, translation
+  // TODO: Tippy
   const ranked = MODE[type] === MODE.RANKED;
   return (
     <>
