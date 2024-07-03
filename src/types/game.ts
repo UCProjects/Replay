@@ -5,6 +5,7 @@ export type Artifact = {
   id: number;
   image: string;
   custom?: string;
+  disabled?: boolean;
   legendary?: boolean;
 };
 
