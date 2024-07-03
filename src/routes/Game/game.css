@@ -21,14 +21,14 @@
 /* HP layers: #6d9ef8 -> Orange -> Yellow -> Red */
 .hpBar[data-lives]:not([data-lives="0"])::after {
   position: absolute;
-  top: 0;
+  top: -1px;
   right: 82px;
   content: attr(data-lives);
 }
 
 .hpBar[data-dodge]:not([data-dodge="0"])::after {
   position: absolute;
-  top: 0;
+  top: -1px;
   right: 82px;
   content: attr(data-dodge);
 }
