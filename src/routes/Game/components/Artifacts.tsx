@@ -1,6 +1,6 @@
 import { Box, Divider, styled } from '@mui/material';
 import { ReactNode } from 'react';
-import Badge from '~/components/Badge';
+import { Badge } from '~/components/Badge';
 import { Flex } from '~/components/Flex';
 import { Text } from '~/components/Text';
 import { Tip } from '~/components/Tip';
