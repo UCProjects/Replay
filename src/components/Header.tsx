@@ -5,10 +5,10 @@ import {
 } from '@mui/icons-material';
 import { ReactNode } from 'react';
 
-import { Flex } from '~/components/Flex.tsx';
+import { Flex } from '~/components/Flex';
+import { Link } from '~/components/Link';
 import { useTranslation } from '~/hooks/useTranslation';
-import { useUser } from '~/hooks/useUser.ts';
-import Link from './Link';
+import { useUser } from '~/hooks/useUser';
 
 export default function Header(): ReactNode {
   const t = useTranslation();

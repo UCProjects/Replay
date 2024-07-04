@@ -9,7 +9,7 @@ import { useTranslation } from '~/hooks/useTranslation';
 import { GameRecord } from '~/structures/GameRecord';
 import { User } from '~/types/user';
 import { MODE } from '~/types/game';
-import Link from '../Link';
+import { Link } from '~/components/Link';
 
 import './style.css';
 
