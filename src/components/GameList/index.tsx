@@ -7,7 +7,7 @@ import {
   useRef,
 } from 'react';
 import { Flex } from '~/components/Flex';
-import { PagedList } from '~/components/PagedList';
+import { Paginator } from '~/components/Paginator';
 import { GameRecords } from '~/structures/GameRecord';
 import { useTranslation } from '~/hooks/useTranslation';
 import Entry from './Entry';
@@ -81,7 +81,7 @@ export default function GameList({
         </Flex>
         <Flex ref={ref} />
       </Flex>
-      <PagedList
+      <Paginator
         component={Box}
         emptyMessage={t('replay-loading')}
         items={list}

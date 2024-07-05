@@ -26,7 +26,7 @@ export type Component =
   | ComponentClass<ComponentProps<BaseElement>>
   | BaseElement;
 
-export type PagedListProps<C extends Component, T extends Element = HTMLElement> = {
+export type PaginatorProps<C extends Component, T extends Element = HTMLElement> = {
   component: C;
   componentProps?: Omit<ComponentProps<C>, 'children'>;
   emptyMessage?: ReactNode;
@@ -39,7 +39,7 @@ export type PagedListProps<C extends Component, T extends Element = HTMLElement>
   resetPage?: unknown;
 };
 
-export function PagedList<C extends Component>({
+export function Paginator<C extends Component>({
   component,
   componentProps = undefined,
   emptyMessage = undefined,
@@ -50,7 +50,7 @@ export function PagedList<C extends Component>({
   paginateTop = false,
   paginateTopRef = undefined,
   resetPage = undefined,
-}: PagedListProps<C>): ReactNode {
+}: PaginatorProps<C>): ReactNode {
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
   const [page, setPage] = useState(0);
 
