@@ -44,15 +44,14 @@ export function PagedList<C extends Component>({
   componentProps = undefined,
   emptyMessage = undefined,
   items,
-  itemsPerPage = -1,
-  itemsPerPageOptions = [],
+  itemsPerPage = 20,
+  itemsPerPageOptions,
   // paginateBottom = true,
   paginateTop = false,
   paginateTopRef = undefined,
   resetPage = undefined,
 }: PagedListProps<C>): ReactNode {
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
-  const [rowsPerPageOptions] = useState(itemsPerPageOptions);
   const [page, setPage] = useState(0);
 
   useEffect(
@@ -71,10 +70,9 @@ export function PagedList<C extends Component>({
   const handleSelectRows: NonNullable<TablePaginationProps['onRowsPerPageChange']> = useCallback(
     (event) => {
       const num = Number(event.target.value);
-      if (!rowsPerPageOptions?.includes(num)) return;
       setRowsPerPage(num);
     },
-    [rowsPerPageOptions],
+    [],
   );
 
   const itemSlice = useMemo(() => {
@@ -112,7 +110,7 @@ export function PagedList<C extends Component>({
             onRowsPerPageChange={handleSelectRows}
             page={page}
             rowsPerPage={rowsPerPage}
-            rowsPerPageOptions={rowsPerPageOptions}
+            rowsPerPageOptions={itemsPerPageOptions}
           />
         </Portal>
       ) : null}
@@ -124,7 +122,7 @@ export function PagedList<C extends Component>({
         onRowsPerPageChange={handleSelectRows}
         page={page}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={rowsPerPageOptions}
+        rowsPerPageOptions={itemsPerPageOptions}
       />
     </>
   );
