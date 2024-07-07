@@ -15,4 +15,3 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_UNDERCARD_509BA }}
           channelId: live
-          projectId: undercard-509ba
