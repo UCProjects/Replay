@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "undercard-509ba"
+  },
+  "targets": {
+    "undercard-509ba": {
+      "hosting": {
+        "spectate": [
+          "uc-spectate"
+        ]
+      }
+    }
+  }
+}
