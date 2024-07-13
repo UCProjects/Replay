@@ -15,6 +15,10 @@ export function hasLoaded(): boolean {
   return cache.size > 0;
 }
 
+export function hasKey(key: string): boolean {
+  return banana.getMessage(key) !== key;
+}
+
 export async function loadLanguage(key: DocumentKey): Promise<void> {
   if (!key) Promise.reject(new Error('No translation key provided'));
   if (cache.has(key)) {

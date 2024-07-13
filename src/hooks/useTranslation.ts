@@ -4,7 +4,11 @@ import {
   useCallback,
   useContext,
 } from 'react';
-import { translate, loadLanguage } from '~/managers/lang';
+import {
+  translate,
+  hasKey,
+  loadLanguage,
+} from '~/managers/lang';
 
 export type TranslationContent = {
   loadLanguage: typeof loadLanguage;
@@ -32,7 +36,7 @@ export function useTranslation(): TranslationContent['t'] {
   const { t, locale, ready } = content;
   return useCallback(
     (...args: Parameters<TranslationContent['t']>) => {
-      if (!locale || !ready) return '';
+      if (!locale || (!ready && !hasKey(args[0]))) return '';
       return t(...args);
     },
     [
