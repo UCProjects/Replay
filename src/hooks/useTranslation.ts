@@ -2,53 +2,45 @@ import Banana from 'banana-i18n';
 import {
   createContext,
   useCallback,
-  useContext,
 } from 'react';
 import {
   translate,
   hasKey,
   loadLanguage,
+  Translate,
 } from '~/managers/lang';
+import { useContent } from '~/hooks/useContent';
 
 export type TranslationContent = {
   loadLanguage: typeof loadLanguage;
   locale: Banana['locale'];
   ready: boolean;
   setLocale: (locale: string) => void;
-  t: typeof translate;
 };
-export const TranslationContext = createContext<TranslationContent | undefined>(undefined);
+export const TranslationContext = createContext<TranslationContent | null>(null);
 
 export function useLoadLanguage(): TranslationContent['loadLanguage'] {
-  const content = useContext(TranslationContext);
-  if (content === undefined) {
-    throw new Error('Used outside of provider');
-  }
-  const { loadLanguage: load } = content;
+  const { loadLanguage: load } = useContent(TranslationContext);
   return load;
 }
 
-export function useTranslation(): TranslationContent['t'] {
-  const content = useContext(TranslationContext);
-  if (content === undefined) {
-    throw new Error('Used outside of provider');
-  }
-  const { t, locale, ready } = content;
+export function useTranslation(): Translate {
+  const { locale, ready } = useContent(TranslationContext);
   return useCallback(
-    (...args: Parameters<TranslationContent['t']>) => {
-      if (!locale || (!ready && !hasKey(args[0]))) return '';
-      return t(...args);
+    (...[message, ...args]: Parameters<Translate>) => {
+      if (!locale || (!ready && !hasKey(message))) return '';
+      return translate(message, ...args);
     },
-    [
-      t, locale, ready,
-    ],
+    [locale, ready],
   );
 }
 
 export function useSetLocale(): TranslationContent['setLocale'] {
-  const content = useContext(TranslationContext);
-  if (content === undefined) {
-    throw new Error('Used outside of provider');
-  }
-  return content.setLocale;
+  const { setLocale } = useContent(TranslationContext);
+  return setLocale;
+}
+
+export function useIsReady(): TranslationContent['ready'] {
+  const { ready } = useContent(TranslationContext);
+  return ready;
 }

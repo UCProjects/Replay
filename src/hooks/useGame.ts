@@ -1,7 +1,6 @@
 import {
   createContext,
   useCallback,
-  useContext,
   useMemo,
 } from 'react';
 import { LoadedGame } from '~/structures/LoadedGame';
@@ -11,6 +10,7 @@ import {
   GameStateExpanded,
   Slot,
 } from '~/types/game';
+import { useContent } from '~/hooks/useContent';
 
 export type GameContent = {
   activeSlot: Slot;
@@ -24,29 +24,23 @@ export type GameContent = {
 
 export const GameContext = createContext<GameContent | null>(null);
 
-function useGameContent(): GameContent {
-  const context = useContext(GameContext);
-  if (!context) throw new Error('Used outside of provider');
-  return context;
-}
-
 export function useGame(): LoadedGame {
-  const { game } = useGameContent();
+  const { game } = useContent(GameContext);
   return game;
 }
 
 export function useGameState(): GameStateExpanded {
-  const { gameState } = useGameContent();
+  const { gameState } = useContent(GameContext);
   return gameState;
 }
 
 export function useSetGameState(): GameContent['setGameState'] {
-  const { setGameState } = useGameContent();
+  const { setGameState } = useContent(GameContext);
   return setGameState;
 }
 
 export function useGameBoard(): GameBoard {
-  const { gameState } = useGameContent();
+  const { gameState } = useContent(GameContext);
   return useMemo(
     () => gameState.board,
     [gameState.board],
@@ -54,22 +48,22 @@ export function useGameBoard(): GameBoard {
 }
 
 export function useActiveSlot(): Slot {
-  const { activeSlot } = useGameContent();
+  const { activeSlot } = useContent(GameContext);
   return activeSlot;
 }
 
 export function useSetActiveSlot(): GameContent['setActiveSlot'] {
-  const { setActiveSlot } = useGameContent();
+  const { setActiveSlot } = useContent(GameContext);
   return setActiveSlot;
 }
 
 export function usePlaying(): GameContent['playing'] {
-  const { playing } = useGameContent();
+  const { playing } = useContent(GameContext);
   return playing;
 }
 
 export function useSetPlaying(): GameContent['setPlaying'] {
-  const { setPlaying } = useGameContent();
+  const { setPlaying } = useContent(GameContext);
   return setPlaying;
 }
 
