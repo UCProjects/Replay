@@ -1,10 +1,4 @@
-export type Nodes = string[];
-
-export type ParsedNodes = {
-  args: Nodes;
-  override: string;
-  empty: boolean;
-};
+import { Nodes, ParsedNodes } from './types';
 
 export function parse(nodes: Nodes): ParsedNodes {
   const found = nodes.findIndex((node) => node.startsWith('override='));

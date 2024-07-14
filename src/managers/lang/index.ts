@@ -2,12 +2,9 @@ import getOptional from '~/utils/getOptional';
 import banana from './banana';
 import getFile from './getFile';
 import { plugins } from './plugins';
-import { Nodes } from './utils';
+import { TranslateOptions, Nodes } from './types';
 
-export type TranslateOptions = {
-  decode?: boolean;
-  fallback?: string,
-};
+export type { Translate } from './types';
 
 const cache = new Map<string, Record<string, string>>();
 
@@ -38,7 +35,7 @@ export function translate(message: string, ...args: Optional<string[], Translate
   const {
     decode = true,
     fallback = '',
-  } = getOptional<TranslateOptions, typeof args>(args);
+  } = getOptional<TranslateOptions>(args);
   try {
     const text = banana.i18n(message, ...args);
     const raw = text === message ? fallback : text;

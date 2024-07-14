@@ -1,13 +1,11 @@
-import type { translate as translateFn } from '.';
+import { Plugin } from './types';
 import {
-  Nodes,
   getKey,
   getText,
   parse,
   switchHandler,
 } from './utils';
 
-export type Plugin = (nodes: Nodes, translate: typeof translateFn) => string;
 export const plugins: Record<string, Plugin> = {
   ucp([amt]) {
     return getText(amt, 'ucp');
