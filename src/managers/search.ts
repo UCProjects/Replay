@@ -18,6 +18,7 @@ import firebase from './firebase';
 
 export type SearchParams = {
   id?: string;
+  limit?: number;
   mode?: GameMode;
   name?: string;
   soul?: 'ANY' | Soul;
@@ -30,6 +31,7 @@ const db = getFirestore(firebase);
 
 export default async function search({
   id = '0',
+  limit: lmt = 20,
   mode = 'ANY',
   name = '',
   soul = 'ANY',
@@ -67,8 +69,7 @@ export default async function search({
   const q = query(
     collection(db, 'gamehistory'),
     ...constraints,
-    // TODO: custom limit depending on guest, sponsor, admin
-    limit(20),
+    limit(lmt),
   ).withConverter(converter);
   const docs = await getDocs(q);
 

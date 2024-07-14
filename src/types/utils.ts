@@ -9,4 +9,6 @@ declare global {
   type Optional<T extends any[], O> = [...T, O?];
 
   type DocumentKey = DocumentSnapshot['id'];
+
+  type ValueOf<T> = T[keyof T];
 }

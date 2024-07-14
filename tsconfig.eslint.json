@@ -11,6 +11,10 @@
       "*.js",
       "*.ts",
       ".*.js",
-      "test"
+      "test",
+      "functions"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
