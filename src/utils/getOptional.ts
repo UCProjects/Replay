@@ -1,6 +1,6 @@
 import containsOnly from './containsOnly';
 
-export default function getOptional<D extends object, T extends any[]>(
+export default function getOptional<D extends object, T extends any[] = unknown[]>(
   args: T,
   defaults: D = {} as D,
 ): D {
