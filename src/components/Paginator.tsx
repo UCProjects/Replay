@@ -45,7 +45,7 @@ export function Paginator<C extends Component>({
   emptyMessage = undefined,
   items,
   itemsPerPage = 20,
-  itemsPerPageOptions,
+  itemsPerPageOptions = [itemsPerPage],
   // paginateBottom = true,
   paginateTop = false,
   paginateTopRef = undefined,
