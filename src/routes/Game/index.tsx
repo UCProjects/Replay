@@ -7,14 +7,12 @@ import { Flex } from '~/components/Flex';
 import { useGameState } from '~/hooks/useGame';
 import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';
+import Controls from './components/Controls';
 import Profile from './components/Profile';
 import { Slot } from './components/Slot';
-import useUpdateActiveCard from './hooks/useUpdateActiveCard';
 import './game.css';
 
-// TODO: Add controls... somehow?
 function Render(): ReactNode {
-  useUpdateActiveCard();
   const state = useGameState();
 
   const board = useMemo(
@@ -32,27 +30,30 @@ function Render(): ReactNode {
     <Box
       className="gameBoard"
     >
-      <Profile player={state.players[1]} />
-      <Flex
-        container
-        sx={{
-          // TODO: This needs more restrictions
-          '@media (orientation: portrait)': {
-            sm: {
-              flexDirection: 'row',
-              maxHeight: 'unset',
-            },
-            xs: {
-              flexDirection: 'column',
-              maxHeight: '608px',
-            },
-          },
-        }}
-      >
-        {board}
-      </Flex>
       <Profile player={state.players[0]} />
-      <ActiveCard />
+      <Box sx={{ position: 'relative' }}>
+        <Flex
+          container
+          sx={{
+            // TODO: This needs more restrictions
+            '@media (orientation: portrait)': {
+              sm: {
+                flexDirection: 'row',
+                maxHeight: 'unset',
+              },
+              xs: {
+                flexDirection: 'column',
+                maxHeight: '608px',
+              },
+            },
+          }}
+        >
+          {board}
+        </Flex>
+        <ActiveCard />
+      </Box>
+      <Profile player={state.players[1]} />
+      <Controls />
     </Box>
   );
 }

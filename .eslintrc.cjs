@@ -65,6 +65,7 @@ module.exports = {
       "devDependencies": [
         "vite.config.ts",
         "**/*.test.js",
+        "**/*.test.ts",
       ]}],
     'react/function-component-definition': [
         'error',

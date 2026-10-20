@@ -1,25 +1,29 @@
 import {
   createContext,
-  useCallback,
   useMemo,
 } from 'react';
 import { LoadedGame } from '~/structures/LoadedGame';
 import {
   GameBoard,
-  GameState,
   GameStateExpanded,
   Slot,
 } from '~/types/game';
 import { useContent } from '~/hooks/useContent';
+import { Timeline } from '~/utils/timeline';
 
 export type GameContent = {
   activeSlot: Slot;
+  commitScrub: () => void;
+  eventState: GameStateExpanded;
   game: LoadedGame;
   gameState: GameStateExpanded;
+  pause: () => void;
+  play: () => void;
   playing: boolean;
-  setActiveSlot: (slot: Slot) => void;
-  setGameState: (state: GameState) => void;
-  setPlaying: (playing: boolean) => void;
+  position: number;
+  scrub: (time: number) => void;
+  step: (direction: 1 | -1) => void;
+  timeline: Timeline;
 };
 
 export const GameContext = createContext<GameContent | null>(null);
@@ -34,9 +38,9 @@ export function useGameState(): GameStateExpanded {
   return gameState;
 }
 
-export function useSetGameState(): GameContent['setGameState'] {
-  const { setGameState } = useContent(GameContext);
-  return setGameState;
+export function useEventState(): GameStateExpanded {
+  const { eventState } = useContent(GameContext);
+  return eventState;
 }
 
 export function useGameBoard(): GameBoard {
@@ -52,33 +56,48 @@ export function useActiveSlot(): Slot {
   return activeSlot;
 }
 
-export function useSetActiveSlot(): GameContent['setActiveSlot'] {
-  const { setActiveSlot } = useContent(GameContext);
-  return setActiveSlot;
-}
-
 export function usePlaying(): GameContent['playing'] {
   const { playing } = useContent(GameContext);
   return playing;
 }
 
-export function useSetPlaying(): GameContent['setPlaying'] {
-  const { setPlaying } = useContent(GameContext);
-  return setPlaying;
+export function usePlay(): GameContent['play'] {
+  const { play } = useContent(GameContext);
+  return play;
 }
 
-export function usePlay() {
-  const setPlaying = useSetPlaying();
-  return useCallback(
-    () => setPlaying(true),
-    [setPlaying],
-  );
+export function usePause(): GameContent['pause'] {
+  const { pause } = useContent(GameContext);
+  return pause;
 }
 
-export function usePause() {
-  const setPlaying = useSetPlaying();
-  return useCallback(
-    () => setPlaying(false),
-    [setPlaying],
-  );
+export type Playback = Pick<GameContent, 'commitScrub' | 'pause' | 'play' | 'playing' | 'scrub' | 'step'> & {
+  elapsed: number;
+  finished: boolean;
+  total: number;
+};
+
+export function usePlayback(): Playback {
+  const {
+    commitScrub,
+    game,
+    pause,
+    play,
+    playing,
+    position,
+    scrub,
+    step,
+    timeline,
+  } = useContent(GameContext);
+  return {
+    commitScrub,
+    elapsed: timeline.starts[position] ?? 0,
+    finished: position >= game.index.length - 1,
+    pause,
+    play,
+    playing,
+    scrub,
+    step,
+    total: timeline.total,
+  };
 }
