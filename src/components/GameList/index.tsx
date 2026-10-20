@@ -83,6 +83,12 @@ export default function GameList({
       </Flex>
       <Paginator
         component={Box}
+        componentProps={{
+          sx: {
+            display: 'grid',
+            gridTemplateColumns: '1fr auto',
+          },
+        }}
         emptyMessage={t('replay-loading')}
         items={list}
         itemsPerPage={20}

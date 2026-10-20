@@ -53,6 +53,12 @@ function UserData({
   );
 }
 
+const subgrid = {
+  display: 'grid',
+  gridColumn: '1 / -1',
+  gridTemplateColumns: 'subgrid',
+};
+
 export default function Entry({
   record: {
     date,
@@ -70,29 +76,36 @@ export default function Entry({
   const ranked = MODE[type] === MODE.RANKED;
   return (
     <>
-      <Divider />
+      <Divider sx={{ gridColumn: '1 / -1', marginY: 0.5 }} />
       <Link
+        style={subgrid}
         to={`/game/${key}/`}
       >
         <Stack
           data-date={date}
           data-start={start}
-          direction="row"
+          sx={subgrid}
         >
-          <UserData
-            ranked={ranked}
-            user={player}
-          />
-          <UserData
-            opponent
-            ranked={ranked}
-            user={opponent}
-          />
+          <Stack
+            direction={{ sm: 'row-reverse', xs: 'column' }}
+            minWidth={0}
+          >
+            <UserData
+              opponent
+              ranked={ranked}
+              user={opponent}
+            />
+            <UserData
+              ranked={ranked}
+              user={player}
+            />
+          </Stack>
           <Typography
             component="span"
             sx={{
               textAlign: 'center',
-              flexBasis: '200px',
+              minWidth: { sm: '200px', xs: 0 },
+              paddingX: '10px',
               alignSelf: 'center',
             }}
           >

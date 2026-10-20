@@ -1,6 +1,7 @@
 import { EmojiEvents, Star } from '@mui/icons-material';
 import {
   BadgeProps,
+  Box,
   Divider,
   styled,
 } from '@mui/material';
@@ -9,7 +10,9 @@ import { Flex } from '~/components/Flex';
 import { Player } from '~/types/game';
 import { Text } from '~/components/Text';
 import { Tip } from '~/components/Tip';
-import { useGame, useGameState } from '~/hooks/useGame';
+import {
+  useGame, useGameState, useHighlights, useIsTurn,
+} from '~/hooks/useGame';
 import { useTranslation } from '~/hooks/useTranslation';
 import { Artifacts } from './Artifacts';
 import { ProfileIcon } from './ProfileIcon';
@@ -19,6 +22,7 @@ export type ProfileProps = {
 };
 
 type UsernameProps = {
+  active: boolean;
   name: string;
   soul: string;
 };
@@ -27,7 +31,39 @@ const Img = styled('img')({
   height: 28,
 });
 
+type StatProps = {
+  alt: string;
+  image: string;
+  tip: string;
+  value: ReactNode;
+};
+
+const Value = styled('span')({
+  backgroundColor: 'var(--bgcolor-2)',
+  borderRadius: 10,
+  margin: '0 5px',
+  padding: '0 5px',
+});
+
+function Stat({
+  alt,
+  image,
+  tip,
+  value,
+}: StatProps): ReactNode {
+  const t = useTranslation();
+  return (
+    <Tip title={t(tip)}>
+      <Flex alignItems="center" container flexGrow={0} wrap="nowrap">
+        <Img alt={alt} src={`/images/board/${image}.png`} />
+        <Value>{value}</Value>
+      </Flex>
+    </Tip>
+  );
+}
+
 function Username({
+  active,
   name,
   soul,
 }: UsernameProps): ReactNode {
@@ -44,7 +80,7 @@ function Username({
       )}
     >
       <span
-        className="name"
+        className={active ? 'name effectActive' : 'name'}
         data-soul={soul}
       >
         {name}
@@ -70,6 +106,8 @@ export default function Profile({
 }: ProfileProps): ReactNode {
   const { results, type } = useGame();
   const state = useGameState();
+  const highlights = useHighlights();
+  const turnActive = useIsTurn(isOpponent);
 
   const isCurrentTurn = useMemo(
     () => state.turnPlayer.id === id,
@@ -94,7 +132,10 @@ export default function Profile({
   return (
     <Flex
       alignItems="center"
-      className={isOpponent ? 'opponent' : 'player'}
+      className={[
+        isOpponent ? 'opponent' : 'player',
+        highlights.targeted.includes(id) && 'user-targeted',
+      ].filter(Boolean).join(' ')}
       container
       data-user-id={id}
       justifyContent="space-between"
@@ -102,7 +143,7 @@ export default function Profile({
       position="relative"
       sx={{
         border: {
-          sm: '1px solid var(--bgcolor)',
+          sm: `1px solid ${turnActive ? 'rgb(255, 255, 0)' : 'var(--bgcolor)'}`,
           xs: 0,
         },
       }}
@@ -115,10 +156,12 @@ export default function Profile({
         flexGrow={0}
       >
         <Username
+          active={highlights.effectNames.includes(id)}
           name={user.name}
           soul={user.class}
         />
         <Artifacts
+          active={highlights.effectArtifacts.includes(id)}
           artifacts={artifacts}
           isOpponent={isOpponent}
         />
@@ -158,30 +201,25 @@ export default function Profile({
         />
       </Flex>
       <Flex
+        alignItems="center"
         className="player-info"
+        container
         flexGrow={0}
+        wrap="nowrap"
       >
-        <ProfileIcon
-          anchor={anchor}
-          badge={deck}
-          tip="replay.deck"
-        >
-          <Img alt="deck" src="/images/board/cards.png" />
-        </ProfileIcon>
-        <ProfileIcon
-          anchor={anchor}
-          badge={hand}
+        <Stat alt="deck" image="cards" tip="replay.deck" value={deck} />
+        <Stat
+          alt="hand"
+          image="hand"
           tip="replay.hand"
-        >
-          <Img alt="hand" src="/images/board/hand.png" />
-        </ProfileIcon>
-        <ProfileIcon
-          anchor={anchor}
-          badge={gold}
-          tip="replay.gold"
-        >
-          <Img alt="gold" src="/images/board/gold.png" />
-        </ProfileIcon>
+          value={(
+            <>
+              {hand}
+              <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>/7</Box>
+            </>
+)}
+        />
+        <Stat alt="gold" image="gold" tip="replay.gold" value={gold} />
       </Flex>
     </Flex>
   );

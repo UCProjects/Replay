@@ -3,6 +3,7 @@ import { ReactNode, useMemo } from 'react';
 import { useTranslation } from '~/hooks/useTranslation';
 import { FitText } from '~/components/FitText';
 import { WithSlot } from '~/types/game';
+import { cardClasses, soulOf } from '~/utils/cardClasses';
 import { Status } from './Status';
 import { Tribes } from './Tribes';
 import { Footer } from './Footer';
@@ -12,8 +13,10 @@ import './card.css';
 export function Card({
   data,
   full = false,
-}: WithSlot<{ full?: boolean }>): ReactNode {
+  mark = '',
+}: WithSlot<{ full?: boolean; mark?: string }>): ReactNode {
   const t = useTranslation();
+  const soul = soulOf(data);
   const name = useMemo(() => {
     if (data?.fixedId) return t(`card-name-${data.fixedId}`, '1');
     return '';
@@ -25,7 +28,7 @@ export function Card({
   return (
     <Stack
       bgcolor="var(--bgcolor)"
-      className={full ? 'card card-full' : 'card'}
+      className={['card', full && 'card-full', mark, ...cardClasses(data)].filter(Boolean).join(' ')}
       visibility={data ? 'visible' : 'hidden'}
     >
       <Stack
@@ -33,14 +36,14 @@ export function Card({
         direction="row"
       >
         <FitText
-          className="card-name"
+          className={['card-name', 'black-bg', 'center-v', soul].filter(Boolean).join(' ')}
           fitHeight={false}
           size={15}
           textAlign="left"
         >
           {name}
         </FitText>
-        <div className="card-cost">
+        <div className="card-cost black-bg center-v center-h">
           {data ? data.cost ?? 0 : null}
         </div>
       </Stack>
@@ -52,7 +55,7 @@ export function Card({
           src={data ? `/images/cards/${data.name.replace(/ /g, '_')}.png` : ''}
         />
         <FitText
-          className="name outlined"
+          className={['name', 'outlined', soul].filter(Boolean).join(' ')}
           fitHeight={false}
           size={13}
         >
@@ -61,7 +64,7 @@ export function Card({
         <Status data={data} />
         <Tribes data={data} />
       </div>
-      <div className="card-description center-v center-h">
+      <div className="card-description black-bg center-v center-h">
         <FitText
           fitBoth
           html={data ? t(`card-${data.fixedId}`) : ''}

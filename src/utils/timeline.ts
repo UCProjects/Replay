@@ -25,8 +25,8 @@ const FIXED_DURATION: Record<string, number> = {
 const MAX_DURATION = 3000;
 const MAX_UPDATE_DURATION = 200;
 
-const CARRIES_EVENT = ['log', 'update'];
-const NOT_A_STEP = ['emote', 'gameTurn', 'init', 'log', 'unknown', 'update'];
+const CARRIES_EVENT = ['animation', 'emote', 'log', 'unknown', 'update'];
+const NOT_A_STEP = ['animation', 'emote', 'gameTurn', 'init', 'log', 'unknown', 'update'];
 
 function durationOf(scene: TimelineScene, next: TimelineScene | undefined): number {
   if (!next) return 0;

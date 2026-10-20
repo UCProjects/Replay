@@ -52,7 +52,7 @@ export function expand(obj: unknown, cache: GameRaw['cache']): unknown {
     return obj.map((val) => expand(val, cache));
   }
 
-  if (typeof obj === 'object' && Object.keys(obj).length) {
+  if (typeof obj === 'object') {
     const o: Record<string, unknown> = {};
     Object.keys(obj).forEach((key) => {
       o[key] = expand(obj[key as keyof typeof obj], cache);

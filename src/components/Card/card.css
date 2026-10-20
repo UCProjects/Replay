@@ -22,16 +22,16 @@
   margin: 0;
 }
 
-.card-top {
+.card-top > * {
   border-bottom: 2px solid var(--border);
 }
 
-.card-bottom {
+.card-bottom > * {
   border-top: 2px solid var(--border);
 }
 
 .card-top, .card-bottom {
-  align-items: center;
+  align-items: stretch;
   height: 30px;
 }
 
@@ -135,6 +135,11 @@
 }
 
 /* Borders */
+.black-bg {
+  background-color: rgb(0, 0, 0);
+  background-clip: padding-box;
+}
+
 .card-shiny {
   background-color: rgb(255, 216, 89);
   background-image: linear-gradient(

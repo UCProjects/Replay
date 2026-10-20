@@ -81,10 +81,10 @@ export type Game = Modify<GameRaw, {
 
 type EventEffect = {
   trigger: Card | PlayerRaw;
-  affected: {
-    cards: [];
-    players: [];
-  }
+  affected?: {
+    cards?: Card[];
+    players?: Array<PlayerRaw | number>;
+  };
 };
 
 type EventAttack = {

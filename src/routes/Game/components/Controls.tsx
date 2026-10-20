@@ -129,7 +129,8 @@ export default function Controls(): ReactNode {
         onChange={handleChange}
         onChangeCommitted={handleCommit}
         size="small"
-        step={null}
+        step={50}
+        sx={{ color: 'white' }}
         value={dragging ?? elapsed}
       />
       <Box component="span">{format(total)}</Box>

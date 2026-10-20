@@ -60,7 +60,7 @@ describe('buildTimeline', () => {
     expect(total).toBe(1395);
   });
 
-  it('points updates and logs at the event before them', () => {
+  it('points updates, logs and animations at the event before them', () => {
     const { event } = buildTimeline([
       scene('init', 0),
       scene('attack', 1),
@@ -68,9 +68,14 @@ describe('buildTimeline', () => {
       scene('log', 3),
       scene('update', 4),
       scene('spell', 5),
-      scene('log', 6),
+      scene('animation', 6),
+      scene('log', 7),
+      scene('unknown', 8),
+      scene('emote', 9),
+      scene('cardEffect', 10),
+      scene('animation', 11),
     ]);
-    expect(event).toEqual([0, 1, 1, 1, 1, 5, 5]);
+    expect(event).toEqual([0, 1, 1, 1, 1, 5, 5, 5, 5, 5, 10, 10]);
   });
 
   it('only counts real events as steps', () => {
@@ -83,9 +88,10 @@ describe('buildTimeline', () => {
       scene('log', 5),
       scene('unknown', 6),
       scene('emote', 7),
-      scene('finish', 8),
+      scene('animation', 8),
+      scene('finish', 9),
     ]);
-    expect(steps).toEqual([2, 4, 8]);
+    expect(steps).toEqual([2, 4, 9]);
   });
 
   it('copes with a game that has no scenes', () => {

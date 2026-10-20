@@ -10,7 +10,9 @@ const Image = styled('img')({
   height: 20,
 });
 
-export type ArtifactsProps = Pick<Player, 'artifacts' | 'isOpponent'>;
+export type ArtifactsProps = Pick<Player, 'artifacts' | 'isOpponent'> & {
+  active?: boolean;
+};
 type ArtProps = {
   art: Artifact;
   isOpponent: Player['isOpponent'];
@@ -50,11 +52,12 @@ function Art({
 }
 
 export function Artifacts({
+  active = false,
   artifacts,
   isOpponent,
 }: ArtifactsProps): ReactNode {
   return (
-    <Flex>
+    <Flex className={active ? 'artifacts effectActive' : 'artifacts'}>
       {artifacts.map((art) => (
         <Art
           art={art}

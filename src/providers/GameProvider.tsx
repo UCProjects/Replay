@@ -12,6 +12,7 @@ import { GameContext } from '~/hooks/useGame';
 import { useProcessGameState } from '~/hooks/useProcessGameState';
 import { LoadedGame } from '~/structures/LoadedGame';
 import { activeCardOf } from '~/utils/activeCard';
+import { highlightsOf } from '~/utils/highlights';
 import {
   buildTimeline,
   findScene,
@@ -29,6 +30,7 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
   const [position, setPosition] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [scrubbing, setScrubbing] = useState(false);
+  const [pin, setPin] = useState<number | null>(null);
   const shown = useDeferredValue(position);
 
   const gameState = useMemo(
@@ -40,6 +42,7 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     return index === shown ? gameState : processGameState(game.index[index]);
   }, [game, gameState, processGameState, shown, timeline]);
   const activeSlot = useMemo(() => activeCardOf(eventState), [eventState]);
+  const highlights = useMemo(() => highlightsOf(eventState), [eventState]);
 
   useEffect(() => {
     if (!playing || scrubbing) return undefined;
@@ -47,12 +50,16 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
       setPlaying(false);
       return undefined;
     }
+    const end = timeline.starts[position] + timeline.durations[position];
     const timer = window.setTimeout(
-      () => setPosition(position + 1),
-      timeline.durations[position],
+      () => {
+        setPin(null);
+        setPosition(position + 1);
+      },
+      pin === null ? timeline.durations[position] : Math.max(end - pin, 0),
     );
     return () => window.clearTimeout(timer);
-  }, [last, playing, position, scrubbing, timeline]);
+  }, [last, pin, playing, position, scrubbing, timeline]);
 
   useEffect(() => {
     const pauseWhenHidden = () => {
@@ -63,20 +70,26 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
   }, []);
 
   const play = useCallback(() => {
-    if (position >= last) setPosition(0);
+    if (position >= last) {
+      setPin(null);
+      setPosition(0);
+    }
     setPlaying(true);
   }, [last, position]);
 
   const pause = useCallback(() => setPlaying(false), []);
 
   const scrub = useCallback((time: number) => {
+    if (!Number.isFinite(time)) return;
     setScrubbing(true);
+    setPin(time);
     setPosition(findScene(timeline, time));
   }, [timeline]);
 
   const commitScrub = useCallback(() => setScrubbing(false), []);
 
   const step = useCallback((direction: 1 | -1) => {
+    setPin(null);
     setPosition(stepScene(timeline, position, direction));
   }, [position, timeline]);
 
@@ -86,7 +99,9 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     eventState,
     game,
     gameState,
+    highlights,
     pause,
+    pin,
     play,
     playing,
     position,
@@ -99,7 +114,9 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     eventState,
     game,
     gameState,
+    highlights,
     pause,
+    pin,
     play,
     playing,
     position,

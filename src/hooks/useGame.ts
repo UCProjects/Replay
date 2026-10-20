@@ -9,6 +9,7 @@ import {
   Slot,
 } from '~/types/game';
 import { useContent } from '~/hooks/useContent';
+import { Highlights } from '~/utils/highlights';
 import { Timeline } from '~/utils/timeline';
 
 export type GameContent = {
@@ -17,7 +18,9 @@ export type GameContent = {
   eventState: GameStateExpanded;
   game: LoadedGame;
   gameState: GameStateExpanded;
+  highlights: Highlights;
   pause: () => void;
+  pin: number | null;
   play: () => void;
   playing: boolean;
   position: number;
@@ -41,6 +44,11 @@ export function useGameState(): GameStateExpanded {
 export function useEventState(): GameStateExpanded {
   const { eventState } = useContent(GameContext);
   return eventState;
+}
+
+export function useHighlights(): Highlights {
+  const { highlights } = useContent(GameContext);
+  return highlights;
 }
 
 export function useGameBoard(): GameBoard {
@@ -82,6 +90,7 @@ export function usePlayback(): Playback {
     commitScrub,
     game,
     pause,
+    pin,
     play,
     playing,
     position,
@@ -91,7 +100,7 @@ export function usePlayback(): Playback {
   } = useContent(GameContext);
   return {
     commitScrub,
-    elapsed: timeline.starts[position] ?? 0,
+    elapsed: pin ?? timeline.starts[position] ?? 0,
     finished: position >= game.index.length - 1,
     pause,
     play,
@@ -100,4 +109,11 @@ export function usePlayback(): Playback {
     step,
     total: timeline.total,
   };
+}
+
+export function useIsTurn(isOpponent: boolean): boolean {
+  const { eventState, game, gameState } = useContent(GameContext);
+  if (eventState.action === 'finish') return false;
+  const opponentId = game.users[0].id;
+  return (gameState.turnPlayer.id === opponentId) === isOpponent;
 }
