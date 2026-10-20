@@ -39,7 +39,10 @@ export function Slot({
   data,
 }: SlotProps): ReactNode {
   return (
-    <StyledSlot isOpponent={isOpponent}>
+    <StyledSlot
+      className="slot"
+      isOpponent={isOpponent}
+    >
       <Card data={data} />
     </StyledSlot>
   );

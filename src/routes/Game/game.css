@@ -95,3 +95,13 @@
 .hpBar[data-lives="2"]::-moz-progress-bar {
   background: rgb(109, 158, 248);
 }
+
+@media only screen and (max-height: 400px) and (orientation: landscape) {
+  .gameBoard .slot {
+    padding: 2px;
+  }
+
+  .gameBoard .controls {
+    padding: 0 12px;
+  }
+}

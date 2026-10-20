@@ -21,7 +21,6 @@ function Art({
     custom,
     id,
     image,
-    legendary,
   },
   isOpponent: _,
 }: ArtProps): ReactNode {
@@ -38,9 +37,9 @@ function Art({
       }}
       tip={(
         <Box>
-          <Text html={t(`{{ARTIFACT:${id}${legendary ? '|LEGEND' : ''}}}`)} />
+          <Text html={t(`artifact-name-${id}`)} />
           <Divider />
-          <Text html={t(`{{ARTIFACT:${id}|desc}}`)} />
+          <Text html={t(`artifact-${id}`)} />
         </Box>
       )}
       tipAnchor="top"

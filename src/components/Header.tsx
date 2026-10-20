@@ -16,6 +16,7 @@ export default function Header(): ReactNode {
   // TODO: Handle buttons
   return (
     <Flex
+      className="site-header"
       component="header"
       container
       justifyContent="space-between"
