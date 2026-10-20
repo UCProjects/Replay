@@ -243,11 +243,32 @@
   .card-full .card-description { display: flex; }
 }
 
-/* Remove header for tiny screens */
-@media only screen and (orientation: portrait) and (max-height: 700px),
-  only screen and (max-height: 400px) {
-  .card-top { display: none; }
+@media only screen and (max-width: 599px) {
+  .card .card-top { display: none; }
   .card-image > .name { display: block; }
   .card-full .card-top { display: flex; }
   .card-full .card-image > .name { display: none; }
+}
+
+/* Remove header for tiny screens */
+@media only screen and (orientation: portrait) and (max-height: 700px),
+  only screen and (max-height: 400px) {
+  .card .card-top { display: none; }
+  .card-image > .name { display: block; }
+  .card-full .card-top { display: flex; }
+  .card-full .card-image > .name { display: none; }
+}
+
+.card-status [data-overlay] {
+  position: relative;
+}
+
+.card-status [data-overlay]::before {
+  content: attr(data-overlay);
+  position: absolute;
+  font-family: monospace;
+  bottom: -2px;
+  right: 1px;
+  font-size: 11px;
+  text-shadow: -1px -1px var(--bgcolor), 1px 1px var(--bgcolor), -1px 1px var(--bgcolor), 1px -1px var(--bgcolor);
 }

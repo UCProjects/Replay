@@ -17,20 +17,29 @@ export enum CreatorType {
   CARD,
   ARTIFACT,
   SOUL,
+  ENCHANT,
 }
 
-// TODO: This is broken too
-export type CreatorInfo<Type extends CreatorType = CreatorType.CARD> = {
-  typeCreator: Type;
-  id: Type extends CreatorType.SOUL ? never : number;
-  name: Type extends CreatorType.SOUL ? string : never;
+export type CreatorInfo = {
+  typeCreator?: CreatorType | -1;
+  id?: number;
+  name?: string;
+};
+
+export type CardStatus = {
+  name: string;
+  statusType: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL';
+  statusBehavior: 'REPLACE' | 'STACKABLE' | 'UNIQUE';
+  counter?: number;
+  displayCounter?: boolean;
 };
 
 export type MonsterInfo = {
-  hp: number;
-  maxHp: number;
-  attack: number;
-  originalAttack: number;
+  hp?: number;
+  maxHp?: number;
+  originalHp?: number;
+  attack?: number;
+  originalAttack?: number;
   taunt?: boolean;
   charge?: boolean;
   haste?: boolean;
@@ -48,7 +57,7 @@ export type MonsterInfo = {
   ranged?: boolean;
   thorns?: boolean;
   // eslint-disable-next-line no-use-before-define -- One has to exist before the other...
-  caughtMonster?: Card;
+  caughtMonster?: Card & { ownerId?: number };
   shockEnabled?: boolean;
   supportEnabled?: boolean;
   bullseyeEnabled?: boolean;
@@ -58,13 +67,15 @@ export type MonsterInfo = {
 export type Card = {
   id: number;
   fixedId: number;
-  type: CardType;
+  typeCard?: CardType;
   name: string;
   image: string;
   rarity: Rarity;
   extension: Family;
-  cost: number;
+  cost?: number;
+  originalCost?: number;
   shiny: boolean;
+  statuses?: CardStatus[];
   tribes?: string[];
   loop?: number;
   creatorInfo?: CreatorInfo;

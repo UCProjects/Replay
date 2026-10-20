@@ -11,7 +11,8 @@ import './card.css';
 // TODO: Resizable component for name/description
 export function Card({
   data,
-}: WithSlot): ReactNode {
+  full = false,
+}: WithSlot<{ full?: boolean }>): ReactNode {
   const t = useTranslation();
   const name = useMemo(() => {
     if (data?.fixedId) return t(`card-name-${data.fixedId}`, '1');
@@ -24,16 +25,12 @@ export function Card({
   return (
     <Stack
       bgcolor="var(--bgcolor)"
-      className="card"
+      className={full ? 'card card-full' : 'card'}
       visibility={data ? 'visible' : 'hidden'}
     >
       <Stack
         className="card-top"
         direction="row"
-        display={{
-          sm: 'flex',
-          xs: 'none',
-        }}
       >
         <FitText
           className="card-name"
@@ -44,7 +41,7 @@ export function Card({
           {name}
         </FitText>
         <div className="card-cost">
-          {data?.cost}
+          {data ? data.cost ?? 0 : null}
         </div>
       </Stack>
       <div className="card-image">
