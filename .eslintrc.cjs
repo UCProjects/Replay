@@ -92,4 +92,18 @@ module.exports = {
     'no-use-before-define': 'off',
     'no-useless-constructor': 'off',
   },
+  overrides: [
+    {
+      files: ['scripts/**/*.js'],
+      env: {
+        node: true,
+      },
+      extends: ['plugin:@typescript-eslint/disable-type-checked'],
+      rules: {
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+        'no-console': 'off',
+        'no-await-in-loop': 'off',
+      },
+    },
+  ],
 }

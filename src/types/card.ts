@@ -56,7 +56,6 @@ export type MonsterInfo = {
   silence?: boolean;
   ranged?: boolean;
   thorns?: boolean;
-  // eslint-disable-next-line no-use-before-define -- One has to exist before the other...
   caughtMonster?: Card & { ownerId?: number };
   shockEnabled?: boolean;
   supportEnabled?: boolean;
