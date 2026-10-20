@@ -102,7 +102,7 @@ export type Actions = {
   damaged: unknown;
   discard: Card;
   exposed: Card;
-  finished: never;
+  finish: never;
   gameTurn: never;
   healed: unknown;
   init: never;

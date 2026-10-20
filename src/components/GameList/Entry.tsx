@@ -60,8 +60,8 @@ export default function Entry({
     start,
     type,
     users: [
-      player,
       opponent,
+      player,
     ],
   },
 }: EntryProps): ReactNode {

@@ -77,7 +77,7 @@ export default function Profile({
   );
 
   const isVictor = useMemo(
-    () => state.action === 'finished' && results.winner?.id === id,
+    () => state.action === 'finish' && results.winner?.id === id,
     [
       results,
       state.action,

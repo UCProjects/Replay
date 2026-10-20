@@ -38,7 +38,7 @@ export default async function search({
   previous = undefined,
 }: SearchParams = {}): Promise<GameRecord[]> {
   const date = new Date();
-  // date.setDate(date.getDate() - 1); // FIXME: Supposed to allow 7 days
+  date.setDate(date.getDate() - 6);
 
   const constraints: QueryConstraint[] = [
     where('date', '>=', date),
