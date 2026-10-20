@@ -75,13 +75,16 @@ export function Paginator<C extends Component>({
     [],
   );
 
+  const pageCount = rowsPerPage === -1 ? 1 : Math.ceil(items.length / rowsPerPage);
+  const currentPage = Math.min(page, Math.max(0, pageCount - 1));
+
   const itemSlice = useMemo(() => {
-    const start = page * rowsPerPage;
+    const start = currentPage * rowsPerPage;
     const end = rowsPerPage === -1 ? items.length : start + rowsPerPage;
     return items.slice(start, end);
   }, [
+    currentPage,
     items,
-    page,
     rowsPerPage,
   ]);
 
@@ -108,7 +111,7 @@ export function Paginator<C extends Component>({
             count={items.length}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleSelectRows}
-            page={page}
+            page={currentPage}
             rowsPerPage={rowsPerPage}
             rowsPerPageOptions={itemsPerPageOptions}
           />
@@ -120,7 +123,7 @@ export function Paginator<C extends Component>({
         count={items.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleSelectRows}
-        page={page}
+        page={currentPage}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={itemsPerPageOptions}
       />
