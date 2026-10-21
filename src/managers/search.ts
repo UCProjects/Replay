@@ -13,7 +13,8 @@ import {
 } from 'firebase/firestore';
 import { converter, GameRecord } from '~/structures/GameRecord';
 import { MODE, GameMode } from '~/types/game';
-import { SOUL, Soul } from '~/types/soul';
+import { Soul } from '~/types/soul';
+import { searchToken } from '~/utils/searchToken';
 import firebase from './firebase';
 
 export type SearchParams = {
@@ -45,21 +46,13 @@ export default async function search({
     orderBy('date', 'desc'),
   ];
 
-  if (id !== '0') {
-    const number = Number(id);
-    if (Number.isInteger(number)) {
-      constraints.push(where('playermeta.ids', 'array-contains', number));
-    }
-  } else if (name) {
-    constraints.push(where('playermeta.names', 'array-contains', name));
+  const token = searchToken({ id, name, soul });
+  if (token) {
+    constraints.push(where('search', 'array-contains', token));
   }
 
   if (mode !== 'ANY' && MODE[mode]) {
     constraints.push(where('type', '==', mode));
-  }
-
-  if (soul !== 'ANY' && SOUL[soul]) {
-    constraints.push(where('playermeta.souls', 'array-contains', soul));
   }
 
   if (previous) {
