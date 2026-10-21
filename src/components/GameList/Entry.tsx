@@ -56,8 +56,10 @@ function UserData({
       data-rank={ranked ? rank.substring(0, 1) : undefined}
       display="flex"
       flex={1}
-      justifyContent="space-between"
       overflow="hidden"
+      sx={{
+        '&[data-rank]::before': { margin: '0 5px 0 0' },
+      }}
     >
       <Typography
         className="user"
@@ -72,7 +74,12 @@ function UserData({
         component="span"
         onClick={handleSearch}
         size="small"
-        sx={{ color: 'inherit', opacity: 0.6, ':hover': { opacity: 1 } }}
+        sx={{
+          color: 'inherit',
+          marginLeft: 'auto',
+          opacity: 0.6,
+          ':hover': { opacity: 1 },
+        }}
         title={`Search games with ${name}`}
       >
         <Search fontSize="inherit" />
