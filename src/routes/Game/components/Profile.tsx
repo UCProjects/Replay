@@ -13,7 +13,9 @@ import { Tip } from '~/components/Tip';
 import {
   useGame, useGameState, useHighlights, useIsTurn,
 } from '~/hooks/useGame';
+import { useDisplayName } from '~/hooks/useDisplayName';
 import { useTranslation } from '~/hooks/useTranslation';
+import { storyFightOf } from '~/utils/storyFight';
 import { Artifacts } from './Artifacts';
 import { ProfileIcon } from './ProfileIcon';
 
@@ -68,14 +70,17 @@ function Username({
   soul,
 }: UsernameProps): ReactNode {
   const t = useTranslation();
+  const displayName = useDisplayName();
+  const fight = soul === 'MONSTER' ? storyFightOf(name) : undefined;
+  const storySoul = fight ? t(`soul-monster-${fight}`) : '';
   return (
     <Tip
       placement="top"
       title={(
         <Flex>
-          <Text html={t(`{{SOUL:${soul}}}`)} />
+          <Text html={storySoul || t(`{{SOUL:${soul}}}`)} />
           <Divider />
-          <Text html={t(`{{SOUL:${soul}-desc}}`)} />
+          <Text html={storySoul ? t(`soul-monster-${fight}-desc`) : t(`{{SOUL:${soul}-desc}}`)} />
         </Flex>
       )}
     >
@@ -83,7 +88,7 @@ function Username({
         className={active ? 'name effectActive' : 'name'}
         data-soul={soul}
       >
-        {name}
+        {displayName(name)}
       </span>
     </Tip>
   );

@@ -123,6 +123,7 @@ body.authed .unauthed,
 [data-soul='PERSEVERANCE']::before { background-image: url(/images/souls/PERSEVERANCE.png); }
 [data-soul='KINDNESS']::before { background-image: url(/images/souls/KINDNESS.png); }
 [data-soul='JUSTICE']::before { background-image: url(/images/souls/JUSTICE.png); }
+[data-soul='MONSTER']::before { background-image: url(/images/souls/MONSTER.png); }
 
 @media only screen and (max-height: 500px) and (orientation: landscape) {
   header.site-header { display: none; }

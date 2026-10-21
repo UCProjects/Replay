@@ -21,6 +21,7 @@ import {
 } from 'react';
 import { Link } from '~/components/Link';
 import { useGame } from '~/hooks/useGame';
+import { useDisplayName } from '~/hooks/useDisplayName';
 import { useTranslation } from '~/hooks/useTranslation';
 
 export type GameMenuProps = {
@@ -33,6 +34,7 @@ export default function GameMenu({
   open,
 }: GameMenuProps): ReactNode {
   const t = useTranslation();
+  const displayName = useDisplayName();
   const {
     results,
     start,
@@ -71,9 +73,9 @@ export default function GameMenu({
     >
       <Box sx={{ padding: '16px' }}>
         <Typography variant="h6">
-          {player.name}
+          {displayName(player.name)}
           {' vs '}
-          {opponent.name}
+          {displayName(opponent.name)}
         </Typography>
       </Box>
       <Divider sx={{ borderColor: 'white' }} />
@@ -87,7 +89,7 @@ export default function GameMenu({
         </ListItem>
         <ListItem>
           <ListItemText
-            primary={results.winner ? `${results.winner.name} won` : 'No winner'}
+            primary={results.winner ? `${displayName(results.winner.name)} won` : 'No winner'}
             secondary={reason}
             secondaryTypographyProps={{ sx: { color: 'inherit', opacity: 0.7 } }}
           />

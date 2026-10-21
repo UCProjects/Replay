@@ -8,6 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { useDisplayName } from '~/hooks/useDisplayName';
 import { useTranslation } from '~/hooks/useTranslation';
 import { GameRecord } from '~/structures/GameRecord';
 import { User } from '~/types/user';
@@ -39,6 +40,7 @@ function UserData({
   ranked = false,
 }: UserDataProps): ReactNode {
   const navigate = useNavigate();
+  const displayName = useDisplayName();
   const handleSearch = useCallback((event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -67,8 +69,9 @@ function UserData({
         data-level={level}
         data-soul={soul}
       >
-        {name}
+        {displayName(name)}
       </Typography>
+      {id !== 0 && (
       <IconButton
         aria-label={`Search games with ${name}`}
         component="span"
@@ -84,6 +87,7 @@ function UserData({
       >
         <Search fontSize="inherit" />
       </IconButton>
+      )}
     </Box>
   );
 }
