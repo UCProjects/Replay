@@ -11,7 +11,7 @@ export type Artifact = {
 
 export type PlayerRaw = {
   id: User['id'];
-  artifacts: Artifact[];
+  artifacts?: Artifact[];
   deck: number;
   hand: number;
   health: number;

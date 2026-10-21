@@ -10,6 +10,7 @@ export function useProcessGameState(game: LoadedGame) {
       (_, i) => expanded.board?.[i] ?? null,
     ) as GameBoard;
     expanded.players.forEach((acc) => {
+      acc.id ??= 0;
       const user = game.getUser(acc.id);
       acc.user = user;
       acc.isOpponent = user === game.users[0];

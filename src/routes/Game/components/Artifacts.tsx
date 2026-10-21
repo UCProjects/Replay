@@ -53,7 +53,7 @@ function Art({
 
 export function Artifacts({
   active = false,
-  artifacts,
+  artifacts = [],
   isOpponent,
 }: ArtifactsProps): ReactNode {
   return (
