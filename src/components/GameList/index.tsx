@@ -15,12 +15,14 @@ import Entry from './Entry';
 export type GameListParams = {
   title?: string;
   entries?: GameRecords;
+  emptyMessage?: ReactNode;
   onRefresh?: () => void;
 };
 
 export default function GameList({
   title = '',
   entries = [],
+  emptyMessage = undefined,
   onRefresh = undefined,
 }: GameListParams): ReactNode {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -89,7 +91,7 @@ export default function GameList({
             gridTemplateColumns: '1fr auto',
           },
         }}
-        emptyMessage={t('replay-loading')}
+        emptyMessage={emptyMessage ?? t('replay-loading')}
         items={list}
         itemsPerPage={20}
         paginateTopRef={ref}

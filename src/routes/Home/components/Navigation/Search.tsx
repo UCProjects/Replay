@@ -1,77 +1,99 @@
 import {
-  Box,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
-import {
+  ChangeEvent,
+  FormEvent,
   ReactNode,
+  useCallback,
+  useEffect,
+  useState,
 } from 'react';
 
-import Expand from '~/components/Expand';
-import { useIsAuthed } from '~/hooks/useUser';
+import { MODE, GameMode } from '~/types/game';
+import { SOUL, Soul } from '~/types/soul';
+import {
+  MAX_NAME_LENGTH,
+  SearchQuery,
+} from '../../searchQuery';
 import './nav.css';
 
-export default function Search(): ReactNode {
-  // TODO: Make search work
-  // TODO: MUIfy
-  const theme = useTheme();
-  const open = useMediaQuery(theme.breakpoints.up('md'));
-  const isAuthed = useIsAuthed();
+export type SearchProps = {
+  onSearch: (query: SearchQuery) => void;
+  query: SearchQuery;
+};
 
-  // TODO: convert showMore to useState
-  // const [extended, setExtended] = useState(false);
+const SOULS = (Object.keys(SOUL) as Soul[]).filter((soul) => soul !== 'MONSTER');
+const MODES = (Object.keys(MODE) as GameMode[]).filter((mode) => mode !== 'ANY');
 
-  if (!isAuthed) return null;
+export default function Search({
+  onSearch,
+  query,
+}: SearchProps): ReactNode {
+  const [draft, setDraft] = useState(query);
+
+  useEffect(() => setDraft(query), [query]);
+
+  const handleName = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setDraft((old) => ({ ...old, id: '', name: value }));
+  }, []);
+
+  const handleMode = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    const mode = event.target.value as GameMode;
+    setDraft((old) => ({ ...old, mode }));
+  }, []);
+
+  const handleSoul = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    const soul = event.target.value as SearchQuery['soul'];
+    setDraft((old) => ({ ...old, soul }));
+  }, []);
+
+  const handleSubmit = useCallback((event: FormEvent) => {
+    event.preventDefault();
+    onSearch({
+      ...draft,
+      id: /^\d+$/.test(draft.id) ? draft.id : '',
+      name: draft.name.trim(),
+    });
+  }, [
+    draft,
+    onSearch,
+  ]);
+
   return (
-    <Box
-      component="section"
-    >
-      <Expand
-        initialState={open}
-        title={(
-          <Box
-            component="h1"
-            textAlign="center"
-            width="100%"
-          >
-            Search
-          </Box>
-        )}
+    <form className="search-form" onSubmit={handleSubmit}>
+      <input
+        data-bwignore
+        data-lpignore
+        id="searchName"
+        maxLength={MAX_NAME_LENGTH}
+        onChange={handleName}
+        placeholder="Username"
+        type="text"
+        value={draft.name}
+      />
+      <select
+        aria-label="Mode"
+        id="searchMode"
+        onChange={handleMode}
+        value={draft.mode}
       >
-        <input className="toggleMore hidden" id="showMore" type="checkbox" />
-        <input data-bwignore data-lpignore id="searchName" maxLength={15} placeholder="Username" type="text" />
-        <div className="flex-break showMore" />
-        <input className="showMore" data-bwignore data-lpignore data-tippy-content="Overrides Username" id="searchID" min="0" placeholder="User ID" type="number" />
-        <div className="flex-break" />
-        <label className="spaced" htmlFor="searchMode">Mode:</label>
-        <select id="searchMode">
-          <option>Any</option>
-          <option>Ranked</option>
-          <option>Standard</option>
-          <option>Custom</option>
-        </select>
-        <div className="flex-break showMore" />
-        <label className="showMore spaced" htmlFor="searchSoul">Soul:</label>
-        <select
-          className="showMore"
-          id="searchSoul"
-          onChange={(e) => {
-            e.target.dataset.value = e.target.value;
-          }}
-        >
-          <option>Any</option>
-          <option className="KINDNESS">Kindness</option>
-          <option className="DETERMINATION">Determination</option>
-          <option className="PATIENCE">Patience</option>
-          <option className="BRAVERY">Bravery</option>
-          <option className="INTEGRITY">Integrity</option>
-          <option className="PERSEVERANCE">Perseverance</option>
-          <option className="JUSTICE">Justice</option>
-        </select>
-        <div className="flex-break" />
-        <label className="stylized" htmlFor="showMore" />
-        <input id="searchButton" type="submit" />
-      </Expand>
-    </Box>
+        <option value="ANY">Any mode</option>
+        {MODES.map((mode) => (
+          <option key={mode} value={mode}>{MODE[mode]}</option>
+        ))}
+      </select>
+      <select
+        aria-label="Soul"
+        data-value={draft.soul === 'ANY' ? undefined : SOUL[draft.soul]}
+        id="searchSoul"
+        onChange={handleSoul}
+        value={draft.soul}
+      >
+        <option value="ANY">Any soul</option>
+        {SOULS.map((soul) => (
+          <option className={soul} key={soul} value={soul}>{SOUL[soul]}</option>
+        ))}
+      </select>
+      <input id="searchButton" type="submit" value="Search" />
+    </form>
   );
 }

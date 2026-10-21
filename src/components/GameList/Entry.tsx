@@ -1,7 +1,10 @@
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search } from '@mui/icons-material';
 import {
   Box,
   Divider,
+  IconButton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -10,6 +13,7 @@ import { GameRecord } from '~/structures/GameRecord';
 import { User } from '~/types/user';
 import { MODE } from '~/types/game';
 import { Link } from '~/components/Link';
+import { playerParams } from '~/routes/Home/searchQuery';
 
 import './style.css';
 
@@ -25,6 +29,7 @@ type UserDataProps = {
 
 function UserData({
   user: {
+    id,
     name,
     class: soul,
     level,
@@ -33,12 +38,25 @@ function UserData({
   opponent = false,
   ranked = false,
 }: UserDataProps): ReactNode {
+  const navigate = useNavigate();
+  const handleSearch = useCallback((event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    navigate({ pathname: '/', search: playerParams({ id, name }).toString() });
+  }, [
+    id,
+    name,
+    navigate,
+  ]);
+
   return (
     <Box
-      alignContent="center"
+      alignItems="center"
       className={opponent ? 'opponent' : 'player'}
       data-rank={ranked ? rank.substring(0, 1) : undefined}
+      display="flex"
       flex={1}
+      justifyContent="space-between"
       overflow="hidden"
     >
       <Typography
@@ -49,6 +67,16 @@ function UserData({
       >
         {name}
       </Typography>
+      <IconButton
+        aria-label={`Search games with ${name}`}
+        component="span"
+        onClick={handleSearch}
+        size="small"
+        sx={{ color: 'inherit', opacity: 0.6, ':hover': { opacity: 1 } }}
+        title={`Search games with ${name}`}
+      >
+        <Search fontSize="inherit" />
+      </IconButton>
     </Box>
   );
 }

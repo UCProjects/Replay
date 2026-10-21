@@ -1,10 +1,15 @@
-.showMore {
-  display: none;
+.search-form {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 5px;
 }
 
 input,
-select,
-.stylized {
+select {
+  box-sizing: border-box;
   color: var(--font);
   background-color: var(--bgcolor-2);
   height: 34px;
@@ -17,22 +22,17 @@ select,
   display: inline-block;
 }
 
-label {
-  margin-right: 5px;
+#searchName {
+  width: 170px;
 }
 
-.toggleMore ~ label[for="showMore"]::after {
-  content: 'Show Advanced';
+input[type="submit"] {
+  cursor: pointer;
 }
 
-.toggleMore:checked ~ label[for="showMore"]::after {
-  content: 'Hide Advanced';
+#searchSoul option[value="ANY"] {
+  color: var(--font);
 }
-
-.toggleMore:checked ~ .showMore {
-  display: revert;
-}
-
 #searchSoul[data-value="Kindness"] {
   color: var(--kindness);
 }
