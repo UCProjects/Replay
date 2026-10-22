@@ -223,6 +223,12 @@ async function main() {
     ...artifactImages(artifacts),
     ...insertedImages(lang),
     'images/powers/Enchant.png',
+    'images/vfx/AttackBuff.png',
+    'images/vfx/AttackDebuff.png',
+    'images/vfx/Heal.png',
+    'images/vfx/Heal_Player.png',
+    'images/vfx/HpBuff.png',
+    'images/vfx/HpDebuff.png',
   ];
   const queue = [
     ...new Set(required).values().map((path) => ({ path, optional: false })),

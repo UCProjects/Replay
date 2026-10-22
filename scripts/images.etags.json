@@ -1128,5 +1128,11 @@
   "images/tribes/ROYAL_INVENTION.png": "\"1f87d604b790f61bf5aed4d8694d95d3\"",
   "images/tribes/SNAIL.png": "\"798cf9027cb6389e6cd23d2b03e328c4\"",
   "images/tribes/TEMMIE.png": "\"c0b729b4fdf70380ed28c2600682782f\"",
-  "images/tribes/THRASHING_PART.png": "\"ac895035560ea8b4f37915378f84be37\""
+  "images/tribes/THRASHING_PART.png": "\"ac895035560ea8b4f37915378f84be37\"",
+  "images/vfx/AttackBuff.png": "\"e8218060f2873c16c83100fdee345181\"",
+  "images/vfx/AttackDebuff.png": "\"2fac8438dc2dff39a33fc854addbc5d5\"",
+  "images/vfx/Heal_Player.png": "\"1f105ebf53599ef668de7f72b825b163\"",
+  "images/vfx/Heal.png": "\"6a60979f452661b8cd38bc76d3706864\"",
+  "images/vfx/HpBuff.png": "\"3e93e1afebb970784cfed5dbc25640da\"",
+  "images/vfx/HpDebuff.png": "\"63993762434585a9bc9d687e95f6fbd5\""
 }

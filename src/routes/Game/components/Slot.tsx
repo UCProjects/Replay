@@ -1,5 +1,6 @@
 import { styled } from '@mui/material';
 import {
+  MouseEvent,
   ReactNode,
   useCallback,
   useEffect,
@@ -44,6 +45,8 @@ const StyledSlot = styled('div')<StyledSlotProps>(({ active, isOpponent, theme }
   display: 'flex',
 }));
 
+const OWN_TIPS = '.card-status, .card-tribes, [data-card], [data-kw]';
+
 export function Slot({
   isOpponent,
   data,
@@ -57,7 +60,9 @@ export function Slot({
   const [zoomed, setZoomed] = useState(false);
   const { pause, play, playing } = usePlayback();
   const resume = useRef(false);
-  const handleOpen = useCallback(() => {
+  const handleOpen = useCallback((event: MouseEvent) => {
+    const { target } = event;
+    if (target instanceof Element && target.closest(OWN_TIPS)) return;
     resume.current = playing;
     pause();
     setZoomed(true);
@@ -81,6 +86,7 @@ export function Slot({
       <StyledSlot
         active={active}
         className="slot"
+        data-card-id={data?.id}
         isOpponent={isOpponent}
         onClick={data ? handleOpen : undefined}
         sx={data ? { cursor: 'zoom-in' } : undefined}

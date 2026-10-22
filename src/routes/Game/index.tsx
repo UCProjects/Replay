@@ -9,6 +9,7 @@ import { KeywordTip } from '~/components/KeywordTip';
 import { useGameState } from '~/hooks/useGame';
 import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';
+import { AnimationLayer } from './components/AnimationLayer';
 import Controls from './components/Controls';
 import Profile from './components/Profile';
 import { Slot } from './components/Slot';
@@ -58,6 +59,7 @@ function Render(): ReactNode {
       <Controls />
       <CardPreview />
       <KeywordTip />
+      <AnimationLayer />
     </Box>
   );
 }
