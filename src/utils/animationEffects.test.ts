@@ -44,13 +44,29 @@ describe('describeAnimation', () => {
       });
   });
 
+  it('flashes a card for freeze, poison and silence with the game timings', () => {
+    expect(describeAnimation({ animation: 'FREEZE', idTarget: 2, target: 'MONSTER' }))
+      .toMatchObject({ duration: 1200, image: 'Ice', kind: 'flash' });
+    expect(describeAnimation({ animation: 'POISON', idTarget: 2, target: 'MONSTER' }))
+      .toMatchObject({ duration: 800, image: 'Poison' });
+    expect(describeAnimation({ animation: 'SILENCE', idTarget: 2, target: 'MONSTER' }))
+      .toMatchObject({ duration: 1680, image: 'Silence' });
+  });
+
+  it('describes the animations that cover the board without a target', () => {
+    expect(describeAnimation({ animation: 'SPELL', waitTime: 0 }))
+      .toEqual({ duration: 1150, kind: 'spell' });
+    expect(describeAnimation({ animation: 'BARRIER_BREAK' }))
+      .toEqual({ duration: 3550, kind: 'barrier' });
+  });
+
   it('has no flash for a player', () => {
     expect(describeAnimation({ animation: 'HP_BUFF', idTarget: 1, target: 'PLAYER' })).toBeNull();
   });
 
   it('has nothing for animations it does not draw yet', () => {
     expect(describeAnimation({ animation: 'DRAW', waitTime: 0.5 })).toBeNull();
-    expect(describeAnimation({ animation: 'FREEZE', idTarget: 1, target: 'MONSTER' })).toBeNull();
+    expect(describeAnimation({ animation: 'BLACK_OUT' })).toBeNull();
     expect(describeAnimation(null)).toBeNull();
   });
 

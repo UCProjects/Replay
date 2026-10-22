@@ -21,6 +21,14 @@ export type AnimationEffect =
     id: number;
     image: string;
     kind: 'flash';
+  }
+  | {
+    duration: number;
+    kind: 'barrier';
+  }
+  | {
+    duration: number;
+    kind: 'spell';
   };
 
 export const EFFECT_DURATION = {
@@ -32,8 +40,16 @@ const FLASHES: Record<string, { duration: number; image: string }> = {
   ATTACK_BUFF: { duration: 870, image: 'AttackBuff' },
   ATTACK_DEBUFF: { duration: 810, image: 'AttackDebuff' },
   HP_BUFF: { duration: 870, image: 'HpBuff' },
+  FREEZE: { duration: 1200, image: 'Ice' },
   HP_DEBUFF: { duration: 810, image: 'HpDebuff' },
+  POISON: { duration: 800, image: 'Poison' },
+  SILENCE: { duration: 1680, image: 'Silence' },
 };
+
+const BOARD_WIDE = {
+  BARRIER_BREAK: { duration: 3550, kind: 'barrier' },
+  SPELL: { duration: 1150, kind: 'spell' },
+} as const;
 
 const STATS: Record<string, StatKind> = {
   ATTACK_STAT: 'attack',
@@ -65,6 +81,9 @@ export function describeAnimation(extra: unknown): AnimationEffect | null {
     target,
     value = 0,
   } = extra as Payload;
+  if (typeof animation === 'string' && animation in BOARD_WIDE) {
+    return { ...BOARD_WIDE[animation as keyof typeof BOARD_WIDE] };
+  }
   if (typeof animation !== 'string' || typeof idTarget !== 'number') return null;
   if (target !== 'MONSTER' && target !== 'PLAYER') return null;
 

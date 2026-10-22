@@ -38,6 +38,8 @@ function rectOf(selector: string): DOMRect | null {
 }
 
 function locate(effect: AnimationEffect): DOMRect | null {
+  if (effect.kind === 'barrier') return new DOMRect(0, 0, window.innerWidth, window.innerHeight);
+  if (effect.kind === 'spell') return rectOf('[data-board]');
   const card = `[data-card-id="${effect.id}"]`;
   const bar = `[data-user-id="${effect.id}"] .hpBar`;
   if (effect.kind === 'flash') return rectOf(card);
@@ -47,11 +49,47 @@ function locate(effect: AnimationEffect): DOMRect | null {
 }
 
 function durationOf(effect: AnimationEffect): number {
-  if (effect.kind === 'flash') return effect.duration;
+  if (effect.kind === 'flash' || effect.kind === 'spell' || effect.kind === 'barrier') {
+    return effect.duration;
+  }
   return effect.kind === 'heal' ? EFFECT_DURATION.heal[effect.target] : EFFECT_DURATION.stat;
 }
 
 function Drawn({ effect, rect }: Omit<Placed, 'scene'>): ReactNode {
+  if (effect.kind === 'barrier') {
+    return (
+      <Box
+        alt=""
+        component="img"
+        src="/images/vfx/BarrierBreak.png"
+        sx={{
+          height: '100vh',
+          left: 0,
+          pointerEvents: 'none',
+          position: 'fixed',
+          top: 0,
+          width: '100vw',
+        }}
+      />
+    );
+  }
+  if (effect.kind === 'spell') {
+    return (
+      <Box
+        alt=""
+        component="img"
+        src="/images/vfx/Spell.png"
+        sx={{
+          height: rect.height * 0.7,
+          left: rect.left + rect.width / 2,
+          pointerEvents: 'none',
+          position: 'fixed',
+          top: rect.top + rect.height / 2,
+          transform: 'translate(-50%, -50%)',
+        }}
+      />
+    );
+  }
   if (effect.kind === 'flash') {
     return (
       <Box

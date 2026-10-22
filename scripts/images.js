@@ -225,10 +225,15 @@ async function main() {
     'images/powers/Enchant.png',
     'images/vfx/AttackBuff.png',
     'images/vfx/AttackDebuff.png',
+    'images/vfx/BarrierBreak.png',
     'images/vfx/Heal.png',
     'images/vfx/Heal_Player.png',
     'images/vfx/HpBuff.png',
     'images/vfx/HpDebuff.png',
+    'images/vfx/Ice.png',
+    'images/vfx/Poison.png',
+    'images/vfx/Silence.png',
+    'images/vfx/Spell.png',
   ];
   const queue = [
     ...new Set(required).values().map((path) => ({ path, optional: false })),

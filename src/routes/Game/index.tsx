@@ -34,7 +34,7 @@ function Render(): ReactNode {
       className="gameBoard"
     >
       <Profile player={state.players[0]} />
-      <Box sx={{ position: 'relative' }}>
+      <Box data-board sx={{ position: 'relative' }}>
         <Flex
           container
           sx={{
