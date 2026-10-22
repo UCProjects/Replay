@@ -47,7 +47,7 @@
   width: 40px;
   border-left: 2px solid var(--border);
   font-size: 1.2rem;
-  color: rgb(52, 185, 254);
+  color: rgb(0, 208, 255);
   flex-shrink: 0;
 }
 
@@ -67,7 +67,7 @@
 .card-attack {
   width: 40px;
   border-right: 2px solid var(--border);
-  color: rgb(255, 0, 0);
+  color: rgb(240, 0, 60);
   font-size: 20px;
 }
 
@@ -79,7 +79,7 @@
 .card-health {
   width: 40px;
   border-left: 2px solid var(--border);
-  color: rgb(107, 204, 0);
+  color: rgb(13, 208, 0);
   font-size: 20px;
 }
 

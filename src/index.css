@@ -23,16 +23,14 @@
   --font: rgb(255, 255, 255);
   --opponent: rgba(153, 4, 4, 0.774);
   --player: rgba(0, 84, 145, 0.692);
-  --copper: rgb(210, 105, 30);
-  --iron: rgb(185, 185, 185);
+  --copper: rgb(255, 144, 109);
+  --iron: rgb(219, 219, 219);
   --gold: rgb(255, 228, 85);
-  --emerald: rgb(0, 202, 120);
-  --sapphire: rgb(31, 55, 255);
-  --ruby: rgb(255, 3, 3);
-  --diamond: rgb(0, 206, 210);
-  --amethyst: rgb(255, 0, 255);
-  --onyx: rgb(61, 31, 141);
+  --emerald: rgb(103, 255, 102);
+  --diamond: rgb(130, 255, 245);
   --master: rgb(255, 177, 0);
+  --high-master: rgb(255, 77, 77);
+  --ultimate-master: rgb(143, 72, 253);
 }
 
 body {
@@ -67,10 +65,10 @@ body.authed .unauthed,
 .show { display: unset; }
 .bold { font-weight: bold; }
 .underlined { text-decoration: underline; }
-.green { color: rgb(102, 204, 0); }
-.red { color: rgb(255, 0, 0); }
+.green, .health { color: rgb(13, 208, 0); }
+.red, .attack { color: rgb(240, 0, 60); }
 .yellow { color: rgb(255, 215, 0); }
-.blue { color: rgb(0, 184, 255); }
+.blue, .cost { color: rgb(0, 208, 255); }
 
 .user[data-level]::after {
   content: ' LV ' attr(data-level);
