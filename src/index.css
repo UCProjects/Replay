@@ -64,6 +64,7 @@ body.authed .unauthed,
 
 .show { display: unset; }
 .bold { font-weight: bold; }
+.helpPointer { cursor: help; }
 .underlined { text-decoration: underline; }
 .green, .health { color: rgb(13, 208, 0); }
 .red, .attack { color: rgb(240, 0, 60); }

@@ -3,7 +3,9 @@ import {
   ReactNode,
   useMemo,
 } from 'react';
+import { CardPreview } from '~/components/CardPreview';
 import { Flex } from '~/components/Flex';
+import { KeywordTip } from '~/components/KeywordTip';
 import { useGameState } from '~/hooks/useGame';
 import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';
@@ -54,6 +56,8 @@ function Render(): ReactNode {
       </Box>
       <Profile player={state.players[1]} />
       <Controls />
+      <CardPreview />
+      <KeywordTip />
     </Box>
   );
 }

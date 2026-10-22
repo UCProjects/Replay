@@ -1,10 +1,11 @@
 import { Card } from '~/types/card';
 import { isMonster, isSpell } from '~/utils/isCard';
 
-type WithSoul = { soul?: { name?: string } };
+type WithSoul = { soul?: string | { name?: string } };
 
 export function soulOf(card: Card | null): string | undefined {
-  return (card as WithSoul | null)?.soul?.name;
+  const soul = (card as WithSoul | null)?.soul;
+  return typeof soul === 'string' ? soul : soul?.name;
 }
 
 export function cardClasses(card: Card | null): string[] {

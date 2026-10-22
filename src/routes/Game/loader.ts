@@ -2,6 +2,7 @@ import {
   LoaderFunctionArgs,
 } from 'react-router-dom';
 import load from '~/managers/game';
+import { loadAllCards } from '~/managers/cards';
 import { loadLanguage } from '~/managers/lang';
 
 export default async function GameLoader({
@@ -15,6 +16,6 @@ export default async function GameLoader({
   return Promise.all([
     game,
     loadLanguage(game.translation),
-    // loadAllCards(game.cards)
+    loadAllCards(game.cards).catch((error) => console.error('Card previews unavailable', error)),
   ]);
 }
