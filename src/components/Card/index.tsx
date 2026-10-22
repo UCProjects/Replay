@@ -52,7 +52,7 @@ export function Card({
           alt="avatar"
           className="card-avatar"
           draggable="false"
-          src={data ? `/images/cards/${data.name.replace(/ /g, '_')}.png` : ''}
+          src={data ? `/images/cards/${data.image || data.name.replace(/ /g, '_')}.png` : ''}
         />
         <FitText
           className={['name', 'outlined', soul].filter(Boolean).join(' ')}
