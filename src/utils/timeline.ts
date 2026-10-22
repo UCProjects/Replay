@@ -77,11 +77,19 @@ export function findScene({ starts }: Timeline, time: number): number {
   return low;
 }
 
-export function stepScene(timeline: Timeline, position: number, direction: 1 | -1): number {
+export function stepScene(
+  timeline: Timeline,
+  position: number,
+  direction: 1 | -1,
+  minGap = 0,
+): number {
   const last = timeline.starts.length - 1;
   if (direction > 0) {
     return timeline.steps.find((index) => index > position) ?? Math.max(last, 0);
   }
-  const before = timeline.steps.filter((index) => index < position);
+  const latest = (timeline.starts[position] ?? 0) - minGap;
+  const before = timeline.steps.filter(
+    (index) => index < position && timeline.starts[index] <= latest,
+  );
   return before.length ? before[before.length - 1] : 0;
 }

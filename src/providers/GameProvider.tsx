@@ -23,6 +23,8 @@ import {
 
 type ArtifactHistory = (Artifact[] | undefined)[];
 
+const PLAYING_SKIP_BACK = 1000;
+
 export type LoaderDataType = [LoadedGame];
 
 export function GameProvider({ children }: PropsWithChildren): ReactNode {
@@ -109,8 +111,8 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
 
   const step = useCallback((direction: 1 | -1) => {
     setPin(null);
-    setPosition(stepScene(timeline, position, direction));
-  }, [position, timeline]);
+    setPosition(stepScene(timeline, position, direction, playing ? PLAYING_SKIP_BACK : 0));
+  }, [playing, position, timeline]);
 
   const content = useMemo(() => ({
     activeSlot,

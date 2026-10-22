@@ -127,6 +127,32 @@ describe('findScene', () => {
   });
 });
 
+describe('stepScene while playing', () => {
+  const timeline = buildTimeline([
+    scene('playerTurn', 0),
+    scene('monster', 1100),
+    scene('monster', 1110),
+    scene('monster', 1120),
+    scene('monster', 1130),
+  ]);
+
+  it('goes back one event when paused, even if it is only moments earlier', () => {
+    expect(stepScene(timeline, 3, -1)).toBe(2);
+  });
+
+  it('skips back past a burst of events that play in a blink', () => {
+    expect(stepScene(timeline, 3, -1, 1000)).toBe(0);
+  });
+
+  it('goes to the start when nothing is a second earlier', () => {
+    expect(stepScene(timeline, 1, -1, 1000)).toBe(0);
+  });
+
+  it('does not change skipping forward', () => {
+    expect(stepScene(timeline, 1, 1, 1000)).toBe(2);
+  });
+});
+
 describe('stepScene', () => {
   const timeline = buildTimeline([
     scene('init', 0),
