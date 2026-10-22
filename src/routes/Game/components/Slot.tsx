@@ -1,8 +1,15 @@
 import { styled } from '@mui/material';
-import { ReactNode } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Card } from '~/components/Card';
-import { useHighlights, useIsTurn } from '~/hooks/useGame';
+import { useHighlights, useIsTurn, usePlayback } from '~/hooks/useGame';
 import { WithSlot } from '~/types/game';
+import { CardZoom } from './CardZoom';
 
 type StyledSlotProps = {
   active?: boolean;
@@ -47,21 +54,47 @@ export function Slot({
     effectCards,
   } = useHighlights();
   const active = useIsTurn(isOpponent);
+  const [zoomed, setZoomed] = useState(false);
+  const { pause, play, playing } = usePlayback();
+  const resume = useRef(false);
+  const handleOpen = useCallback(() => {
+    resume.current = playing;
+    pause();
+    setZoomed(true);
+  }, [pause, playing]);
+  const handleClose = useCallback(() => {
+    setZoomed(false);
+    if (resume.current) play();
+    resume.current = false;
+  }, [play]);
+
+  useEffect(() => {
+    if (!data && zoomed) handleClose();
+  }, [data, handleClose, zoomed]);
   const id = data?.id ?? -1;
   let mark = '';
   if (attacking.includes(id)) mark = 'card-attacking';
   else if (defending.includes(id)) mark = 'card-defending';
   else if (effectCards.includes(id)) mark = 'effectActive';
   return (
-    <StyledSlot
-      active={active}
-      className="slot"
-      isOpponent={isOpponent}
-    >
-      <Card
+    <>
+      <StyledSlot
+        active={active}
+        className="slot"
+        isOpponent={isOpponent}
+        onClick={data ? handleOpen : undefined}
+        sx={data ? { cursor: 'zoom-in' } : undefined}
+      >
+        <Card
+          data={data}
+          mark={mark}
+        />
+      </StyledSlot>
+      <CardZoom
         data={data}
-        mark={mark}
+        onClose={handleClose}
+        open={zoomed}
       />
-    </StyledSlot>
+    </>
   );
 }
