@@ -108,11 +108,16 @@ function cardImages(cards) {
 }
 
 function rarityImages(cards) {
-  const found = new Set();
+  const found = new Map();
   cards.forEach((card) => {
-    if (card.extension && card.rarity) found.add(`images/rarity/${card.rarity}${familySuffix(card.extension)}.png`);
+    if (card.extension && card.rarity) {
+      found.set(
+        `images/rarity/${card.rarity}${familySuffix(card.extension)}.png`,
+        `images/rarity/${card.extension}_${card.rarity}.png`,
+      );
+    }
   });
-  return [...found];
+  return [...found].map(([path, source]) => ({ path, source }));
 }
 
 function statusImages(lang) {
@@ -158,10 +163,10 @@ async function main() {
   const artifacts = deepParse(decks.allArtifacts) || [];
 
   const required = [...cardImages(cards), ...artifactImages(artifacts)];
-  const optional = [...rarityImages(cards), ...statusImages(lang)];
   const queue = [
     ...new Set(required).values().map((path) => ({ path, optional: false })),
-    ...new Set(optional).values().map((path) => ({ path, optional: true })),
+    ...rarityImages(cards).map((image) => ({ ...image, optional: true })),
+    ...new Set(statusImages(lang)).values().map((path) => ({ path, optional: true })),
   ];
 
   const failures = [];
@@ -172,7 +177,7 @@ async function main() {
     for (let item = queue.shift(); item; item = queue.shift()) {
       try {
         const known = !force && etags[item.path] && await exists(item.path);
-        const res = await request(`/${item.path}`, {
+        const res = await request(`/${item.source ?? item.path}`, {
           cookie,
           headers: known ? { 'If-None-Match': etags[item.path] } : {},
         });
