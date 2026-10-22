@@ -16,6 +16,7 @@ export type GameContent = {
   activeSlot: Slot;
   commitScrub: () => void;
   eventState: GameStateExpanded;
+  featuredArtifacts: Map<number, (number | undefined)[]>;
   game: LoadedGame;
   gameState: GameStateExpanded;
   highlights: Highlights;
@@ -116,4 +117,9 @@ export function useIsTurn(isOpponent: boolean): boolean {
   if (eventState.action === 'finish') return false;
   const opponentId = game.users[0].id;
   return (gameState.turnPlayer.id === opponentId) === isOpponent;
+}
+
+export function useFeaturedArtifact(playerId: number): number | undefined {
+  const { featuredArtifacts, gameState } = useContent(GameContext);
+  return featuredArtifacts.get(playerId)?.[gameState.id];
 }

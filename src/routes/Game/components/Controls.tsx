@@ -76,7 +76,7 @@ export default function Controls(): ReactNode {
         color: 'white',
         display: 'flex',
         gap: 1,
-        padding: '4px 12px',
+        padding: { sm: '4px 12px', xs: '4px 4px' },
         userSelect: 'none',
       }}
     >

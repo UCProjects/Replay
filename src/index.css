@@ -128,3 +128,7 @@ body.authed .unauthed,
 @media only screen and (max-height: 500px) and (orientation: landscape) {
   header.site-header { display: none; }
 }
+
+@media only screen and (max-width: 599px) and (orientation: portrait) {
+  body:has(.gameBoard) header.site-header { display: none; }
+}

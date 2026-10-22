@@ -10,14 +10,18 @@ import {
 import { useLoaderData } from 'react-router-dom';
 import { GameContext } from '~/hooks/useGame';
 import { useProcessGameState } from '~/hooks/useProcessGameState';
-import { LoadedGame } from '~/structures/LoadedGame';
+import { LoadedGame, expand } from '~/structures/LoadedGame';
+import { Artifact, PlayerRaw } from '~/types/game';
 import { activeCardOf } from '~/utils/activeCard';
+import { featuredAcross } from '~/utils/featuredArtifact';
 import { highlightsOf } from '~/utils/highlights';
 import {
   buildTimeline,
   findScene,
   stepScene,
 } from '~/utils/timeline';
+
+type ArtifactHistory = (Artifact[] | undefined)[];
 
 export type LoaderDataType = [LoadedGame];
 
@@ -26,6 +30,21 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
   const processGameState = useProcessGameState(game);
   const timeline = useMemo(() => buildTimeline(game.index), [game]);
   const last = game.index.length - 1;
+  const featuredArtifacts = useMemo(() => {
+    const lists = new Map<number, ArtifactHistory>();
+    game.index.forEach((state, index) => {
+      const players = (expand(state.players, game.cache) ?? []) as PlayerRaw[];
+      players.forEach((player) => {
+        const id = player.id ?? 0;
+        const history = lists.get(id) ?? [];
+        history[index] = player.artifacts;
+        lists.set(id, history);
+      });
+    });
+    return new Map(
+      [...lists].map(([id, history]) => [id, featuredAcross(Array.from(history))]),
+    );
+  }, [game]);
 
   const [position, setPosition] = useState(0);
   const [playing, setPlaying] = useState(true);
@@ -97,6 +116,7 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     activeSlot,
     commitScrub,
     eventState,
+    featuredArtifacts,
     game,
     gameState,
     highlights,
@@ -112,6 +132,7 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     activeSlot,
     commitScrub,
     eventState,
+    featuredArtifacts,
     game,
     gameState,
     highlights,

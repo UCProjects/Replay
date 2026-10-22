@@ -56,9 +56,9 @@ function Stat({
   const t = useTranslation();
   return (
     <Tip title={t(tip)}>
-      <Flex alignItems="center" container flexGrow={0} wrap="nowrap">
+      <Flex alignItems="center" className="stat" container flexGrow={0} wrap="nowrap">
         <Img alt={alt} src={`/images/board/${image}.png`} />
-        <Value>{value}</Value>
+        <Value className="stat-value">{value}</Value>
       </Flex>
     </Tip>
   );
@@ -169,6 +169,7 @@ export default function Profile({
           active={highlights.effectArtifacts.includes(id)}
           artifacts={artifacts}
           isOpponent={isOpponent}
+          playerId={id}
         />
         {isCurrentTurn && (
           <ProfileIcon
