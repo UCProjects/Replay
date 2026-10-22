@@ -9,6 +9,10 @@
     ],
     "rewrites": [
       {
+        "source": "/spectate/**",
+        "function": "spectate-redirect"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
