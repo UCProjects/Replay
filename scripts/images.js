@@ -2,6 +2,43 @@ import fs from 'node:fs/promises';
 import https from 'node:https';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 
+const ACRONYMS = new Set(['kr']);
+const POWERS = [
+  'Armor',
+  'BaseStatChange',
+  'BonusAtk',
+  'BonusCost',
+  'BonusHp',
+  'Box',
+  'Bullseye',
+  'Burn',
+  'Candy',
+  'Charge',
+  'Created',
+  'Darkspawn',
+  'Determination',
+  'Disarmed',
+  'Dodge',
+  'FloweryPower',
+  'Haste',
+  'Invulnerable',
+  'KR',
+  'Loop',
+  'MalusAtk',
+  'MalusCost',
+  'MalusHp',
+  'MoldSpore',
+  'Paralyzed',
+  'Program',
+  'Shock',
+  'Silenced',
+  'Support',
+  'Taunt',
+  'Transparency',
+  'Underevent2024',
+  'Wanted',
+];
+
 const ORIGIN = process.env.UC_ORIGIN || 'https://undercards.net';
 const USER = process.env.UC_USER;
 const PASSWORD = process.env.UC_PASSWORD;
@@ -94,7 +131,9 @@ function pascal(key, prefix) {
   return key
     .slice(prefix.length)
     .split('-')
-    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+    .map((part) => (ACRONYMS.has(part)
+      ? part.toUpperCase()
+      : `${part.charAt(0).toUpperCase()}${part.slice(1)}`))
     .join('');
 }
 
@@ -120,6 +159,13 @@ function rarityImages(cards) {
   return [...found].map(([path, source]) => ({ path, source }));
 }
 
+function insertedImages(lang) {
+  return Object.values(lang)
+    .filter((text) => typeof text === 'string')
+    .flatMap((text) => [...text.matchAll(/{{image:([^|}]+)/gi)])
+    .map(([, name]) => `images/inserted/${name.trim()}.png`);
+}
+
 function enchantImages(lang) {
   return Object.keys(lang)
     .filter((key) => key.startsWith('enchant-') && !key.endsWith('-desc'))
@@ -130,9 +176,10 @@ function enchantImages(lang) {
 }
 
 function statusImages(lang) {
-  return Object.keys(lang)
+  const named = Object.keys(lang)
     .filter((key) => key.startsWith('status-') && !key.endsWith('-desc'))
-    .map((key) => `images/powers/${pascal(key, 'status-')}.png`);
+    .map((key) => pascal(key, 'status-'));
+  return [...new Set([...named, ...POWERS])].map((name) => `images/powers/${name}.png`);
 }
 
 function artifactImages(artifacts) {
@@ -174,6 +221,7 @@ async function main() {
   const required = [
     ...cardImages(cards),
     ...artifactImages(artifacts),
+    ...insertedImages(lang),
     'images/powers/Enchant.png',
   ];
   const queue = [
