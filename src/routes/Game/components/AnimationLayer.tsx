@@ -12,12 +12,15 @@ import {
   AnimationEffect,
   describeAnimation,
   EFFECT_DURATION,
+  imageName,
 } from '~/utils/animationEffects';
+import { freshImageUrl } from '~/utils/vfxImages';
 
 type Placed = {
   effect: AnimationEffect;
   rect: DOMRect;
   scene: number;
+  src?: string;
 };
 
 const rise = keyframes`
@@ -40,7 +43,8 @@ function rectOf(selector: string): DOMRect | null {
 function locate(effect: AnimationEffect): DOMRect | null {
   if (effect.kind === 'barrier') return new DOMRect(0, 0, window.innerWidth, window.innerHeight);
   if (effect.kind === 'spell') return rectOf('[data-board]');
-  const card = `[data-card-id="${effect.id}"]`;
+  const slot = `[data-card-id="${effect.id}"]`;
+  const card = `${slot} .card`;
   const bar = `[data-user-id="${effect.id}"] .hpBar`;
   if (effect.kind === 'flash') return rectOf(card);
   if (effect.target === 'PLAYER') return rectOf(bar);
@@ -55,13 +59,13 @@ function durationOf(effect: AnimationEffect): number {
   return effect.kind === 'heal' ? EFFECT_DURATION.heal[effect.target] : EFFECT_DURATION.stat;
 }
 
-function Drawn({ effect, rect }: Omit<Placed, 'scene'>): ReactNode {
+function Drawn({ effect, rect, src }: Omit<Placed, 'scene'>): ReactNode {
   if (effect.kind === 'barrier') {
     return (
       <Box
         alt=""
         component="img"
-        src="/images/vfx/BarrierBreak.png"
+        src={src}
         sx={{
           height: '100vh',
           left: 0,
@@ -78,7 +82,7 @@ function Drawn({ effect, rect }: Omit<Placed, 'scene'>): ReactNode {
       <Box
         alt=""
         component="img"
-        src="/images/vfx/Spell.png"
+        src={src}
         sx={{
           height: rect.height * 0.7,
           left: rect.left + rect.width / 2,
@@ -95,13 +99,14 @@ function Drawn({ effect, rect }: Omit<Placed, 'scene'>): ReactNode {
       <Box
         alt=""
         component="img"
-        src={`/images/vfx/${effect.image}.png`}
+        src={src}
         sx={{
           height: rect.height,
           left: rect.left,
           pointerEvents: 'none',
           position: 'fixed',
           top: rect.top,
+          width: rect.width,
         }}
       />
     );
@@ -112,13 +117,14 @@ function Drawn({ effect, rect }: Omit<Placed, 'scene'>): ReactNode {
       <Box
         alt=""
         component="img"
-        src={`/images/vfx/${player ? 'Heal_Player' : 'Heal'}.png`}
+        src={src}
         sx={{
           height: player ? undefined : rect.height,
           left: player ? rect.left - 22 : rect.left,
           pointerEvents: 'none',
           position: 'fixed',
           top: player ? rect.top - 65 : rect.top,
+          width: player ? undefined : rect.width,
         }}
       />
     );
@@ -170,18 +176,29 @@ export function AnimationLayer(): ReactNode {
     const effect = describeAnimation(scene.extra);
     const rect = effect && locate(effect);
     if (!effect || !rect) return;
-    setPlaced((old) => [...old, { effect, rect, scene: position }]);
-    window.setTimeout(
-      () => setPlaced((old) => old.filter(({ scene: shown }) => shown !== position)),
-      durationOf(effect),
-    );
+    const name = imageName(effect);
+    (async () => {
+      const src = name ? await freshImageUrl(name) : undefined;
+      setPlaced((old) => [...old, {
+        effect, rect, scene: position, src,
+      }]);
+      window.setTimeout(() => {
+        setPlaced((old) => old.filter(({ scene: shown }) => shown !== position));
+        if (src) URL.revokeObjectURL(src);
+      }, durationOf(effect));
+    })().catch(() => undefined);
   }, [game, pin, playing, position]);
 
   return (
     <Portal>
       <Box sx={(theme) => ({ zIndex: theme.zIndex.tooltip, position: 'fixed' })}>
-        {placed.map(({ effect, rect, scene }) => (
-          <Drawn effect={effect} key={scene} rect={rect} />
+        {placed.map(({
+          effect,
+          rect,
+          scene,
+          src,
+        }) => (
+          <Drawn effect={effect} key={scene} rect={rect} src={src} />
         ))}
       </Box>
     </Portal>

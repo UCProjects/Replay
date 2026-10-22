@@ -66,6 +66,16 @@ export function statColor(stat: StatKind, value: number): string {
   }
 }
 
+export function imageName(effect: AnimationEffect): string | null {
+  switch (effect.kind) {
+    case 'barrier': return 'BarrierBreak';
+    case 'flash': return effect.image;
+    case 'heal': return effect.target === 'PLAYER' ? 'Heal_Player' : 'Heal';
+    case 'spell': return 'Spell';
+    default: return null;
+  }
+}
+
 type Payload = {
   animation?: string;
   idTarget?: number;

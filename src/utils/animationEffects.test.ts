@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { describeAnimation } from './animationEffects';
+import { describeAnimation, imageName } from './animationEffects';
 
 describe('describeAnimation', () => {
   it('shows a loss of health in yellow with its sign', () => {
@@ -58,6 +58,18 @@ describe('describeAnimation', () => {
       .toEqual({ duration: 1150, kind: 'spell' });
     expect(describeAnimation({ animation: 'BARRIER_BREAK' }))
       .toEqual({ duration: 3550, kind: 'barrier' });
+  });
+
+  it('names the image each effect draws, and none for a number', () => {
+    const heal = describeAnimation({ animation: 'HEAL', idTarget: 1, target: 'PLAYER' });
+    const buff = describeAnimation({ animation: 'HP_BUFF', idTarget: 1, target: 'MONSTER' });
+    const stat = describeAnimation({
+      animation: 'HP_STAT', idTarget: 1, target: 'MONSTER', value: 1,
+    });
+    expect(heal && imageName(heal)).toBe('Heal_Player');
+    expect(buff && imageName(buff)).toBe('HpBuff');
+    expect(stat && imageName(stat)).toBeNull();
+    expect(imageName({ duration: 1, kind: 'spell' })).toBe('Spell');
   });
 
   it('has no flash for a player', () => {
