@@ -120,6 +120,15 @@ function rarityImages(cards) {
   return [...found].map(([path, source]) => ({ path, source }));
 }
 
+function enchantImages(lang) {
+  return Object.keys(lang)
+    .filter((key) => key.startsWith('enchant-') && !key.endsWith('-desc'))
+    .flatMap((key) => {
+      const name = pascal(key, 'enchant-');
+      return [`images/enchants/backgrounds/${name}.png`, `images/enchants/overlays/${name}.png`];
+    });
+}
+
 function statusImages(lang) {
   return Object.keys(lang)
     .filter((key) => key.startsWith('status-') && !key.endsWith('-desc'))
@@ -162,11 +171,16 @@ async function main() {
   const cards = deepParse(data).cards || [];
   const artifacts = deepParse(decks.allArtifacts) || [];
 
-  const required = [...cardImages(cards), ...artifactImages(artifacts)];
+  const required = [
+    ...cardImages(cards),
+    ...artifactImages(artifacts),
+    'images/powers/Enchant.png',
+  ];
   const queue = [
     ...new Set(required).values().map((path) => ({ path, optional: false })),
     ...rarityImages(cards).map((image) => ({ ...image, optional: true })),
-    ...new Set(statusImages(lang)).values().map((path) => ({ path, optional: true })),
+    ...new Set([...enchantImages(lang), ...statusImages(lang)]).values()
+      .map((path) => ({ path, optional: true })),
   ];
 
   const failures = [];
