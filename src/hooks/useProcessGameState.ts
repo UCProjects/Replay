@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { LoadedGame, expand } from '~/structures/LoadedGame';
-import { GameBoard, GameState } from '~/types/game';
+import { GameBoard, GameState, GameStateExpanded } from '~/types/game';
 
 export function useProcessGameState(game: LoadedGame) {
   return useCallback((state: GameState) => {
@@ -9,6 +9,10 @@ export function useProcessGameState(game: LoadedGame) {
       { length: 8 },
       (_, i) => expanded.board?.[i] ?? null,
     ) as GameBoard;
+    expanded.slots = Array.from(
+      { length: 8 },
+      (_, i) => expanded.slots?.[i] ?? null,
+    ) as GameStateExpanded['slots'];
     expanded.players.forEach((acc) => {
       acc.id ??= 0;
       const user = game.getUser(acc.id);

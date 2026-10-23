@@ -1,11 +1,13 @@
 import { GameStateExpanded } from '~/types/game';
 
 export type Highlights = {
+  affectedSlots: number[];
   attacking: number[];
   defending: number[];
   effectArtifacts: number[];
   effectCards: number[];
   effectNames: number[];
+  effectSlots: number[];
   targeted: number[];
 };
 
@@ -16,6 +18,7 @@ type EffectExtra = {
   affected?: {
     cards?: Reference[] | null;
     players?: Reference[] | null;
+    slots?: number[] | null;
   };
 };
 
@@ -33,11 +36,13 @@ function ids(values: Reference[] | null | undefined): number[] {
 
 export function highlightsOf(state: GameStateExpanded): Highlights {
   const highlights: Highlights = {
+    affectedSlots: [],
     attacking: [],
     defending: [],
     effectArtifacts: [],
     effectCards: [],
     effectNames: [],
+    effectSlots: [],
     targeted: [],
   };
 
@@ -58,6 +63,13 @@ export function highlightsOf(state: GameStateExpanded): Highlights {
     case 'healed': {
       const { playerId } = (state.extra ?? {}) as { playerId?: number };
       highlights.targeted = ids([playerId]);
+      break;
+    }
+    case 'enchantEffect': {
+      const { trigger, affected } = (state.extra ?? {}) as EffectExtra;
+      highlights.effectSlots = ids([trigger]);
+      highlights.defending = ids(affected?.cards);
+      highlights.affectedSlots = ids(affected?.slots);
       break;
     }
     case 'cardEffect':

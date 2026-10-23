@@ -7,15 +7,33 @@ const state = (action: string, extra?: unknown) => (
 );
 
 const empty = {
+  affectedSlots: [],
   attacking: [],
   defending: [],
   effectArtifacts: [],
   effectCards: [],
   effectNames: [],
+  effectSlots: [],
   targeted: [],
 };
 
 describe('highlightsOf', () => {
+  it('marks the slot an enchant fired from, the cards and the slots it touched', () => {
+    expect(highlightsOf(state('enchantEffect', {
+      trigger: 2,
+      affected: { cards: [{ id: 7 }], slots: [1, 3] },
+    }))).toEqual({
+      ...empty,
+      affectedSlots: [1, 3],
+      defending: [7],
+      effectSlots: [2],
+    });
+  });
+
+  it('keeps a trigger on slot zero', () => {
+    expect(highlightsOf(state('enchantEffect', { trigger: 0 })).effectSlots).toEqual([0]);
+  });
+
   it('marks nothing for events that do not point at anything', () => {
     expect(highlightsOf(state('update'))).toEqual(empty);
     expect(highlightsOf(state('monster', { id: 4 }))).toEqual(empty);

@@ -16,6 +16,7 @@ const FIXED_DURATION: Record<string, number> = {
   attackPlayer: 1000,
   cardEffect: 1000,
   discard: 1000,
+  enchantEffect: 1000,
   exposed: 1000,
   playerTurn: 1000,
   soulEffect: 1000,

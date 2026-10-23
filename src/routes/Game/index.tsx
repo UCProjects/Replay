@@ -22,11 +22,13 @@ function Render(): ReactNode {
     () => state.board.map((slot, i) => (
       <Slot
         data={slot}
+        enchant={state.slots[i]}
+        index={i}
         isOpponent={i < 4}
         key={`slot-${i + 1}`}
       />
     )),
-    [state.board],
+    [state.board, state.slots],
   );
 
   return (

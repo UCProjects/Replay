@@ -39,6 +39,15 @@ export type GameResult = {
 
 export type Slot = Card | null;
 
+export type Enchant = {
+  custom?: number;
+  duration?: number;
+  enchantType?: string;
+  name: string;
+};
+
+export type EnchantSlot = Enchant | null;
+
 export type WithSlot<W = unknown> = W & {
   data: Slot;
 };
@@ -55,6 +64,7 @@ export type GameStateRaw = {
   turnPlayer: User['id'];
   players: HASH;
   board: HASH;
+  slots?: HASH;
   extra: unknown;
 };
 
@@ -67,6 +77,7 @@ export type GameState = Modify<GameStateRaw, {
 export type GameStateExpanded = Modify<GameState, {
   board: GameBoard;
   players: Tuple<Player, 2>;
+  slots: Tuple<EnchantSlot, 8>;
 }>;
 
 export type GameRaw = {
@@ -101,6 +112,7 @@ export type Actions = {
   cardEffect: EventEffect;
   damaged: unknown;
   discard: Card;
+  enchantEffect: unknown;
   exposed: Card;
   finish: never;
   gameTurn: never;
