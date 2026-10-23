@@ -46,11 +46,7 @@ export default function Search({
 
   const handleFight = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     const { value: fight } = event.target;
-    setDraft((old) => (fight
-      ? {
-        ...old, fight, id: '', name: '', soul: 'ANY',
-      }
-      : { ...old, fight }));
+    setDraft((old) => ({ ...old, fight }));
   }, []);
 
   const handleSoul = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
@@ -75,7 +71,6 @@ export default function Search({
       <input
         data-bwignore
         data-lpignore
-        disabled={Boolean(draft.fight)}
         id="searchName"
         maxLength={MAX_NAME_LENGTH}
         onChange={handleName}
@@ -112,7 +107,6 @@ export default function Search({
       <select
         aria-label="Soul"
         data-value={draft.soul === 'ANY' ? undefined : SOUL[draft.soul]}
-        disabled={Boolean(draft.fight)}
         id="searchSoul"
         onChange={handleSoul}
         value={draft.soul}

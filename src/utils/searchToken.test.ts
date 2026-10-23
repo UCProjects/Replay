@@ -2,18 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { searchToken } from './searchToken';
 
 describe('searchToken', () => {
-  it('searches a story fight by the name its opponent is recorded under', () => {
-    expect(searchToken({ fight: '12' })).toBe('n:story-fight-12-name');
-  });
-
-  it('prefers a fight over a player or soul, since one key can only match one thing', () => {
-    expect(searchToken({ fight: '3', name: 'Frisk', soul: 'JUSTICE' })).toBe('n:story-fight-3-name');
-  });
-
-  it('ignores a fight that is not a number', () => {
-    expect(searchToken({ fight: 'x', name: 'Frisk' })).toBe('n:frisk');
-  });
-
   it('has nothing to search for without a player or soul', () => {
     expect(searchToken()).toBeUndefined();
     expect(searchToken({ id: '0', name: '', soul: 'ANY' })).toBeUndefined();

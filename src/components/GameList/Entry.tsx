@@ -14,7 +14,8 @@ import { GameRecord } from '~/structures/GameRecord';
 import { User } from '~/types/user';
 import { MODE } from '~/types/game';
 import { Link } from '~/components/Link';
-import { playerParams } from '~/routes/Home/searchQuery';
+import { fightParams, playerParams } from '~/routes/Home/searchQuery';
+import { storyFightOf } from '~/utils/storyFight';
 
 import './style.css';
 
@@ -41,11 +42,14 @@ function UserData({
 }: UserDataProps): ReactNode {
   const navigate = useNavigate();
   const displayName = useDisplayName();
+  const fight = storyFightOf(name);
   const handleSearch = useCallback((event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    navigate({ pathname: '/', search: playerParams({ id, name }).toString() });
+    const params = fight ? fightParams(fight) : playerParams({ id, name });
+    navigate({ pathname: '/', search: params.toString() });
   }, [
+    fight,
     id,
     name,
     navigate,
@@ -71,9 +75,9 @@ function UserData({
       >
         {displayName(name)}
       </Typography>
-      {id !== 0 && (
+      {(id !== 0 || fight) && (
       <IconButton
-        aria-label={`Search games with ${name}`}
+        aria-label={`Search games with ${displayName(name)}`}
         component="span"
         onClick={handleSearch}
         size="small"
@@ -83,7 +87,7 @@ function UserData({
           opacity: 0.6,
           ':hover': { opacity: 1 },
         }}
-        title={`Search games with ${name}`}
+        title={`Search games with ${displayName(name)}`}
       >
         <Search fontSize="inherit" />
       </IconButton>

@@ -3,6 +3,7 @@ import {
   EMPTY_QUERY,
   hasQuery,
   parseQuery,
+  fightParams,
   playerParams,
   toParams,
 } from './searchQuery';
@@ -50,6 +51,10 @@ describe('searchQuery', () => {
   it('counts a mode or soul alone as a search', () => {
     expect(hasQuery({ ...EMPTY_QUERY, mode: 'CUSTOM' })).toBe(true);
     expect(hasQuery({ ...EMPTY_QUERY, soul: 'PATIENCE' })).toBe(true);
+  });
+
+  it('searches a story fight in the story mode', () => {
+    expect(parseQuery(fightParams('12'))).toEqual({ ...EMPTY_QUERY, fight: '12', mode: 'STORY' });
   });
 
   it('searches a player by id and keeps their name for the form', () => {

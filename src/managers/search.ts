@@ -51,17 +51,14 @@ export default async function search({
     orderBy('date', 'desc'),
   ];
 
-  const token = searchToken({
-    fight,
-    id,
-    name,
-    soul,
-  });
+  const token = searchToken({ id, name, soul });
   if (token) {
     constraints.push(where('search', 'array-contains', token));
   }
 
-  if (mode !== 'ANY' && MODE[mode]) {
+  if (/^\d+$/.test(fight)) {
+    constraints.push(where('fight', '==', Number(fight)));
+  } else if (mode !== 'ANY' && MODE[mode]) {
     constraints.push(where('type', '==', mode));
   }
 

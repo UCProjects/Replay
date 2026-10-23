@@ -55,6 +55,14 @@ export function toParams(query: SearchQuery): URLSearchParams {
   return params;
 }
 
+export function fightParams(fight: string): URLSearchParams {
+  return toParams({
+    ...EMPTY_QUERY,
+    fight,
+    mode: 'STORY',
+  });
+}
+
 export function playerParams({ id, name }: { id: number; name: string }): URLSearchParams {
   return toParams({
     ...EMPTY_QUERY,

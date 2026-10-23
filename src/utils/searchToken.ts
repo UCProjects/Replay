@@ -1,20 +1,16 @@
 import { Soul } from '~/types/soul';
 
 export type SearchTokenParams = {
-  fight?: string;
   id?: string;
   name?: string;
   soul?: 'ANY' | Soul;
 };
 
 export function searchToken({
-  fight = '',
   id = '0',
   name = '',
   soul = 'ANY',
 }: SearchTokenParams = {}): string | undefined {
-  if (/^\d+$/.test(fight)) return `n:story-fight-${fight}-name`;
-
   const number = Number(id);
   let player: string | undefined;
   if (id !== '0' && Number.isInteger(number)) {
