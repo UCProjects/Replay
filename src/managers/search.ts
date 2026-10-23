@@ -1,3 +1,4 @@
+import { getAuth } from 'firebase/auth';
 import {
   collection,
   doc,
@@ -16,6 +17,7 @@ import { converter, GameRecord } from '~/structures/GameRecord';
 import { MODE, GameMode } from '~/types/game';
 import { Soul } from '~/types/soul';
 import { searchToken } from '~/utils/searchToken';
+import { searchWindowDays, searchWindowStart } from '~/utils/searchWindow';
 import firebase from './firebase';
 
 export type SearchParams = {
@@ -32,6 +34,13 @@ export type SearchParams = {
 const cache = new Map<GameRecord['key'], GameRecord>();
 
 const db = getFirestore(firebase);
+const auth = getAuth(firebase);
+
+async function searchStart(): Promise<Date> {
+  await auth.authStateReady();
+  const result = await auth.currentUser?.getIdTokenResult();
+  return searchWindowStart(searchWindowDays(result?.claims ?? null));
+}
 
 export default async function search({
   fight = '',
@@ -43,11 +52,8 @@ export default async function search({
   soul = 'ANY',
   previous = undefined,
 }: SearchParams = {}): Promise<GameRecord[]> {
-  const date = new Date();
-  date.setDate(date.getDate() - 6);
-
   const constraints: QueryConstraint[] = [
-    where('date', '>=', date),
+    where('date', '>=', await searchStart()),
     orderBy('date', 'desc'),
   ];
 
