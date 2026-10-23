@@ -6,6 +6,7 @@ import {
   getDocs,
   getFirestore,
   limit,
+  limitToLast,
   orderBy,
   query,
   QueryConstraint,
@@ -22,6 +23,7 @@ export type SearchParams = {
   limit?: number;
   mode?: GameMode;
   name?: string;
+  newer?: boolean;
   soul?: 'ANY' | Soul;
   previous?: Date;
 };
@@ -35,6 +37,7 @@ export default async function search({
   limit: lmt = 20,
   mode = 'ANY',
   name = '',
+  newer = false,
   soul = 'ANY',
   previous = undefined,
 }: SearchParams = {}): Promise<GameRecord[]> {
@@ -62,7 +65,7 @@ export default async function search({
   const q = query(
     collection(db, 'gamehistory'),
     ...constraints,
-    limit(lmt),
+    newer ? limitToLast(lmt) : limit(lmt),
   ).withConverter(converter);
   const docs = await getDocs(q);
 

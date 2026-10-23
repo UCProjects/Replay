@@ -20,7 +20,7 @@ import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import Footer from './components/Footer.tsx';
 import Navigation from './components/Navigation';
-import searchRecent from './searchRecent.ts';
+import searchRecent, { cachedRecent } from './searchRecent.ts';
 import Search from './components/Navigation/Search.tsx';
 import SearchResults from './SearchResults.tsx';
 import {
@@ -31,8 +31,8 @@ import {
 } from './searchQuery.ts';
 
 function RecentGames(): ReactNode {
-  const [entries, setEntries] = useState<GameRecords>([]);
-  const [loaded, setLoaded] = useState(false);
+  const [entries, setEntries] = useState<GameRecords>(cachedRecent);
+  const [loaded, setLoaded] = useState(() => entries.length > 0);
   const [refresh, setRefresh] = useState(false);
   const loadLanguage = useLoadLanguage();
   // TODO: Add refresh cooldown
@@ -57,7 +57,12 @@ function RecentGames(): ReactNode {
     refresh,
   ]);
 
-  useEffect(() => setRefresh(true), []);
+  useEffect(() => {
+    if (entries.length) loadLanguage(entries[0].translation);
+    setRefresh(true);
+    // Only on mount: show what is cached, then look for newer games
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleRefresh = useCallback(() => setRefresh(true), []);
 
