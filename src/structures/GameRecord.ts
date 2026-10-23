@@ -68,7 +68,9 @@ export class GameRecord {
     } else {
       this.results = {
         ...results,
-        winner: results.winner ? this.getUser(results.winner) : null,
+        winner: results.winner === null || results.winner === undefined
+          ? null
+          : this.getUser(results.winner),
       };
     }
   }
