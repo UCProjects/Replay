@@ -3,19 +3,29 @@ import {
   Logout,
   Settings,
 } from '@mui/icons-material';
-import { ReactNode } from 'react';
+import { IconButton } from '@mui/material';
+import { ReactNode, useCallback, useState } from 'react';
 
 import { Flex } from '~/components/Flex';
 import { Link } from '~/components/Link';
+import { LoginDialog } from '~/components/LoginDialog';
 import { useTranslation } from '~/hooks/useTranslation';
-import { useUser } from '~/hooks/useUser';
+import { useUser, useUserName } from '~/hooks/useUser';
+import { loginAvailable, logout } from '~/managers/identity';
 
 export default function Header(): ReactNode {
   const t = useTranslation();
   const user = useUser();
-  // TODO: Handle buttons
+  const name = useUserName();
+  const [signingIn, setSigningIn] = useState(false);
+  const handleOpen = useCallback(() => setSigningIn(true), []);
+  const handleClose = useCallback(() => setSigningIn(false), []);
+  const handleLogout = useCallback(() => {
+    logout().catch(() => undefined);
+  }, []);
   return (
     <Flex
+      alignItems="center"
       className="site-header"
       component="header"
       container
@@ -30,16 +40,26 @@ export default function Header(): ReactNode {
         </Link>
       </Flex>
       <Flex
+        alignItems="center"
         container
         xs="auto"
       >
         <span>
-          {t('replay-welcome', user?.displayName || 'Guest')}
+          {t('replay-welcome', name)}
         </span>
-        {user && <Logout />}
+        {user && (
+          <IconButton aria-label="Sign out" color="inherit" onClick={handleLogout} sx={{ padding: 0 }}>
+            <Logout />
+          </IconButton>
+        )}
         {user && <Settings className="hidden" />}
-        {!user && <Login />}
+        {!user && loginAvailable && (
+          <IconButton aria-label="Sign in" color="inherit" onClick={handleOpen} sx={{ padding: 0 }}>
+            <Login />
+          </IconButton>
+        )}
       </Flex>
+      <LoginDialog onClose={handleClose} open={signingIn} />
     </Flex>
   );
 }
