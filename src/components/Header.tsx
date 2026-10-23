@@ -1,8 +1,4 @@
-import {
-  Login,
-  Logout,
-  Settings,
-} from '@mui/icons-material';
+import { Login, Logout } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { ReactNode, useCallback, useState } from 'react';
 
@@ -52,7 +48,6 @@ export default function Header(): ReactNode {
             <Logout />
           </IconButton>
         )}
-        {user && <Settings className="hidden" />}
         {!user && loginAvailable && (
           <IconButton aria-label="Sign in" color="inherit" onClick={handleOpen} sx={{ padding: 0 }}>
             <Login />
