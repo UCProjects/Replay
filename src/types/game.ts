@@ -136,5 +136,7 @@ export const MODE = {
   CUSTOM: 'Custom',
   EVENT: 'Event',
   BOSS: 'Boss',
+  CPU: 'CPU',
+  STORY: 'Story',
   TOURNAMENT: 'Tourny',
 } as const;
