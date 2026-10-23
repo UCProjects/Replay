@@ -40,7 +40,7 @@ export const plugins: Record<string, Plugin> = {
     const { args: [key, quantity = '1'], override, empty } = parse(nodes);
     if (empty) return '';
     const keyword = getKey('enchant', key);
-    const text = override ?? translate(getKey('enchant', keyword), quantity);
+    const text = override || translate(keyword, quantity);
     return getText(text, `${keyword} pointer helpPointer underlined`);
   },
   hp(nodes, translate) {
