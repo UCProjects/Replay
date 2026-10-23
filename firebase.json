@@ -13,6 +13,10 @@
         "function": "spectate-redirect"
       },
       {
+        "source": "/login/exchange",
+        "function": "login-exchange"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
