@@ -19,6 +19,7 @@ import { searchToken } from '~/utils/searchToken';
 import firebase from './firebase';
 
 export type SearchParams = {
+  fight?: string;
   id?: string;
   limit?: number;
   mode?: GameMode;
@@ -33,6 +34,7 @@ const cache = new Map<GameRecord['key'], GameRecord>();
 const db = getFirestore(firebase);
 
 export default async function search({
+  fight = '',
   id = '0',
   limit: lmt = 20,
   mode = 'ANY',
@@ -49,7 +51,12 @@ export default async function search({
     orderBy('date', 'desc'),
   ];
 
-  const token = searchToken({ id, name, soul });
+  const token = searchToken({
+    fight,
+    id,
+    name,
+    soul,
+  });
   if (token) {
     constraints.push(where('search', 'array-contains', token));
   }

@@ -7,11 +7,13 @@ import {
   useState,
 } from 'react';
 
+import { useTranslation } from '~/hooks/useTranslation';
 import { MODE, GameMode } from '~/types/game';
 import { SOUL, Soul } from '~/types/soul';
 import {
   MAX_NAME_LENGTH,
   SearchQuery,
+  STORY_FIGHTS,
 } from '../../searchQuery';
 import './nav.css';
 
@@ -27,6 +29,7 @@ export default function Search({
   onSearch,
   query,
 }: SearchProps): ReactNode {
+  const t = useTranslation();
   const [draft, setDraft] = useState(query);
 
   useEffect(() => setDraft(query), [query]);
@@ -38,7 +41,16 @@ export default function Search({
 
   const handleMode = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
     const mode = event.target.value as GameMode;
-    setDraft((old) => ({ ...old, mode }));
+    setDraft((old) => ({ ...old, fight: mode === 'STORY' ? old.fight : '', mode }));
+  }, []);
+
+  const handleFight = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    const { value: fight } = event.target;
+    setDraft((old) => (fight
+      ? {
+        ...old, fight, id: '', name: '', soul: 'ANY',
+      }
+      : { ...old, fight }));
   }, []);
 
   const handleSoul = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
@@ -63,6 +75,7 @@ export default function Search({
       <input
         data-bwignore
         data-lpignore
+        disabled={Boolean(draft.fight)}
         id="searchName"
         maxLength={MAX_NAME_LENGTH}
         onChange={handleName}
@@ -81,9 +94,25 @@ export default function Search({
           <option key={mode} value={mode}>{MODE[mode]}</option>
         ))}
       </select>
+      {draft.mode === 'STORY' && (
+        <select
+          aria-label="Fight"
+          id="searchFight"
+          onChange={handleFight}
+          value={draft.fight}
+        >
+          <option value="">Any fight</option>
+          {STORY_FIGHTS.map((fight) => (
+            <option key={fight} value={fight}>
+              {t(`story-fight-${fight}-name`, { fallback: `Fight ${fight}` })}
+            </option>
+          ))}
+        </select>
+      )}
       <select
         aria-label="Soul"
         data-value={draft.soul === 'ANY' ? undefined : SOUL[draft.soul]}
+        disabled={Boolean(draft.fight)}
         id="searchSoul"
         onChange={handleSoul}
         value={draft.soul}

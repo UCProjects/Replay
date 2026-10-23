@@ -15,6 +15,7 @@ describe('searchQuery', () => {
 
   it('round trips a full query', () => {
     const query = {
+      fight: '',
       id: '42',
       mode: 'RANKED' as const,
       name: 'Frisk',
@@ -37,6 +38,13 @@ describe('searchQuery', () => {
   it('trims and limits the name', () => {
     expect(parseQuery(new URLSearchParams({ name: '  Frisk  ' })).name).toBe('Frisk');
     expect(parseQuery(new URLSearchParams({ name: 'a'.repeat(30) })).name).toHaveLength(15);
+  });
+
+  it('keeps a story fight in the url and counts it as a search', () => {
+    const query = { ...EMPTY_QUERY, fight: '12', mode: 'STORY' as const };
+    expect(parseQuery(toParams(query))).toEqual(query);
+    expect(hasQuery({ ...EMPTY_QUERY, fight: '12' })).toBe(true);
+    expect(parseQuery(new URLSearchParams('fight=abc')).fight).toBe('');
   });
 
   it('counts a mode or soul alone as a search', () => {
