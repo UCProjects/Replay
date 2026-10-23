@@ -5,7 +5,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { Search as SearchIcon } from '@mui/icons-material';
 import {
   Box,
@@ -103,6 +103,7 @@ const TAB_SX = (theme: Theme) => ({
 type TabName = 'home' | 'search';
 
 export default function Home(): ReactNode {
+  const { key } = useLocation();
   const [params, setParams] = useSearchParams();
   const query = useMemo(() => parseQuery(params), [params]);
   const searching = hasQuery(query);
@@ -111,7 +112,7 @@ export default function Home(): ReactNode {
   useEffect(() => {
     if (searching) setTab('search');
   }, [
-    query,
+    key,
     searching,
   ]);
 
