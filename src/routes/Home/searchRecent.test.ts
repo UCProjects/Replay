@@ -50,12 +50,12 @@ describe('searchRecent', () => {
     expect(mocked).toHaveBeenCalledTimes(4);
   });
 
-  it('keeps no more than a few hundred games, dropping the oldest', async () => {
+  it('keeps no more than a hundred games, dropping the oldest', async () => {
     const many = Array.from({ length: 400 }, (_, i) => game(400 - i));
     mocked.mockResolvedValueOnce(many);
     const games = await searchRecent(500);
-    expect(games).toHaveLength(300);
+    expect(games).toHaveLength(100);
     expect(games[0].key).toBe('g400');
-    expect(games[299].key).toBe('g101');
+    expect(games[99].key).toBe('g301');
   });
 });

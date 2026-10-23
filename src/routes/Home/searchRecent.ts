@@ -1,7 +1,7 @@
 import search from '~/managers/search';
 import { GameRecord, GameRecords } from '~/structures/GameRecord';
 
-const MAX_HISTORY = 300;
+const MAX_HISTORY = 100;
 const MAX_BATCHES = 10;
 
 export const history: GameRecord[] = [];
