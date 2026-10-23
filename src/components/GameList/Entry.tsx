@@ -143,7 +143,6 @@ export default function Entry({
             component="span"
             sx={{
               textAlign: 'center',
-              minWidth: { md: '200px', xs: 0 },
               paddingX: '10px',
               alignSelf: 'center',
             }}
