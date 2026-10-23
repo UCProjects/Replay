@@ -5,6 +5,7 @@ import {
   GameStateExpanded,
 } from '~/types/game';
 import { User } from '~/types/user';
+import { legacySlots } from '~/utils/legacySlots';
 import { GameRecord } from './GameRecord';
 
 export type LoadedGame = GameRecord & Game;
@@ -15,12 +16,19 @@ export function loadGame(record: GameRecord, data: GameRaw): LoadedGame {
   function getUser(userId: User['id']): User {
     return record.getUser(userId);
   }
-  const index: GameState[] = data.index.map((state, id) => ({
+  const scenes: GameState[] = data.index.map((state, id) => ({
     ...state,
     id,
     time: new Date(state.time),
     turnPlayer: getUser(state.turnPlayer),
   }));
+  const [opponent, player] = record.users;
+  const index = legacySlots(
+    scenes,
+    (extra) => expand(extra, data.cache),
+    opponent.id,
+    player.id,
+  );
   return {
     ...record,
     ...data,
