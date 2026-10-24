@@ -15,11 +15,13 @@ import { User } from '~/types/user';
 import { MODE } from '~/types/game';
 import { Link } from '~/components/Link';
 import { fightParams, playerParams } from '~/routes/Home/searchQuery';
+import { FocusQuery, focusLast } from '~/utils/focusUser';
 import { storyFightOf } from '~/utils/storyFight';
 
 import './style.css';
 
 export type EntryProps = {
+  focus?: FocusQuery;
   record: GameRecord;
 };
 
@@ -103,18 +105,17 @@ const subgrid = {
 };
 
 export default function Entry({
+  focus = undefined,
   record: {
     date,
     key,
     start,
     type,
-    users: [
-      opponent,
-      player,
-    ],
+    users,
   },
 }: EntryProps): ReactNode {
   const t = useTranslation();
+  const [opponent, player] = focusLast(users, focus);
   // TODO: Tippy
   const ranked = MODE[type] === MODE.RANKED;
   return (

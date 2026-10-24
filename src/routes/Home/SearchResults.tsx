@@ -2,6 +2,7 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { Typography } from '@mui/material';
@@ -26,6 +27,7 @@ export default function SearchResults({
   const [error, setError] = useState('');
   const [refresh, setRefresh] = useState(true);
   const loadLanguage = useLoadLanguage();
+  const focus = useMemo(() => ({ id: query.id, name: query.name }), [query.id, query.name]);
 
   useEffect(() => {
     setRefresh(true);
@@ -78,6 +80,7 @@ export default function SearchResults({
       <GameList
         emptyMessage={loaded ? 'No games found' : undefined}
         entries={entries}
+        focus={focus}
         onRefresh={handleRefresh}
         title="Search Results"
       />

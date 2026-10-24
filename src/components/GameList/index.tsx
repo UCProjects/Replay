@@ -10,12 +10,14 @@ import { Flex } from '~/components/Flex';
 import { Paginator } from '~/components/Paginator';
 import { GameRecords } from '~/structures/GameRecord';
 import { useTranslation } from '~/hooks/useTranslation';
+import { FocusQuery } from '~/utils/focusUser';
 import Entry from './Entry';
 
 export type GameListParams = {
   title?: string;
   entries?: GameRecords;
   emptyMessage?: ReactNode;
+  focus?: FocusQuery;
   onRefresh?: () => void;
 };
 
@@ -23,6 +25,7 @@ export default function GameList({
   title = '',
   entries = [],
   emptyMessage = undefined,
+  focus = undefined,
   onRefresh = undefined,
 }: GameListParams): ReactNode {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -30,11 +33,12 @@ export default function GameList({
   const list = useMemo(
     () => entries.map((entry) => (
       <Entry
+        focus={focus}
         key={entry.key}
         record={entry}
       />
     )),
-    [entries],
+    [entries, focus],
   );
   // TODO: Ignore tab events
   const handleClick = useCallback(() => {
