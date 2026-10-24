@@ -5,7 +5,10 @@ import {
   getFunctions,
   httpsCallable,
 } from 'firebase/functions';
+import { GameRecord, reviveRecord, serializeRecord } from '~/structures/GameRecord';
+import { loadStored, pruneStored, saveStored } from '~/utils/recordStore';
 import app from './firebase';
+import { get } from './search';
 
 type FavoriteRequest = {
   favorite: boolean;
@@ -30,8 +33,8 @@ const call = httpsCallable<FavoriteRequest, FavoriteResponse>(functions, 'specta
 
 const cache = new Map<string, string[]>();
 
-export async function fetchFavorites(uid: string): Promise<string[]> {
-  const cached = cache.get(uid);
+export async function fetchFavorites(uid: string, { fresh = false } = {}): Promise<string[]> {
+  const cached = fresh ? undefined : cache.get(uid);
   if (cached) return cached;
   const snapshot = await getDoc(doc(db, 'favorites', uid));
   const games = (snapshot.get('games') as string[] | undefined) ?? [];
@@ -48,4 +51,19 @@ export async function setFavorite(uid: string, game: string, favorite: boolean):
   const { data } = await call({ favorite, game });
   cache.set(uid, data.games);
   return data.games;
+}
+
+export async function favoriteRecord(key: string, { fresh = false } = {}): Promise<GameRecord> {
+  const stored = fresh ? undefined : loadStored(key);
+  const revived = stored === undefined ? undefined : reviveRecord(key, stored);
+  if (revived) return revived;
+
+  const record = await get(key, { fresh });
+  const json = serializeRecord(record);
+  if (json) saveStored(key, json);
+  return record;
+}
+
+export function forgetOtherRecords(keep: string[]): void {
+  pruneStored(keep);
 }

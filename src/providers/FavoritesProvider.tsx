@@ -18,18 +18,25 @@ export default function FavoritesProvider({ children }: PropsWithChildren): Reac
   const user = useUser();
   const uid = user?.uid;
   const [games, setGames] = useState<string[]>([]);
+  const [ready, setReady] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     setGames([]);
+    setReady(false);
     if (!uid) return undefined;
     let current = true;
     fetchFavorites(uid)
       .then((list) => {
         if (current) setGames(list);
       })
-      .catch(() => undefined);
+      .catch((error) => {
+        if (current) setMessage(error instanceof Error ? error.message : 'Could not load your favorites');
+      })
+      .finally(() => {
+        if (current) setReady(true);
+      });
     return () => {
       current = false;
     };
@@ -49,11 +56,17 @@ export default function FavoritesProvider({ children }: PropsWithChildren): Reac
     }
   }, [games, uid]);
 
+  const reload = useCallback(async (): Promise<void> => {
+    if (uid) setGames(await fetchFavorites(uid, { fresh: true }));
+  }, [uid]);
+
   const value = useMemo(() => ({
     games,
     isFavorite: (game: string) => games.includes(game),
+    ready,
+    reload,
     toggle,
-  }), [games, toggle]);
+  }), [games, ready, reload, toggle]);
 
   const handleCloseLogin = useCallback(() => setLoginOpen(false), []);
   const handleCloseMessage = useCallback(() => setMessage(''), []);

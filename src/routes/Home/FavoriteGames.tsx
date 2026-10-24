@@ -2,17 +2,19 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 
 import GameList from '~/components/GameList/index.tsx';
 import { useFavorites } from '~/hooks/useFavorites';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
-import { get } from '~/managers/search.ts';
+import { favoriteRecord, forgetOtherRecords } from '~/managers/favorites.ts';
 import { GameRecord, GameRecords } from '~/structures/GameRecord.ts';
 
 export default function FavoriteGames(): ReactNode {
-  const { games } = useFavorites();
+  const { games, ready, reload } = useFavorites();
+  const fresh = useRef(false);
   const [entries, setEntries] = useState<GameRecords>([]);
   const [loaded, setLoaded] = useState(false);
   const [refresh, setRefresh] = useState(true);
@@ -23,11 +25,15 @@ export default function FavoriteGames(): ReactNode {
   }, [games]);
 
   useEffect(() => {
-    if (!refresh) return undefined;
+    if (!refresh || !ready) return undefined;
     let current = true;
     (async () => {
-      const results = await Promise.allSettled([...games].reverse().map((key) => get(key)));
+      const results = await Promise.allSettled(
+        [...games].reverse().map((key) => favoriteRecord(key, { fresh: fresh.current })),
+      );
+      fresh.current = false;
       if (!current) return;
+      if (games.length) forgetOtherRecords(games);
       const records = results
         .filter((result): result is PromiseFulfilledResult<GameRecord> => result.status === 'fulfilled')
         .map(({ value }) => value);
@@ -39,9 +45,14 @@ export default function FavoriteGames(): ReactNode {
     return () => {
       current = false;
     };
-  }, [games, loadLanguage, refresh]);
+  }, [games, loadLanguage, ready, refresh]);
 
-  const handleRefresh = useCallback(() => setRefresh(true), []);
+  const handleRefresh = useCallback(() => {
+    fresh.current = true;
+    reload()
+      .catch(() => undefined)
+      .finally(() => setRefresh(true));
+  }, [reload]);
 
   return (
     <GameList

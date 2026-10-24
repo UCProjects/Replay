@@ -7,7 +7,7 @@ import {
 import metaToUsers from '~/utils/metaToUsers';
 import { User, UserMeta, Users } from '~/types/user';
 
-type GameInfo = {
+export type GameInfo = {
   cards: DocumentKey;
   date: Timestamp;
   expireAt?: Timestamp;
@@ -18,6 +18,8 @@ type GameInfo = {
   translation: DocumentKey;
   type: GameType;
 };
+
+const sources = new WeakMap<GameRecord, GameInfo>();
 
 export class GameRecord {
   public readonly cards: DocumentKey;
@@ -56,6 +58,17 @@ export class GameRecord {
     }: GameInfo,
     key: DocumentKey,
   ) {
+    sources.set(this, {
+      cards,
+      date,
+      expireAt,
+      id,
+      playermeta,
+      results,
+      start,
+      translation,
+      type,
+    });
     this.cards = cards;
     this.date = date.toDate();
     this.gameId = id;
@@ -90,6 +103,38 @@ export class GameRecord {
 }
 
 export type GameRecords = GameRecord[];
+
+export function serializeRecord(record: GameRecord): string | undefined {
+  const info = sources.get(record);
+  if (!info) return undefined;
+  return JSON.stringify({
+    ...info,
+    date: info.date.toMillis(),
+    expireAt: info.expireAt?.toMillis(),
+    start: info.start.toMillis(),
+  });
+}
+
+export function reviveRecord(key: DocumentKey, json: string): GameRecord | undefined {
+  try {
+    const {
+      date, expireAt, start, ...rest
+    } = JSON.parse(json) as Modify<GameInfo, {
+      date: number;
+      expireAt?: number;
+      start: number;
+    }>;
+    if (typeof date !== 'number' || typeof start !== 'number' || !rest.playermeta) return undefined;
+    return new GameRecord({
+      ...rest,
+      date: Timestamp.fromMillis(date),
+      expireAt: typeof expireAt === 'number' ? Timestamp.fromMillis(expireAt) : undefined,
+      start: Timestamp.fromMillis(start),
+    }, key);
+  } catch {
+    return undefined;
+  }
+}
 
 export const converter: FirestoreDataConverter<GameRecord, GameInfo> = {
   toFirestore(_record) {

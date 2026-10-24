@@ -86,8 +86,11 @@ export default async function search({
   return records;
 }
 
-export async function get(key: GameRecord['key']): Promise<GameRecord> {
-  const cached = cache.get(key);
+export async function get(
+  key: GameRecord['key'],
+  { fresh = false }: { fresh?: boolean } = {},
+): Promise<GameRecord> {
+  const cached = fresh ? undefined : cache.get(key);
   if (cached) {
     return cached;
   }
