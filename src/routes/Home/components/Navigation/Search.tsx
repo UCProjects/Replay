@@ -11,6 +11,7 @@ import { useTranslation } from '~/hooks/useTranslation';
 import { MODE, GameMode } from '~/types/game';
 import { SOUL, Soul } from '~/types/soul';
 import {
+  EMPTY_QUERY,
   MAX_NAME_LENGTH,
   SearchQuery,
   STORY_FIGHTS,
@@ -66,6 +67,11 @@ export default function Search({
     onSearch,
   ]);
 
+  const handleClear = useCallback(() => {
+    setDraft(EMPTY_QUERY);
+    onSearch(EMPTY_QUERY);
+  }, [onSearch]);
+
   return (
     <form className="search-form" onSubmit={handleSubmit}>
       <input
@@ -117,6 +123,7 @@ export default function Search({
         ))}
       </select>
       <input id="searchButton" type="submit" value="Search" />
+      <input id="clearButton" onClick={handleClear} type="button" value="Clear" />
     </form>
   );
 }
