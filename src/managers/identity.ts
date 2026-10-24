@@ -1,14 +1,16 @@
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import {
+  Auth,
   AuthProvider,
   GithubAuthProvider,
   GoogleAuthProvider,
-  OAuthProvider,
+  UserCredential,
   getAuth,
   signInWithCustomToken,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { awaitDiscordToken } from '~/utils/discordPopup';
 import { exchangeToken } from '~/utils/exchangeToken';
 import app from './firebase';
 
@@ -23,8 +25,9 @@ export const identityConfig = {
 
 export const loginAvailable = Boolean(identityConfig.apiKey && identityConfig.appId);
 
-const PROVIDERS: Record<LoginMethod, () => AuthProvider> = {
-  discord: () => new OAuthProvider('oidc.discord'),
+const POPUP_FEATURES = 'height=800,width=400';
+
+const PROVIDERS: Record<Exclude<LoginMethod, 'discord'>, () => AuthProvider> = {
   github: () => new GithubAuthProvider(),
   google: () => new GoogleAuthProvider(),
 };
@@ -36,11 +39,25 @@ function identityApp(): FirebaseApp {
   return identity;
 }
 
+function discordCredential(identityAuth: Auth): Promise<UserCredential> {
+  const origin = `https://${identityConfig.authDomain}`;
+  const popup = window.open(
+    `${origin}/discord?origin=${encodeURIComponent(window.location.origin)}`,
+    'auth',
+    POPUP_FEATURES,
+  );
+  if (!popup) return Promise.reject(new Error('Allow popups to sign in with Discord'));
+  return awaitDiscordToken(popup, origin)
+    .then((token) => signInWithCustomToken(identityAuth, token));
+}
+
 export async function login(method: LoginMethod): Promise<void> {
   if (!loginAvailable) throw new Error('Sign in is not set up');
   const identityAuth = getAuth(identityApp());
   try {
-    const { user } = await signInWithPopup(identityAuth, PROVIDERS[method]());
+    const { user } = await (method === 'discord'
+      ? discordCredential(identityAuth)
+      : signInWithPopup(identityAuth, PROVIDERS[method]()));
     const token = await exchangeToken(await user.getIdToken());
     await signInWithCustomToken(getAuth(app), token);
   } finally {

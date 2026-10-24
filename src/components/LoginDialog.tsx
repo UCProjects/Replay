@@ -15,6 +15,7 @@ import {
 } from 'react';
 import Discord from '~/assets/images/discord.svg';
 import { LoginMethod, login } from '~/managers/identity';
+import { LoginCancelled } from '~/utils/discordPopup';
 
 export type LoginDialogProps = {
   onClose: () => void;
@@ -34,6 +35,7 @@ export function LoginDialog({
     login(method)
       .then(onClose)
       .catch((failure) => {
+        if (failure instanceof LoginCancelled) return;
         setError(failure instanceof Error ? failure.message : 'Sign in failed');
       })
       .finally(() => setBusy(false));
