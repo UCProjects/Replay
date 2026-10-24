@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
@@ -20,6 +21,12 @@ import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import { useUser } from '~/hooks/useUser';
 import FavoriteGames from './FavoriteGames.tsx';
+import {
+  initialTab,
+  recall,
+  remember,
+  TabName,
+} from './rememberedTab.ts';
 import Footer from './components/Footer.tsx';
 import Navigation from './components/Navigation';
 import searchRecent, { cachedRecent } from './searchRecent.ts';
@@ -102,27 +109,49 @@ const TAB_SX = (theme: Theme) => ({
   },
 });
 
-type TabName = 'favorites' | 'home' | 'search';
-
 export default function Home(): ReactNode {
-  const { key } = useLocation();
+  const { key, search } = useLocation();
+  const mountKey = useRef(key);
+  const [memory] = useState(recall);
   const [params, setParams] = useSearchParams();
   const query = useMemo(() => parseQuery(params), [params]);
   const searching = hasQuery(query);
   const user = useUser();
-  const [selected, setTab] = useState<TabName>(searching ? 'search' : 'home');
+  const [selected, setTab] = useState<TabName>(() => initialTab(searching, search, memory));
   const tab = selected === 'favorites' && !user ? 'home' : selected;
 
   useEffect(() => {
-    if (searching) setTab('search');
+    if (!searching && memory.tab === 'search' && memory.search) {
+      setParams(new URLSearchParams(memory.search), { replace: true });
+    }
+    // Only on mount: come back to the search that was open
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!searching) return;
+    remember({ search });
+    if (key !== mountKey.current) {
+      setTab('search');
+      remember({ tab: 'search' });
+    }
   }, [
     key,
+    search,
     searching,
   ]);
 
-  const handleTab = useCallback((_event: unknown, value: TabName) => setTab(value), []);
+  const handleTab = useCallback((_event: unknown, value: TabName) => {
+    setTab(value);
+    remember({ tab: value });
+    const saved = recall().search;
+    if (value === 'search' && !searching && saved) {
+      setParams(new URLSearchParams(saved), { replace: true });
+    }
+  }, [searching, setParams]);
 
   const handleSearch = useCallback((next: SearchQuery) => {
+    if (!hasQuery(next)) remember({ search: '' });
     setParams(toParams(next));
   }, [setParams]);
 
