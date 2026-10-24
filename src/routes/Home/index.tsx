@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { Search as SearchIcon } from '@mui/icons-material';
+import { Favorite, Search as SearchIcon } from '@mui/icons-material';
 import {
   Box,
   Tab,
@@ -18,6 +18,8 @@ import { Flex } from '~/components/Flex.tsx';
 import GameList from '~/components/GameList/index.tsx';
 import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
+import { useUser } from '~/hooks/useUser';
+import FavoriteGames from './FavoriteGames.tsx';
 import Footer from './components/Footer.tsx';
 import Navigation from './components/Navigation';
 import searchRecent, { cachedRecent } from './searchRecent.ts';
@@ -100,14 +102,16 @@ const TAB_SX = (theme: Theme) => ({
   },
 });
 
-type TabName = 'home' | 'search';
+type TabName = 'favorites' | 'home' | 'search';
 
 export default function Home(): ReactNode {
   const { key } = useLocation();
   const [params, setParams] = useSearchParams();
   const query = useMemo(() => parseQuery(params), [params]);
   const searching = hasQuery(query);
-  const [tab, setTab] = useState<TabName>(searching ? 'search' : 'home');
+  const user = useUser();
+  const [selected, setTab] = useState<TabName>(searching ? 'search' : 'home');
+  const tab = selected === 'favorites' && !user ? 'home' : selected;
 
   useEffect(() => {
     if (searching) setTab('search');
@@ -158,6 +162,9 @@ export default function Home(): ReactNode {
           >
             <Tab label="Home" value="home" />
             <Tab aria-label="Search" label={<SearchIcon fontSize="small" />} value="search" />
+            {user && (
+              <Tab aria-label="Favorites" label={<Favorite fontSize="small" />} value="favorites" />
+            )}
           </Tabs>
           <Box sx={{ display: tab === 'home' ? 'flex' : 'none' }}>
             <RecentGames />
@@ -169,6 +176,11 @@ export default function Home(): ReactNode {
             />
             {searching && <SearchResults query={query} />}
           </Box>
+          {tab === 'favorites' && (
+            <Box sx={{ display: 'flex' }}>
+              <FavoriteGames />
+            </Box>
+          )}
         </Box>
       </Flex>
       <Flex

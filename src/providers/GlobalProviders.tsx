@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@emotion/react';
 import { PropsWithChildren, ReactNode } from 'react';
 import theme from '~/routes/theme';
+import FavoritesProvider from './FavoritesProvider';
 import TranslationProvider from './TranslationProvider';
 import UserProvider from './UserProvider';
 
@@ -9,7 +10,9 @@ export default function GlobalProviders({ children }: PropsWithChildren): ReactN
     <ThemeProvider theme={theme}>
       <TranslationProvider>
         <UserProvider>
-          {children}
+          <FavoritesProvider>
+            {children}
+          </FavoritesProvider>
         </UserProvider>
       </TranslationProvider>
     </ThemeProvider>

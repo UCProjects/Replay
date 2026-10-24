@@ -7,12 +7,15 @@ import { CardPreview } from '~/components/CardPreview';
 import { Flex } from '~/components/Flex';
 import { KeywordTip } from '~/components/KeywordTip';
 import { useGameState } from '~/hooks/useGame';
+import { useLoaderData } from 'react-router-dom';
 import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';
 import { AnimationLayer } from './components/AnimationLayer';
 import Controls from './components/Controls';
+import OldGameGate from './components/OldGameGate';
 import Profile from './components/Profile';
 import { Slot } from './components/Slot';
+import { GateData } from './loader';
 import './game.css';
 
 function Render(): ReactNode {
@@ -67,6 +70,8 @@ function Render(): ReactNode {
 }
 
 export default function Game(): ReactNode {
+  const data = useLoaderData();
+  if (!Array.isArray(data)) return <OldGameGate record={(data as GateData).gate} />;
   return (
     <GameProvider>
       <Render />

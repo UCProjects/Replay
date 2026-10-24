@@ -10,6 +10,7 @@ import { User, UserMeta, Users } from '~/types/user';
 type GameInfo = {
   cards: DocumentKey;
   date: Timestamp;
+  expireAt?: Timestamp;
   id: number;
   playermeta: UserMeta;
   results: GameResult;
@@ -27,6 +28,8 @@ export class GameRecord {
 
   public readonly key: DocumentKey;
 
+  public readonly kept: boolean;
+
   public readonly results: Modify<GameResult, {
     winner: User | null,
   }>;
@@ -43,6 +46,7 @@ export class GameRecord {
     {
       cards,
       date,
+      expireAt,
       id,
       playermeta,
       results,
@@ -56,6 +60,7 @@ export class GameRecord {
     this.date = date.toDate();
     this.gameId = id;
     this.key = key;
+    this.kept = expireAt === undefined;
     this.start = start.toDate();
     this.translation = translation;
     this.type = type;

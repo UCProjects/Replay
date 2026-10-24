@@ -1,5 +1,7 @@
 import {
   ContentCopy,
+  Favorite,
+  FavoriteBorder,
   Home,
 } from '@mui/icons-material';
 import {
@@ -20,6 +22,7 @@ import {
   useState,
 } from 'react';
 import { Link } from '~/components/Link';
+import { useFavorites } from '~/hooks/useFavorites';
 import { useGame } from '~/hooks/useGame';
 import { useDisplayName } from '~/hooks/useDisplayName';
 import { useTranslation } from '~/hooks/useTranslation';
@@ -35,7 +38,9 @@ export default function GameMenu({
 }: GameMenuProps): ReactNode {
   const t = useTranslation();
   const displayName = useDisplayName();
+  const { isFavorite, toggle } = useFavorites();
   const {
+    key,
     results,
     start,
     type,
@@ -53,6 +58,11 @@ export default function GameMenu({
       .catch(() => setCopied(false));
   }, []);
 
+  const handleFavorite = useCallback(() => {
+    toggle(key).catch(() => undefined);
+  }, [key, toggle]);
+
+  const favorite = isFavorite(key);
   const mode = t(`game-type-${type.toLowerCase()}`, { fallback: type });
   const reason = t(results.type, { fallback: results.type });
 
@@ -105,6 +115,15 @@ export default function GameMenu({
         >
           <ListItemIcon sx={{ color: 'inherit' }}><Home /></ListItemIcon>
           <ListItemText primary="Recent games" />
+        </ListItemButton>
+        <ListItemButton
+          onClick={handleFavorite}
+          sx={{ color: 'inherit' }}
+        >
+          <ListItemIcon sx={{ color: 'inherit' }}>
+            {favorite ? <Favorite sx={{ color: '#bf3989' }} /> : <FavoriteBorder />}
+          </ListItemIcon>
+          <ListItemText primary={favorite ? 'Remove from favorites' : 'Add to favorites'} />
         </ListItemButton>
         <ListItemButton
           onClick={handleCopy}
