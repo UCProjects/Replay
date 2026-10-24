@@ -9,6 +9,8 @@ import { useTranslation } from '~/hooks/useTranslation';
 import { useUser, useUserName } from '~/hooks/useUser';
 import { loginAvailable, logout } from '~/managers/identity';
 
+const ICON_SX = { marginLeft: '8px', padding: 0 };
+
 export default function Header(): ReactNode {
   const t = useTranslation();
   const user = useUser();
@@ -44,12 +46,12 @@ export default function Header(): ReactNode {
           {t('replay-welcome', name)}
         </span>
         {user && (
-          <IconButton aria-label="Sign out" color="inherit" onClick={handleLogout} sx={{ padding: 0 }}>
+          <IconButton aria-label="Sign out" color="inherit" onClick={handleLogout} sx={ICON_SX}>
             <Logout />
           </IconButton>
         )}
         {!user && loginAvailable && (
-          <IconButton aria-label="Sign in" color="inherit" onClick={handleOpen} sx={{ padding: 0 }}>
+          <IconButton aria-label="Sign in" color="inherit" onClick={handleOpen} sx={ICON_SX}>
             <Login />
           </IconButton>
         )}
