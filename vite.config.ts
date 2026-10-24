@@ -30,7 +30,6 @@ export default defineConfig({
           ],
           plugins: [
             'banana-i18n',
-            'axios',
           ],
         },
       },
