@@ -13,7 +13,6 @@ import { useTranslation } from '~/hooks/useTranslation';
 import { GameRecord } from '~/structures/GameRecord';
 import { User } from '~/types/user';
 import { MODE } from '~/types/game';
-import { FavoriteButton } from '~/components/FavoriteButton';
 import { Link } from '~/components/Link';
 import { fightParams, playerParams } from '~/routes/Home/searchQuery';
 import { FocusQuery, focusLast } from '~/utils/focusUser';
@@ -145,23 +144,18 @@ export default function Entry({
               user={player}
             />
           </Stack>
-          <Box
+          <Typography
+            component="span"
             sx={{
-              alignItems: 'center',
-              alignSelf: 'center',
-              display: 'flex',
-              gap: '4px',
-              justifyContent: 'center',
+              textAlign: 'center',
               paddingX: '10px',
+              alignSelf: 'center',
             }}
           >
-            <Typography component="span">
-              [
-              {t(`game-type-${type.toLowerCase()}`, { fallback: type })}
-              ]
-            </Typography>
-            <FavoriteButton game={key} />
-          </Box>
+            [
+            {t(`game-type-${type.toLowerCase()}`, { fallback: type })}
+            ]
+          </Typography>
         </Stack>
       </Link>
     </>
