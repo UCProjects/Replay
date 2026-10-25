@@ -1,6 +1,7 @@
 import { Artifact } from '~/types/game';
+import { artifactCounter } from './artifactCounter';
 
-const signature = ({ custom, disabled }: Artifact) => `${custom ?? ''}|${disabled ? 1 : 0}`;
+const signature = (art: Artifact) => `${artifactCounter(art) ?? ''}|${art.disabled ? 1 : 0}`;
 
 export function featuredAcross(lists: (Artifact[] | undefined)[]): (number | undefined)[] {
   const result: (number | undefined)[] = [];

@@ -6,7 +6,9 @@ export type Artifact = {
   image: string;
   custom?: string;
   disabled?: boolean;
+  goal?: number;
   legendary?: boolean;
+  progress?: number;
 };
 
 export type PlayerRaw = {

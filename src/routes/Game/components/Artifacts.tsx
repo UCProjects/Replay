@@ -11,6 +11,7 @@ import { Text } from '~/components/Text';
 import { useTranslation } from '~/hooks/useTranslation';
 import { useFeaturedArtifact } from '~/hooks/useGame';
 import { Artifact, Player } from '~/types/game';
+import { artifactCounter } from '~/utils/artifactCounter';
 import { ArtifactSummary } from './ArtifactSummary';
 import { ProfileIcon } from './ProfileIcon';
 
@@ -28,18 +29,15 @@ type ArtProps = {
 };
 
 function Art({
-  art: {
-    custom,
-    id,
-    image,
-  },
+  art,
   isOpponent,
 }: ArtProps): ReactNode {
   const t = useTranslation();
+  const { id, image } = art;
   return (
     <ProfileIcon
       anchor={{ horizontal: 'right', vertical: isOpponent ? 'bottom' : 'top' }}
-      badge={custom}
+      badge={artifactCounter(art)}
       props={{
         popper: {
           sx: {
