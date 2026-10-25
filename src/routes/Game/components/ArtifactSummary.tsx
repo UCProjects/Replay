@@ -16,6 +16,7 @@ import { Flex } from '~/components/Flex';
 import { Text } from '~/components/Text';
 import { useTranslation } from '~/hooks/useTranslation';
 import { Artifact } from '~/types/game';
+import { artifactCounter } from '~/utils/artifactCounter';
 
 const Image = styled('img')({
   height: 20,
@@ -24,6 +25,8 @@ const Image = styled('img')({
 const ListImage = styled('img')({
   height: 28,
 });
+
+const VIEWPORT_MARGIN = 8;
 
 export type ArtifactSummaryProps = {
   active?: boolean;
@@ -48,6 +51,7 @@ export function ArtifactSummary({
   const toward = isOpponent ? 'bottom' : 'top';
   const away = isOpponent ? 'top' : 'bottom';
   const shown = artifacts.find(({ id }) => id === featured) ?? artifacts[0];
+  const shownCounter = artifactCounter(shown);
 
   return (
     <>
@@ -65,8 +69,8 @@ export function ArtifactSummary({
         >
           <Badge
             anchorOrigin={{ horizontal: 'right', vertical: toward }}
-            badgeContent={shown.custom}
-            invisible={shown.custom === undefined}
+            badgeContent={shownCounter}
+            invisible={shownCounter === undefined}
             sx={{ margin: 0 }}
           >
             <Image src={`/images/artifacts/${shown.image}.png`} />
@@ -75,6 +79,8 @@ export function ArtifactSummary({
       </IconButton>
       <Popover
         anchorEl={anchor}
+        anchorOrigin={{ horizontal: 'center', vertical: toward }}
+        marginThreshold={VIEWPORT_MARGIN}
         onClose={handleClose}
         open={Boolean(anchor)}
         PaperProps={{
@@ -83,35 +89,36 @@ export function ArtifactSummary({
             backgroundImage: 'none',
             border: '1px solid #fff',
             color: 'var(--font)',
-            maxHeight: '70vh',
-            maxWidth: 'min(360px, 92vw)',
+            maxHeight: `calc(100vh - ${VIEWPORT_MARGIN * 2}px)`,
+            maxWidth: `min(360px, calc(100vw - ${VIEWPORT_MARGIN * 2}px))`,
             padding: '8px',
           },
         }}
+        transformOrigin={{ horizontal: 'center', vertical: away }}
       >
-        {artifacts.map(({
-          custom,
-          id,
-          image,
-        }, index) => (
-          <Box key={id}>
-            {index > 0 && <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.3)', marginY: '6px' }} />}
-            <Flex alignItems="flex-start" container wrap="nowrap">
-              <Badge
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                badgeContent={custom}
-                invisible={custom === undefined}
-                sx={{ margin: '0 8px 0 0' }}
-              >
-                <ListImage src={`/images/artifacts/${image}.png`} />
-              </Badge>
-              <Box>
-                <Text fontWeight="bold" html={t(`artifact-name-${id}`)} />
-                <Text html={t(`artifact-${id}`)} />
-              </Box>
-            </Flex>
-          </Box>
-        ))}
+        {artifacts.map((art, index) => {
+          const counter = artifactCounter(art);
+          return (
+            <Box key={art.id}>
+              {index > 0 && <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.3)', marginY: '6px' }} />}
+              <Flex alignItems="flex-start" container wrap="nowrap">
+                <Box sx={{
+                  alignItems: 'center', display: 'flex', flexDirection: 'column', marginRight: '8px',
+                }}
+                >
+                  <ListImage src={`/images/artifacts/${art.image}.png`} />
+                  {counter !== undefined && (
+                    <Text sx={{ fontSize: 12, fontWeight: 'bold' }}>{counter}</Text>
+                  )}
+                </Box>
+                <Box>
+                  <Text fontWeight="bold" html={t(`artifact-name-${art.id}`)} />
+                  <Text html={t(`artifact-${art.id}`)} />
+                </Box>
+              </Flex>
+            </Box>
+          );
+        })}
       </Popover>
     </>
   );
