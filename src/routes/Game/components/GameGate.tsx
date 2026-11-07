@@ -6,12 +6,15 @@ import {
 import {
   ReactNode,
   useCallback,
+  useEffect,
+  useRef,
   useState,
 } from 'react';
 import { useRevalidator, useSearchParams } from 'react-router-dom';
 import { useDisplayName } from '~/hooks/useDisplayName';
 import { useFavorites } from '~/hooks/useFavorites';
 import { useTranslation } from '~/hooks/useTranslation';
+import { useUser } from '~/hooks/useUser';
 import { GamePreview, matchup } from '~/utils/gamePreview';
 
 export type GameGateProps = {
@@ -32,6 +35,14 @@ export default function GameGate({
   const { toggle } = useFavorites();
   const { revalidate } = useRevalidator();
   const [busy, setBusy] = useState(false);
+  const uid = useUser()?.uid;
+  const seen = useRef(uid);
+
+  useEffect(() => {
+    if (seen.current === uid) return;
+    seen.current = uid;
+    revalidate();
+  }, [revalidate, uid]);
 
   const handleFavorite = useCallback(() => {
     setBusy(true);
