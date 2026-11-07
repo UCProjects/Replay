@@ -1,31 +1,36 @@
+import { FirebaseError } from 'firebase/app';
 import {
   LoaderFunctionArgs,
 } from 'react-router-dom';
-import { currentFavorites } from '~/managers/favorites';
-import load from '~/managers/game';
+import load, { gamePreview } from '~/managers/game';
 import { loadAllCards } from '~/managers/cards';
 import { loadLanguage } from '~/managers/lang';
 import { get } from '~/managers/search';
-import { GameRecord } from '~/structures/GameRecord';
-import { isOldKept } from '~/utils/retention';
+import { GamePreview } from '~/utils/gamePreview';
 
-export const WATCH_PARAM = 'watch';
+export type GateData = { gate: { id: string, preview: GamePreview } };
 
-export type GateData = { gate: GameRecord };
+async function gateOf(id: string): Promise<GateData | undefined> {
+  try {
+    await get(id);
+    return undefined;
+  } catch (error) {
+    if (!(error instanceof FirebaseError) || error.code !== 'permission-denied') throw error;
+    const preview = await gamePreview(id);
+    if (!preview) throw Error(`[${id}] Game not found`);
+    return { gate: { id, preview } };
+  }
+}
 
 export default async function GameLoader({
   params: {
     id,
   },
-  request,
 }: LoaderFunctionArgs): Promise<any> {
   if (!id) throw new Error('Failed to find game');
 
-  if (!new URL(request.url).searchParams.has(WATCH_PARAM)) {
-    const record = await get(id);
-    const favorites = await currentFavorites().catch(() => []);
-    if (isOldKept(record, favorites)) return { gate: record } satisfies GateData;
-  }
+  const gate = await gateOf(id);
+  if (gate) return gate;
 
   const game = await load(id);
   return Promise.all([

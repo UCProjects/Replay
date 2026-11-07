@@ -95,6 +95,7 @@ export async function get(
     return cached;
   }
 
+  await auth.authStateReady();
   const ref = doc(db, 'gamehistory', key)
     .withConverter(converter);
   const result = await getDoc(ref);

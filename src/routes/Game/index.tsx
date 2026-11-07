@@ -12,7 +12,7 @@ import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';
 import { AnimationLayer } from './components/AnimationLayer';
 import Controls from './components/Controls';
-import OldGameGate from './components/OldGameGate';
+import GameGate from './components/GameGate';
 import Profile from './components/Profile';
 import { Slot } from './components/Slot';
 import { GateData } from './loader';
@@ -71,7 +71,7 @@ function Render(): ReactNode {
 
 export default function Game(): ReactNode {
   const data = useLoaderData();
-  if (!Array.isArray(data)) return <OldGameGate record={(data as GateData).gate} />;
+  if (!Array.isArray(data)) return <GameGate {...(data as GateData).gate} />;
   return (
     <GameProvider>
       <Render />
