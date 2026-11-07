@@ -11,10 +11,12 @@ import {
   useState,
 } from 'react';
 import { useRevalidator, useSearchParams } from 'react-router-dom';
+import { LoginDialog } from '~/components/LoginDialog';
 import { useDisplayName } from '~/hooks/useDisplayName';
 import { useFavorites } from '~/hooks/useFavorites';
 import { useTranslation } from '~/hooks/useTranslation';
 import { useUser } from '~/hooks/useUser';
+import { loginAvailable } from '~/managers/identity';
 import { GamePreview, matchup } from '~/utils/gamePreview';
 
 export type GameGateProps = {
@@ -35,6 +37,7 @@ export default function GameGate({
   const { toggle } = useFavorites();
   const { revalidate } = useRevalidator();
   const [busy, setBusy] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const uid = useUser()?.uid;
   const seen = useRef(uid);
 
@@ -54,6 +57,9 @@ export default function GameGate({
       .finally(() => setBusy(false));
   }, [id, revalidate, toggle]);
 
+  const handleSignIn = useCallback(() => setSigningIn(true), []);
+  const handleCloseSignIn = useCallback(() => setSigningIn(false), []);
+
   const mode = type && t(`game-type-${type.toLowerCase()}`, { fallback: type });
   const details = [mode && `[${mode}]`, date?.toLocaleDateString()].filter(Boolean).join(' ');
 
@@ -68,17 +74,33 @@ export default function GameGate({
         </Typography>
       )}
       {details && <Typography sx={{ opacity: 0.7 }}>{details}</Typography>}
-      <Typography sx={{ marginY: 2 }}>
-        This game is older than you can browse. Add it to your favorites to watch it.
+      <Typography sx={{ marginY: 2, whiteSpace: 'pre-line' }}>
+        {uid
+          ? 'This game is older than you can browse.\nAdd it to your favorites to watch it.'
+          : 'Guests can only browse the most recent games.\nSign in to see more.'}
       </Typography>
-      <Button
-        color="inherit"
-        disabled={busy}
-        onClick={handleFavorite}
-        variant="outlined"
-      >
-        Add to favorites
-      </Button>
+      {uid && (
+        <Button
+          color="inherit"
+          disabled={busy}
+          onClick={handleFavorite}
+          variant="outlined"
+        >
+          Add to favorites
+        </Button>
+      )}
+      {!uid && loginAvailable && (
+        <>
+          <Button
+            color="inherit"
+            onClick={handleSignIn}
+            variant="outlined"
+          >
+            Sign in
+          </Button>
+          <LoginDialog onClose={handleCloseSignIn} open={signingIn} />
+        </>
+      )}
     </Box>
   );
 }
