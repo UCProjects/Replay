@@ -26,13 +26,15 @@ export default async function GameLoader({
   params: {
     id,
   },
+  request,
 }: LoaderFunctionArgs): Promise<any> {
   if (!id) throw new Error('Failed to find game');
 
   const gate = await gateOf(id);
   if (gate) return gate;
 
-  const game = await load(id);
+  const user = new URL(request.url).searchParams.get('user');
+  const game = await load(id, user === null ? undefined : Number(user));
   return Promise.all([
     game,
     loadLanguage(game.translation),

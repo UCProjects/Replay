@@ -15,6 +15,7 @@ import { Artifact, PlayerRaw } from '~/types/game';
 import { activeCardOf } from '~/utils/activeCard';
 import { featuredAcross } from '~/utils/featuredArtifact';
 import { highlightsOf } from '~/utils/highlights';
+import { swapIndex } from '~/utils/swapSides';
 import {
   buildTimeline,
   findScene,
@@ -63,7 +64,15 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
     return index === shown ? gameState : processGameState(game.index[index]);
   }, [game, gameState, processGameState, shown, timeline]);
   const activeSlot = useMemo(() => activeCardOf(eventState), [eventState]);
-  const highlights = useMemo(() => highlightsOf(eventState), [eventState]);
+  const highlights = useMemo(() => {
+    const found = highlightsOf(eventState);
+    if (!game.flipped) return found;
+    return {
+      ...found,
+      affectedSlots: found.affectedSlots.map(swapIndex),
+      effectSlots: found.effectSlots.map(swapIndex),
+    };
+  }, [eventState, game]);
 
   useEffect(() => {
     if (!playing || scrubbing) return undefined;

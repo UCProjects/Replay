@@ -15,16 +15,16 @@ const cache = new Map<DocumentKey, GameRaw>();
 
 const storage = getStorage(app);
 
-export default async function load(key: DocumentKey): Promise<LoadedGame> {
+export default async function load(key: DocumentKey, watched?: number): Promise<LoadedGame> {
   const cached = loadCached(key);
   if (cached) {
     const record = await get(key);
-    return loadGame(record, cached);
+    return loadGame(record, cached, watched);
   }
 
   const [record, data] = await Promise.all([get(key), getRaw(key)]);
   store(key, data);
-  return loadGame(record, data);
+  return loadGame(record, data, watched);
 }
 
 export async function gamePreview(key: DocumentKey): Promise<GamePreview | undefined> {

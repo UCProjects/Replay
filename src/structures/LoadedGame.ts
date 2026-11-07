@@ -8,11 +8,11 @@ import { User } from '~/types/user';
 import { legacySlots } from '~/utils/legacySlots';
 import { GameRecord } from './GameRecord';
 
-export type LoadedGame = GameRecord & Game;
+export type LoadedGame = GameRecord & Game & { flipped: boolean };
 
 const hash = /^[a-f0-9]{40}$/;
 
-export function loadGame(record: GameRecord, data: GameRaw): LoadedGame {
+export function loadGame(record: GameRecord, data: GameRaw, watched?: User['id']): LoadedGame {
   function getUser(userId: User['id']): User {
     return record.getUser(userId);
   }
@@ -29,11 +29,14 @@ export function loadGame(record: GameRecord, data: GameRaw): LoadedGame {
     opponent.id,
     player.id,
   );
+  const flipped = watched === opponent.id;
   return {
     ...record,
     ...data,
     index,
     getUser,
+    flipped,
+    users: flipped ? [player, opponent] : record.users,
   };
 }
 

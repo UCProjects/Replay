@@ -29,6 +29,7 @@ type UserDataProps = {
   user: User,
   opponent?: boolean,
   ranked?: boolean,
+  watch?: string,
 };
 
 function UserData({
@@ -41,10 +42,18 @@ function UserData({
   },
   opponent = false,
   ranked = false,
+  watch = undefined,
 }: UserDataProps): ReactNode {
   const navigate = useNavigate();
   const displayName = useDisplayName();
   const fight = storyFightOf(name);
+  const handleWatch = useCallback((event: MouseEvent) => {
+    const plain = event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+    if (!watch || !plain) return;
+    event.preventDefault();
+    event.stopPropagation();
+    navigate({ pathname: `/game/${watch}/`, search: `?user=${id}` });
+  }, [id, navigate, watch]);
   const handleSearch = useCallback((event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -64,6 +73,7 @@ function UserData({
       data-rank={ranked ? rank.substring(0, 1) : undefined}
       display="flex"
       flex={1}
+      onClick={handleWatch}
       overflow="hidden"
       sx={{
         '&[data-rank]::before': { margin: '0 5px 0 0' },
@@ -138,6 +148,7 @@ export default function Entry({
               opponent
               ranked={ranked}
               user={opponent}
+              watch={key}
             />
             <UserData
               ranked={ranked}
