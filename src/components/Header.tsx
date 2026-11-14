@@ -1,10 +1,12 @@
-import { Login, Logout } from '@mui/icons-material';
+import { Login, Logout, ManageAccounts } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { ReactNode, useCallback, useState } from 'react';
 
 import { Flex } from '~/components/Flex';
+import { LinkedAccountsDialog } from '~/components/LinkedAccountsDialog';
 import { Link } from '~/components/Link';
 import { LoginDialog } from '~/components/LoginDialog';
+import { Tip } from '~/components/Tip';
 import { useTranslation } from '~/hooks/useTranslation';
 import { useUser, useUserName } from '~/hooks/useUser';
 import { loginAvailable, logout } from '~/managers/identity';
@@ -18,6 +20,9 @@ export default function Header(): ReactNode {
   const [signingIn, setSigningIn] = useState(false);
   const handleOpen = useCallback(() => setSigningIn(true), []);
   const handleClose = useCallback(() => setSigningIn(false), []);
+  const [managingLinks, setManagingLinks] = useState(false);
+  const handleOpenLinked = useCallback(() => setManagingLinks(true), []);
+  const handleCloseLinked = useCallback(() => setManagingLinks(false), []);
   const handleLogout = useCallback(() => {
     logout().catch(() => undefined);
   }, []);
@@ -46,6 +51,13 @@ export default function Header(): ReactNode {
           {t('replay-welcome', name)}
         </span>
         {user && (
+          <Tip title="Linked accounts">
+            <IconButton aria-label="Linked accounts" color="inherit" onClick={handleOpenLinked} sx={ICON_SX}>
+              <ManageAccounts />
+            </IconButton>
+          </Tip>
+        )}
+        {user && (
           <IconButton aria-label="Sign out" color="inherit" onClick={handleLogout} sx={ICON_SX}>
             <Logout />
           </IconButton>
@@ -57,6 +69,7 @@ export default function Header(): ReactNode {
         )}
       </Flex>
       <LoginDialog onClose={handleClose} open={signingIn} />
+      <LinkedAccountsDialog onClose={handleCloseLinked} open={managingLinks} />
     </Flex>
   );
 }

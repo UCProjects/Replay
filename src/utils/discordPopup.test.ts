@@ -1,7 +1,9 @@
 import {
   afterEach, beforeEach, describe, expect, it, vi,
 } from 'vitest';
-import { awaitDiscordToken, DiscordPopup, LoginCancelled } from './discordPopup';
+import {
+  awaitDiscordLink, awaitDiscordToken, DiscordPopup, LoginCancelled,
+} from './discordPopup';
 
 const ORIGIN = 'https://auth.feildmaster.com';
 
@@ -60,6 +62,58 @@ describe('awaitDiscordToken', () => {
     const settled = expect(result).rejects.toBeInstanceOf(LoginCancelled);
     (popup as { closed: boolean }).closed = true;
     await vi.advanceTimersByTimeAsync(150);
+    await settled;
+    expect(listening()).toBe(false);
+  });
+});
+
+describe('awaitDiscordLink', () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  const LINK = {
+    event: 'Discord link', nonce: 'n1', code: 'c', redirect: 'r', state: 's',
+  };
+
+  it('gives back the link data and acknowledges it with the nonce', async () => {
+    const {
+      deliver, host, listening, popup, sent,
+    } = setup();
+    const result = awaitDiscordLink(popup, ORIGIN, 'n1', host);
+    deliver(ORIGIN, popup, LINK);
+    await expect(result).resolves.toEqual({ code: 'c', redirect: 'r', state: 's' });
+    expect(sent).toEqual([[{ event: 'Discord link received', nonce: 'n1' }, ORIGIN]]);
+    expect(listening()).toBe(false);
+  });
+
+  it('ignores another origin, another window, another nonce, or missing fields', async () => {
+    const { deliver, host, popup } = setup();
+    const result = awaitDiscordLink(popup, ORIGIN, 'n1', host);
+    deliver('https://evil.example', popup, LINK);
+    deliver(ORIGIN, {}, LINK);
+    deliver(ORIGIN, popup, { ...LINK, nonce: 'other' });
+    deliver(ORIGIN, popup, { ...LINK, event: 'Auth result' });
+    deliver(ORIGIN, popup, { ...LINK, code: undefined });
+    deliver(ORIGIN, popup, null);
+    deliver(ORIGIN, popup, { ...LINK, code: 'good' });
+    await expect(result).resolves.toEqual({ code: 'good', redirect: 'r', state: 's' });
+  });
+
+  it('still accepts the message shortly after the popup closes', async () => {
+    const { deliver, host, popup } = setup();
+    const result = awaitDiscordLink(popup, ORIGIN, 'n1', host, 100, 500);
+    (popup as { closed: boolean }).closed = true;
+    await vi.advanceTimersByTimeAsync(150);
+    deliver(ORIGIN, popup, LINK);
+    await expect(result).resolves.toEqual({ code: 'c', redirect: 'r', state: 's' });
+  });
+
+  it('gives up quietly once the popup has been closed past the grace period', async () => {
+    const { host, listening, popup } = setup();
+    const result = awaitDiscordLink(popup, ORIGIN, 'n1', host, 100, 500);
+    const settled = expect(result).rejects.toBeInstanceOf(LoginCancelled);
+    (popup as { closed: boolean }).closed = true;
+    await vi.advanceTimersByTimeAsync(700);
     await settled;
     expect(listening()).toBe(false);
   });

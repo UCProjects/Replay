@@ -4,17 +4,22 @@ import {
   AuthProvider,
   GithubAuthProvider,
   GoogleAuthProvider,
+  User,
   UserCredential,
   getAuth,
+  linkWithPopup,
   signInWithCustomToken,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { awaitDiscordToken } from '~/utils/discordPopup';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { awaitDiscordLink, awaitDiscordToken } from '~/utils/discordPopup';
 import { exchangeToken } from '~/utils/exchangeToken';
 import app from './firebase';
 
 export type LoginMethod = 'discord' | 'github' | 'google';
+
+export type LinkedAccounts = Record<LoginMethod, boolean>;
 
 export const identityConfig = {
   apiKey: 'AIzaSyCy97vTRXkj33Eif5SYJds_RfpI1tY-Kec',
@@ -25,11 +30,18 @@ export const identityConfig = {
 
 export const loginAvailable = Boolean(identityConfig.apiKey && identityConfig.appId);
 
+const AUTH_ORIGIN = `https://${identityConfig.authDomain}`;
 const POPUP_FEATURES = 'height=800,width=400';
+const DISCORD_CLAIM = 'discord.com';
 
 const PROVIDERS: Record<Exclude<LoginMethod, 'discord'>, () => AuthProvider> = {
   github: () => new GithubAuthProvider(),
   google: () => new GoogleAuthProvider(),
+};
+
+const PROVIDER_IDS: Record<Exclude<LoginMethod, 'discord'>, string> = {
+  github: 'github.com',
+  google: 'google.com',
 };
 
 let identity: FirebaseApp | undefined;
@@ -39,15 +51,18 @@ function identityApp(): FirebaseApp {
   return identity;
 }
 
-function discordCredential(identityAuth: Auth): Promise<UserCredential> {
-  const origin = `https://${identityConfig.authDomain}`;
+function discordPopup(query: Record<string, string>): Window {
   const popup = window.open(
-    `${origin}/discord?origin=${encodeURIComponent(window.location.origin)}`,
+    `${AUTH_ORIGIN}/discord?${new URLSearchParams({ origin: window.location.origin, ...query }).toString()}`,
     'auth',
     POPUP_FEATURES,
   );
-  if (!popup) return Promise.reject(new Error('Allow popups to sign in with Discord'));
-  return awaitDiscordToken(popup, origin)
+  if (!popup) throw new Error('Allow popups to continue with Discord');
+  return popup;
+}
+
+function discordCredential(identityAuth: Auth): Promise<UserCredential> {
+  return awaitDiscordToken(discordPopup({}), AUTH_ORIGIN)
     .then((token) => signInWithCustomToken(identityAuth, token));
 }
 
@@ -60,11 +75,72 @@ export async function login(method: LoginMethod): Promise<void> {
       : signInWithPopup(identityAuth, PROVIDERS[method]()));
     const token = await exchangeToken(await user.getIdToken());
     await signInWithCustomToken(getAuth(app), token);
-  } finally {
+  } catch (error) {
     await signOut(identityAuth);
+    throw error;
   }
 }
 
-export function logout(): Promise<void> {
-  return signOut(getAuth(app));
+export async function logout(): Promise<void> {
+  await Promise.all([
+    signOut(getAuth(app)),
+    signOut(getAuth(identityApp())),
+  ]);
+}
+
+async function identityUser(): Promise<User | null> {
+  const identityAuth = getAuth(identityApp());
+  await identityAuth.authStateReady();
+  const user = identityAuth.currentUser;
+  const replayUid = getAuth(app).currentUser?.uid;
+  return user && replayUid && user.uid === replayUid ? user : null;
+}
+
+export async function linkedAccounts(): Promise<LinkedAccounts | null> {
+  const user = await identityUser();
+  if (!user) return null;
+  const { claims } = await user.getIdTokenResult();
+  const ids = user.providerData.map(({ providerId }) => providerId);
+  return {
+    discord: claims[DISCORD_CLAIM] === true,
+    github: ids.includes(PROVIDER_IDS.github),
+    google: ids.includes(PROVIDER_IDS.google),
+  };
+}
+
+async function linkDiscord(user: User): Promise<void> {
+  const nonce = crypto.randomUUID();
+  const link = await awaitDiscordLink(discordPopup({ mode: 'link', nonce }), AUTH_ORIGIN, nonce);
+  const { data } = await httpsCallable(getFunctions(identityApp()), 'auth-discord-token')(link);
+  if (data !== 'LINKED') throw new Error('Could not link Discord');
+  await user.getIdToken(true);
+}
+
+export async function linkAccount(method: LoginMethod): Promise<void> {
+  const user = await identityUser();
+  if (!user) throw new Error('Sign in again to link accounts');
+  if (method === 'discord') {
+    await linkDiscord(user);
+    return;
+  }
+  await linkWithPopup(user, PROVIDERS[method]());
+}
+
+const ALREADY_ATTACHED = 'That account is already attached to a different account.';
+const LINK_MESSAGES: Record<string, string> = {
+  'auth/credential-already-in-use': ALREADY_ATTACHED,
+  'functions/already-exists': ALREADY_ATTACHED,
+  'auth/provider-already-linked': 'That account type is already linked.',
+  'auth/popup-blocked': 'Your browser blocked the sign-in window.',
+  'functions/permission-denied': 'Discord did not accept that sign-in.',
+};
+const IGNORED = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'];
+
+export function linkErrorMessage(error: unknown): string {
+  const code = (error as { code?: unknown } | null)?.code;
+  if (typeof code === 'string') {
+    if (IGNORED.includes(code)) return '';
+    if (LINK_MESSAGES[code]) return LINK_MESSAGES[code];
+  }
+  return error instanceof Error && !code ? error.message : 'Could not link that account.';
 }

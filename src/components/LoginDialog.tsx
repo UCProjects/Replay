@@ -1,7 +1,5 @@
-import { GitHub, Google } from '@mui/icons-material';
 import {
   Alert,
-  Box,
   Button,
   Dialog,
   DialogContent,
@@ -13,7 +11,7 @@ import {
   useCallback,
   useState,
 } from 'react';
-import Discord from '~/assets/images/discord.svg';
+import { DIALOG_PAPER_PROPS, LOGIN_PROVIDERS } from '~/components/loginProviders';
 import { LoginMethod, login } from '~/managers/identity';
 import { LoginCancelled } from '~/utils/discordPopup';
 
@@ -47,45 +45,23 @@ export function LoginDialog({
       maxWidth="xs"
       onClose={busy ? undefined : onClose}
       open={open}
-      PaperProps={{
-        sx: {
-          backgroundColor: 'var(--bgcolor)',
-          backgroundImage: 'none',
-          border: '1px solid var(--border)',
-          color: 'var(--font)',
-        },
-      }}
+      PaperProps={DIALOG_PAPER_PROPS}
     >
       <DialogTitle>Sign in</DialogTitle>
       <DialogContent>
         <Stack spacing={1}>
-          <Button
-            color="inherit"
-            disabled={busy}
-            onClick={choose('discord')}
-            startIcon={<Box alt="" component="img" src={Discord} sx={{ height: 20 }} />}
-            variant="outlined"
-          >
-            Discord
-          </Button>
-          <Button
-            color="inherit"
-            disabled={busy}
-            onClick={choose('github')}
-            startIcon={<GitHub />}
-            variant="outlined"
-          >
-            GitHub
-          </Button>
-          <Button
-            color="inherit"
-            disabled={busy}
-            onClick={choose('google')}
-            startIcon={<Google />}
-            variant="outlined"
-          >
-            Google
-          </Button>
+          {LOGIN_PROVIDERS.map(({ icon, label, method }) => (
+            <Button
+              color="inherit"
+              disabled={busy}
+              key={method}
+              onClick={choose(method)}
+              startIcon={icon}
+              variant="outlined"
+            >
+              {label}
+            </Button>
+          ))}
           {error && <Alert severity="error">{error}</Alert>}
         </Stack>
       </DialogContent>
