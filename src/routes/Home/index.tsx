@@ -159,6 +159,8 @@ export default function Home(): ReactNode {
     }
   }, [searching, setParams]);
 
+  const handleShop = useCallback(() => handleTab(undefined, 'shop'), [handleTab]);
+
   const handleSearch = useCallback((next: SearchQuery) => {
     if (!hasQuery(next)) remember({ search: '' });
     setParams(toParams(next));
@@ -184,7 +186,7 @@ export default function Home(): ReactNode {
           }}
           xs={12}
         >
-          <Navigation />
+          <Navigation onShop={handleShop} />
         </Flex>
         <Box
           sx={{
