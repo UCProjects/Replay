@@ -17,6 +17,13 @@ export default createTheme({
         color: 'inherit', // WHY!?!?!
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        container: {
+          alignItems: 'flex-start',
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
