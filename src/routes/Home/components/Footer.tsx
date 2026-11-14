@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import { FavoriteBorder } from '@mui/icons-material';
 import {
+  Box,
   Button,
   SxProps,
   useMediaQuery,
@@ -66,9 +67,10 @@ export default function Footer(): ReactNode {
           {small ? heart : 'Sponsor'}
         </Button>
       </Flex>
-      <Flex sx={style}>
+      <Flex sx={{ ...style, marginTop: { md: 2 } }}>
         <a href="https://undercards.net/" rel="noreferrer" target="_blank">Undercards</a>
         {!small && ' by Onutrem'}
+        <Box sx={{ fontSize: '0.75rem', opacity: 0.7 }}>Not affiliated with Undercards</Box>
       </Flex>
     </>
   );
