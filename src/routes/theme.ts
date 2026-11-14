@@ -17,6 +17,15 @@ export default createTheme({
         color: 'inherit', // WHY!?!?!
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#fff',
+          },
+        },
+      },
+    },
   },
   palette: {
     mode: 'dark',
