@@ -6,6 +6,12 @@ import {
 } from '@mui/icons-material';
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Drawer,
   List,
@@ -22,10 +28,12 @@ import {
   useState,
 } from 'react';
 import { Link } from '~/components/Link';
+import { DIALOG_PAPER_PROPS } from '~/components/loginProviders';
 import { useFavorites } from '~/hooks/useFavorites';
 import { useGame } from '~/hooks/useGame';
 import { useDisplayName } from '~/hooks/useDisplayName';
 import { useTranslation } from '~/hooks/useTranslation';
+import { expiresSoonAfterUnfavorite } from '~/utils/favoriteRisk';
 
 export type GameMenuProps = {
   onClose: () => void;
@@ -40,6 +48,7 @@ export default function GameMenu({
   const displayName = useDisplayName();
   const { isFavorite, toggle } = useFavorites();
   const {
+    date,
     key,
     results,
     start,
@@ -47,6 +56,7 @@ export default function GameMenu({
     users: [opponent, player],
   } = useGame();
   const [copied, setCopied] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     if (!open) setCopied(false);
@@ -58,11 +68,26 @@ export default function GameMenu({
       .catch(() => setCopied(false));
   }, []);
 
-  const handleFavorite = useCallback(() => {
+  const favorite = isFavorite(key);
+
+  const save = useCallback(() => {
     toggle(key).catch(() => undefined);
   }, [key, toggle]);
 
-  const favorite = isFavorite(key);
+  const handleFavorite = useCallback(() => {
+    if (favorite && expiresSoonAfterUnfavorite(date)) {
+      setConfirming(true);
+      return;
+    }
+    save();
+  }, [date, favorite, save]);
+
+  const handleCancel = useCallback(() => setConfirming(false), []);
+  const handleConfirm = useCallback(() => {
+    setConfirming(false);
+    save();
+  }, [save]);
+
   const mode = t(`game-type-${type.toLowerCase()}`, { fallback: type });
   const reason = t(results.type, { fallback: results.type });
 
@@ -133,6 +158,24 @@ export default function GameMenu({
           <ListItemText primary={copied ? 'Link copied' : 'Copy link'} />
         </ListItemButton>
       </List>
+      <Dialog
+        fullWidth
+        maxWidth="xs"
+        onClose={handleCancel}
+        open={confirming}
+        PaperProps={DIALOG_PAPER_PROPS}
+      >
+        <DialogTitle>Remove from favorites?</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ color: 'inherit', textAlign: 'left' }}>
+            You won&apos;t be able to add this game back for a day, and it could be deleted by then.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="inherit" onClick={handleCancel}>Keep it</Button>
+          <Button color="error" onClick={handleConfirm} variant="outlined">Remove</Button>
+        </DialogActions>
+      </Dialog>
     </Drawer>
   );
 }
