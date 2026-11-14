@@ -1,13 +1,10 @@
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
-import {
-  connectFunctionsEmulator,
-  getFunctions,
-  httpsCallable,
-} from 'firebase/functions';
+import { httpsCallable } from 'firebase/functions';
 import { GameRecord, reviveRecord, serializeRecord } from '~/structures/GameRecord';
 import { loadStored, pruneStored, saveStored } from '~/utils/recordStore';
 import app from './firebase';
+import functions from './functions';
 import { get } from './search';
 
 type FavoriteRequest = {
@@ -19,16 +16,8 @@ type FavoriteResponse = {
   games: string[];
 };
 
-const EMULATOR_PORT = 5001;
-
 const auth = getAuth(app);
 const db = getFirestore(app);
-const functions = getFunctions(app);
-
-if (import.meta.env.VITE_FUNCTIONS_EMULATOR) {
-  connectFunctionsEmulator(functions, 'localhost', EMULATOR_PORT);
-}
-
 const call = httpsCallable<FavoriteRequest, FavoriteResponse>(functions, 'spectate-favorite');
 
 const cache = new Map<string, string[]>();
