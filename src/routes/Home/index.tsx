@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { Favorite, Search as SearchIcon } from '@mui/icons-material';
+import { Favorite, HelpOutline, Search as SearchIcon } from '@mui/icons-material';
 import {
   Box,
   Tab,
@@ -20,6 +20,7 @@ import GameList from '~/components/GameList/index.tsx';
 import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
 import { useUser } from '~/hooks/useUser';
+import About from './About.tsx';
 import FavoriteGames from './FavoriteGames.tsx';
 import {
   initialTab,
@@ -109,6 +110,8 @@ const TAB_SX = (theme: Theme) => ({
   },
 });
 
+const PUSH_RIGHT = { marginLeft: 'auto' };
+
 export default function Home(): ReactNode {
   const { key, search } = useLocation();
   const mountKey = useRef(key);
@@ -192,8 +195,19 @@ export default function Home(): ReactNode {
             <Tab label="Home" value="home" />
             <Tab aria-label="Search" label={<SearchIcon fontSize="small" />} value="search" />
             {user && (
-              <Tab aria-label="Favorites" label={<Favorite fontSize="small" />} value="favorites" />
+              <Tab
+                aria-label="Favorites"
+                label={<Favorite fontSize="small" />}
+                sx={PUSH_RIGHT}
+                value="favorites"
+              />
             )}
+            <Tab
+              aria-label="Information"
+              label={<HelpOutline fontSize="small" />}
+              sx={user ? undefined : PUSH_RIGHT}
+              value="info"
+            />
           </Tabs>
           <Box sx={{ display: tab === 'home' ? 'flex' : 'none' }}>
             <RecentGames />
@@ -205,6 +219,7 @@ export default function Home(): ReactNode {
             />
             {searching && <SearchResults query={query} />}
           </Box>
+          {tab === 'info' && <About />}
           {tab === 'favorites' && (
             <Box sx={{ display: 'flex' }}>
               <FavoriteGames />
