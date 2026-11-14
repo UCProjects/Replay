@@ -277,7 +277,7 @@ export default function Home(): ReactNode {
         })}
         xs={12}
       >
-        <Footer />
+        <Footer onShop={handleShop} />
       </Flex>
     </Box>
   );

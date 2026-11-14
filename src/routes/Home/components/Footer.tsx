@@ -9,8 +9,10 @@ import {
 } from '@mui/material';
 
 import { Flex } from '~/components/Flex.tsx';
+import { usePro } from '~/hooks/usePro';
 import DiscordLogo from '~/assets/images/discord+word.svg';
 import DiscordAlt from '~/assets/images/discord.svg';
+import ProBadge from './ProBadge.tsx';
 
 const style: SxProps = {
   alignSelf: 'center',
@@ -20,9 +22,14 @@ const style: SxProps = {
   },
 };
 
-export default function Footer(): ReactNode {
+export type FooterProps = {
+  onShop?: () => void;
+};
+
+export default function Footer({ onShop }: FooterProps): ReactNode {
   const theme = useTheme();
   const small = useMediaQuery(theme.breakpoints.down('sm'));
+  const pro = usePro();
   const discordImg = useMemo(() => {
     if (small) return DiscordAlt;
     return DiscordLogo;
@@ -67,10 +74,17 @@ export default function Footer(): ReactNode {
           {small ? heart : 'Sponsor'}
         </Button>
       </Flex>
+      {onShop && pro === false && (
+        <Flex sx={style}>
+          <ProBadge onClick={onShop} size="small" />
+        </Flex>
+      )}
       <Flex sx={{ ...style, marginTop: { md: 2 } }}>
         <a href="https://undercards.net/" rel="noreferrer" target="_blank">Undercards</a>
         {!small && ' by Onutrem'}
-        <Box sx={{ fontSize: '0.75rem', opacity: 0.7 }}>Not affiliated with Undercards</Box>
+        <Box sx={{ fontSize: '0.75rem', opacity: 0.7 }}>
+          {small ? 'Not affiliated' : 'Not affiliated with Undercards'}
+        </Box>
       </Flex>
     </>
   );
