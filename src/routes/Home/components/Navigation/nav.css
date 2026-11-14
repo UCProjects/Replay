@@ -7,8 +7,8 @@
   margin: 8px 5px;
 }
 
-input,
-select {
+.search-form input,
+.search-form select {
   box-sizing: border-box;
   color: var(--font);
   background-color: var(--bgcolor-2);
@@ -26,8 +26,8 @@ select {
   width: 170px;
 }
 
-input[type="submit"],
-input[type="button"] {
+.search-form input[type="submit"],
+.search-form input[type="button"] {
   cursor: pointer;
 }
 
