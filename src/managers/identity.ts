@@ -12,9 +12,11 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { doc, getFirestore, onSnapshot } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { awaitDiscordLink, awaitDiscordToken } from '~/utils/discordPopup';
 import { exchangeToken } from '~/utils/exchangeToken';
+import { Wallet, parseWallet } from '~/utils/wallet';
 import app from './firebase';
 
 export type LoginMethod = 'discord' | 'github' | 'google';
@@ -94,6 +96,28 @@ async function identityUser(): Promise<User | null> {
   const user = identityAuth.currentUser;
   const replayUid = getAuth(app).currentUser?.uid;
   return user && replayUid && user.uid === replayUid ? user : null;
+}
+
+export function watchWallet(onChange: (wallet: Wallet | null) => void): () => void {
+  const watch: { active: boolean; stop?: () => void } = { active: true };
+  identityUser()
+    .then((user) => {
+      if (!watch.active) return;
+      if (!user) {
+        onChange(null);
+        return;
+      }
+      watch.stop = onSnapshot(
+        doc(getFirestore(identityApp()), 'wallet', user.uid),
+        (snapshot) => onChange(parseWallet(snapshot.data())),
+        () => onChange(null),
+      );
+    })
+    .catch(() => onChange(null));
+  return () => {
+    watch.active = false;
+    watch.stop?.();
+  };
 }
 
 export async function identityName(): Promise<string | null> {

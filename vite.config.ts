@@ -49,6 +49,11 @@ export default defineConfig({
         rewrite: () => '/login-exchange',
         target: `https://${EXCHANGE_HOST}`,
       },
+      '/plans': {
+        changeOrigin: true,
+        rewrite: () => '/spectate-plans',
+        target: `https://${EXCHANGE_HOST}`,
+      },
     },
   },
   resolve: {

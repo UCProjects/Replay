@@ -17,6 +17,10 @@
         "function": "login-exchange"
       },
       {
+        "source": "/plans",
+        "function": "spectate-plans"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

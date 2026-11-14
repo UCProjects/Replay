@@ -1,8 +1,8 @@
-export type TabName = 'favorites' | 'home' | 'info' | 'search';
+export type TabName = 'favorites' | 'home' | 'info' | 'search' | 'shop';
 
 const TAB_KEY = 'replay.homeTab';
 const SEARCH_KEY = 'replay.homeSearch';
-const TABS: TabName[] = ['favorites', 'home', 'info', 'search'];
+const TABS: TabName[] = ['favorites', 'home', 'info', 'search', 'shop'];
 
 export type Memory = {
   search: string;

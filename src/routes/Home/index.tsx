@@ -7,7 +7,12 @@ import {
   useState,
 } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { Favorite, HelpOutline, Search as SearchIcon } from '@mui/icons-material';
+import {
+  Favorite,
+  HelpOutline,
+  Search as SearchIcon,
+  Storefront,
+} from '@mui/icons-material';
 import {
   Box,
   Tab,
@@ -33,6 +38,7 @@ import Navigation from './components/Navigation';
 import searchRecent, { cachedRecent } from './searchRecent.ts';
 import Search from './components/Navigation/Search.tsx';
 import SearchResults from './SearchResults.tsx';
+import Shop from './Shop.tsx';
 import {
   hasQuery,
   parseQuery,
@@ -203,11 +209,12 @@ export default function Home(): ReactNode {
               />
             )}
             <Tab
-              aria-label="Information"
-              label={<HelpOutline fontSize="small" />}
+              aria-label="Shop"
+              label={<Storefront fontSize="small" />}
               sx={user ? undefined : PUSH_RIGHT}
-              value="info"
+              value="shop"
             />
+            <Tab aria-label="Information" label={<HelpOutline fontSize="small" />} value="info" />
           </Tabs>
           <Box sx={{ display: tab === 'home' ? 'flex' : 'none' }}>
             <RecentGames />
@@ -219,6 +226,7 @@ export default function Home(): ReactNode {
             />
             {searching && <SearchResults query={query} />}
           </Box>
+          {tab === 'shop' && <Shop />}
           {tab === 'info' && <About />}
           {tab === 'favorites' && (
             <Box sx={{ display: 'flex' }}>
