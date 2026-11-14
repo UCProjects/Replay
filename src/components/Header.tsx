@@ -58,14 +58,18 @@ export default function Header(): ReactNode {
           </Tip>
         )}
         {user && (
-          <IconButton aria-label="Sign out" color="inherit" onClick={handleLogout} sx={ICON_SX}>
-            <Logout />
-          </IconButton>
+          <Tip title="Sign out">
+            <IconButton aria-label="Sign out" color="inherit" onClick={handleLogout} sx={ICON_SX}>
+              <Logout />
+            </IconButton>
+          </Tip>
         )}
         {!user && loginAvailable && (
-          <IconButton aria-label="Sign in" color="inherit" onClick={handleOpen} sx={ICON_SX}>
-            <Login />
-          </IconButton>
+          <Tip title="Sign in">
+            <IconButton aria-label="Sign in" color="inherit" onClick={handleOpen} sx={ICON_SX}>
+              <Login />
+            </IconButton>
+          </Tip>
         )}
       </Flex>
       <LoginDialog onClose={handleClose} open={signingIn} />
