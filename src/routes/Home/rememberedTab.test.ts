@@ -3,6 +3,7 @@ import {
   initialTab,
   recall,
   remember,
+  tabOfPath,
 } from './rememberedTab';
 
 function memory() {
@@ -59,5 +60,19 @@ describe('initialTab', () => {
   it('uses the remembered tab, or home, when there is no search', () => {
     expect(initialTab(false, '', { search: '', tab: 'favorites' })).toBe('favorites');
     expect(initialTab(false, '', { search: '', tab: undefined })).toBe('home');
+  });
+});
+
+describe('tabOfPath', () => {
+  it('maps the tab paths, with or without a trailing slash', () => {
+    expect(tabOfPath('/favorites')).toBe('favorites');
+    expect(tabOfPath('/shop/')).toBe('shop');
+    expect(tabOfPath('/tos')).toBe('info');
+  });
+
+  it('leaves the home page and other paths alone', () => {
+    expect(tabOfPath('/')).toBeUndefined();
+    expect(tabOfPath('/search')).toBeUndefined();
+    expect(tabOfPath('/game/abc')).toBeUndefined();
   });
 });

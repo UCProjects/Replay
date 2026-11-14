@@ -34,6 +34,17 @@ export function remember(
   }
 }
 
+export const TAB_PATHS: Partial<Record<TabName, string>> = {
+  favorites: '/favorites',
+  info: '/tos',
+  shop: '/shop',
+};
+
+export function tabOfPath(pathname: string): TabName | undefined {
+  const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+  return TABS.find((tab) => TAB_PATHS[tab] === path);
+}
+
 export function initialTab(searching: boolean, search: string, memory: Memory): TabName {
   if (searching) {
     return memory.tab && memory.search === search ? memory.tab : 'search';

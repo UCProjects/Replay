@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Favorite,
   HelpOutline,
@@ -31,7 +31,9 @@ import {
   initialTab,
   recall,
   remember,
+  TAB_PATHS,
   TabName,
+  tabOfPath,
 } from './rememberedTab.ts';
 import Footer from './components/Footer.tsx';
 import Navigation from './components/Navigation';
@@ -119,23 +121,36 @@ const TAB_SX = (theme: Theme) => ({
 const PUSH_RIGHT = { marginLeft: 'auto' };
 
 export default function Home(): ReactNode {
-  const { key, search } = useLocation();
+  const { key, pathname, search } = useLocation();
+  const navigate = useNavigate();
   const mountKey = useRef(key);
   const [memory] = useState(recall);
   const [params, setParams] = useSearchParams();
   const query = useMemo(() => parseQuery(params), [params]);
   const searching = hasQuery(query);
   const user = useUser();
-  const [selected, setTab] = useState<TabName>(() => initialTab(searching, search, memory));
-  const tab = selected === 'favorites' && !user ? 'home' : selected;
+  const [selected, setTab] = useState<TabName>(() => {
+    const initial = initialTab(searching, search, memory);
+    return TAB_PATHS[initial] ? 'home' : initial;
+  });
+  const pathTab = tabOfPath(pathname);
+  const shown = pathTab ?? selected;
+  const tab = shown === 'favorites' && !user ? 'home' : shown;
 
   useEffect(() => {
-    if (!searching && memory.tab === 'search' && memory.search) {
+    const remembered = memory.tab && TAB_PATHS[memory.tab];
+    if (!pathTab && !searching && remembered) {
+      navigate(remembered, { replace: true });
+    } else if (!pathTab && !searching && memory.tab === 'search' && memory.search) {
       setParams(new URLSearchParams(memory.search), { replace: true });
     }
-    // Only on mount: come back to the search that was open
+    // Only on mount: come back to the tab or search that was open
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (pathTab) remember({ tab: pathTab });
+  }, [pathTab]);
 
   useEffect(() => {
     if (!searching) return;
@@ -151,13 +166,22 @@ export default function Home(): ReactNode {
   ]);
 
   const handleTab = useCallback((_event: unknown, value: TabName) => {
-    setTab(value);
     remember({ tab: value });
+    const path = TAB_PATHS[value];
+    if (path) {
+      navigate(path);
+      return;
+    }
+    setTab(value);
     const saved = recall().search;
+    if (pathTab) {
+      navigate({ pathname: '/', search: value === 'search' ? saved : '' });
+      return;
+    }
     if (value === 'search' && !searching && saved) {
       setParams(new URLSearchParams(saved), { replace: true });
     }
-  }, [searching, setParams]);
+  }, [navigate, pathTab, searching, setParams]);
 
   const handleShop = useCallback(() => handleTab(undefined, 'shop'), [handleTab]);
 
