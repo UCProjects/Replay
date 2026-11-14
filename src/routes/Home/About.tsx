@@ -18,7 +18,7 @@ function days(count: number): string {
 type Item = string | { sub: string[]; text: string };
 
 const KEPT: Item[] = [
-  `Games are kept for ${days(RETENTION_DAYS)} after they finish, then deleted.`,
+  `Games (Replays) are kept for ${days(RETENTION_DAYS)} after they finish, then deleted.`,
   {
     sub: [
       `When the last person removes it, the game goes back to its ${days(RETENTION_DAYS)}, or ${days(GRACE_DAYS)} if it is already older than that.`,
@@ -54,7 +54,7 @@ const PURCHASES: Item[] = [
 
 const TERMS: Item[] = [
   'Replay is a community project, provided as is. It may be unavailable at times, and games can be removed at any time.',
-  'Replays are public, and games are not removed on request.',
+  'Undercards games are public, and Replays will not be removed on request.',
   "Don't automate or abuse the site. Accounts that do can lose access.",
   {
     sub: ['Ask on Discord to have your data deleted. We delete your account and favorites, and your wallet if it is empty.'],
@@ -105,7 +105,7 @@ export default function About(): ReactNode {
           {`Last updated ${LAST_UPDATED}`}
         </Typography>
       </Section>
-      <Section title="How long games are kept">
+      <Section title="How long Replays are kept">
         <Items items={KEPT} />
       </Section>
       <Section title="Browsing">
