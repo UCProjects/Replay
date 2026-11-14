@@ -5,6 +5,7 @@ import {
 } from 'react';
 import { User } from 'firebase/auth';
 import { useNullableContent } from '~/hooks/useContent';
+import { identityName } from '~/managers/identity';
 
 export const UserContext = createContext<User | null | undefined>(undefined);
 
@@ -28,6 +29,10 @@ export function useUserName(): string {
     user?.getIdTokenResult()
       .then(({ claims }) => {
         if (current && typeof claims.name === 'string') setName(claims.name);
+      })
+      .then(identityName)
+      .then((latest) => {
+        if (current && latest) setName(latest);
       })
       .catch(() => undefined);
     return () => {

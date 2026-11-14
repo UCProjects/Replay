@@ -96,6 +96,13 @@ async function identityUser(): Promise<User | null> {
   return user && replayUid && user.uid === replayUid ? user : null;
 }
 
+export async function identityName(): Promise<string | null> {
+  const user = await identityUser();
+  if (!user) return null;
+  await user.reload();
+  return user.displayName;
+}
+
 export async function linkedAccounts(): Promise<LinkedAccounts | null> {
   const user = await identityUser();
   if (!user) return null;
