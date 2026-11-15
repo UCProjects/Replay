@@ -133,12 +133,12 @@ export type Actions = {
 
 export const MODE = {
   ANY: 'Any',
-  STANDARD: 'Standard',
   RANKED: 'Ranked',
-  CUSTOM: 'Custom',
-  EVENT: 'Event',
-  BOSS: 'Boss',
   CPU: 'CPU',
   STORY: 'Story',
+  CUSTOM: 'Custom',
+  STANDARD: 'Standard',
+  EVENT: 'Event',
+  BOSS: 'Boss',
   TOURNAMENT: 'Tourny',
 } as const;
