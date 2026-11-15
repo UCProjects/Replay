@@ -70,7 +70,7 @@ function UserData({
     <Box
       alignItems="center"
       className={opponent ? 'opponent' : 'player'}
-      data-rank={ranked ? rank.substring(0, 1) : undefined}
+      data-rank={ranked && rank ? rank.substring(0, 1) : undefined}
       display="flex"
       flex={1}
       onClick={handleWatch}

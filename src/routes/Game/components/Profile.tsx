@@ -157,7 +157,7 @@ export default function Profile({
         alignItems="center"
         className="user-info"
         container
-        data-rank={type === 'RANKED' ? user.rank.substring(0, 1) : undefined}
+        data-rank={type === 'RANKED' && user.rank ? user.rank.substring(0, 1) : undefined}
         flexGrow={0}
       >
         <Username
