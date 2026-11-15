@@ -55,7 +55,12 @@ export function CardZoom({
           zoom,
         },
       }}
-      sx={{ '& .MuiDialog-container': { alignItems: 'center' } }}
+      sx={{
+        '& .MuiDialog-container': {
+          alignItems: { md: 'flex-start', xs: 'center' },
+          paddingTop: { md: 6, xs: 0 },
+        },
+      }}
     >
       <Card data={data} full />
     </Dialog>
