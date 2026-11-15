@@ -1,4 +1,5 @@
 import {
+  EmojiEvents,
   Menu,
   Pause,
   PlayArrow,
@@ -14,11 +15,13 @@ import {
 import {
   ReactNode,
   useCallback,
+  useEffect,
   useState,
 } from 'react';
 import { useGame, usePlayback } from '~/hooks/useGame';
 import { useTranslation } from '~/hooks/useTranslation';
 import GameMenu from './GameMenu';
+import Results from './Results';
 
 function format(ms: number): string {
   const seconds = Math.floor(ms / 1000);
@@ -51,6 +54,11 @@ export default function Controls(): ReactNode {
   const { type } = useGame();
   const [dragging, setDragging] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [resultsOpen, setResultsOpen] = useState(false);
+
+  useEffect(() => {
+    if (finished && dragging === null) setResultsOpen(true);
+  }, [dragging, finished]);
 
   const handleChange = useCallback((_: Event, value: number | number[]) => {
     const time = Array.isArray(value) ? value[0] : value;
@@ -65,6 +73,17 @@ export default function Controls(): ReactNode {
 
   const handleOpenMenu = useCallback(() => setMenuOpen(true), []);
   const handleCloseMenu = useCallback(() => setMenuOpen(false), []);
+  const handleOpenResults = useCallback(() => {
+    setMenuOpen(false);
+    setResultsOpen(true);
+  }, []);
+  const handleCloseResults = useCallback(() => setResultsOpen(false), []);
+  const handleReplay = useCallback(() => {
+    setResultsOpen(false);
+    scrub(0);
+    commitScrub();
+    play();
+  }, [commitScrub, play, scrub]);
   const handlePrevious = useCallback(() => step(-1), [step]);
   const handleNext = useCallback(() => step(1), [step]);
 
@@ -90,7 +109,13 @@ export default function Controls(): ReactNode {
       </IconButton>
       <GameMenu
         onClose={handleCloseMenu}
+        onResults={handleOpenResults}
         open={menuOpen}
+      />
+      <Results
+        onClose={handleCloseResults}
+        onReplay={handleReplay}
+        open={resultsOpen}
       />
       <Box component="span">
         {`[${t(`game-type-${type.toLowerCase()}`, { fallback: type })}]`}
@@ -121,6 +146,16 @@ export default function Controls(): ReactNode {
       >
         <SkipNext />
       </IconButton>
+      {finished && (
+        <IconButton
+          aria-label="Results"
+          color="inherit"
+          onClick={handleOpenResults}
+          size="small"
+        >
+          <EmojiEvents />
+        </IconButton>
+      )}
       <Box component="span">{format(dragging ?? elapsed)}</Box>
       <Slider
         aria-label="Replay position"

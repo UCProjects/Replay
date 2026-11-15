@@ -1,5 +1,6 @@
 import {
   ContentCopy,
+  EmojiEvents,
   Favorite,
   FavoriteBorder,
   Home,
@@ -37,11 +38,13 @@ import { expiresSoonAfterUnfavorite } from '~/utils/favoriteRisk';
 
 export type GameMenuProps = {
   onClose: () => void;
+  onResults?: () => void;
   open: boolean;
 };
 
 export default function GameMenu({
   onClose,
+  onResults = undefined,
   open,
 }: GameMenuProps): ReactNode {
   const t = useTranslation();
@@ -129,6 +132,15 @@ export default function GameMenu({
             secondaryTypographyProps={{ sx: { color: 'inherit', opacity: 0.7 } }}
           />
         </ListItem>
+        {onResults && (
+          <ListItemButton
+            onClick={onResults}
+            sx={{ color: 'inherit' }}
+          >
+            <ListItemIcon sx={{ color: 'inherit' }}><EmojiEvents /></ListItemIcon>
+            <ListItemText primary="Results" />
+          </ListItemButton>
+        )}
         <Divider
           component="li"
           sx={{ borderColor: 'white' }}
