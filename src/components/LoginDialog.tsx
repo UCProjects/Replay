@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Stack,
+  Typography,
 } from '@mui/material';
 import {
   ReactNode,
@@ -50,6 +51,10 @@ export function LoginDialog({
       <DialogTitle>Sign in</DialogTitle>
       <DialogContent>
         <Stack spacing={1}>
+          <Typography sx={{ opacity: 0.8, textAlign: 'left' }} variant="body2">
+            Each sign-in method is a separate account until you link them. Sign in the way you
+            did before, then link the others from Linked accounts.
+          </Typography>
           {LOGIN_PROVIDERS.map(({ icon, label, method }) => (
             <Button
               color="inherit"
