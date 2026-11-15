@@ -345,6 +345,16 @@ export default function Shop(): ReactNode {
             </Button>
           </Stack>
         </Box>
+        <Box sx={BOX_SX}>
+          <Typography sx={{ marginBottom: 1 }} variant="h6">Getting FMC</Typography>
+          <Typography variant="body2">
+            FMC comes from sponsoring on
+            {' '}
+            <a href="https://github.com/sponsors/feildmaster" rel="noreferrer" target="_blank">GitHub Sponsors</a>
+            . Sponsor with the same GitHub account you have linked here.
+            Credits can take up to 6 hours to arrive.
+          </Typography>
+        </Box>
         <Typography sx={{ opacity: 0.7 }} variant="body2">
           Purchases can&apos;t be refunded. See your balance and history at
           {' '}
