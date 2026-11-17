@@ -54,8 +54,7 @@ export function LoginDialog({
       <DialogContent>
         <Stack spacing={1}>
           <Typography sx={{ opacity: 0.8, textAlign: 'left' }} variant="body2">
-            Each sign-in method is a separate account until you link them. Sign in the way you
-            did before, then link the others from Linked accounts.
+            Each sign-in method is its own account. You can link more after signing in.
           </Typography>
           {LOGIN_PROVIDERS.map(({
             icon,

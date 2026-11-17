@@ -95,8 +95,6 @@ export function LinkedAccountsDialog({
             <>
               <Typography variant="body2">
                 Sign in again to manage linked accounts.
-                {' '}
-                Use an account you already sign in with here.
               </Typography>
               {LOGIN_PROVIDERS.map(({
                 icon,
@@ -121,9 +119,7 @@ export function LinkedAccountsDialog({
           {linked && (
             <>
               <Typography variant="body2">
-                Link the accounts you sign in with, even if they use different email addresses,
-                {' '}
-                and they all open this same account.
+                Link sign-in methods to open this account with any of them.
               </Typography>
               {LOGIN_PROVIDERS.map(({
                 icon,
