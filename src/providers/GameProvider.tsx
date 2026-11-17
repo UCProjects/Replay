@@ -15,6 +15,7 @@ import { Artifact, PlayerRaw } from '~/types/game';
 import { activeCardOf } from '~/utils/activeCard';
 import { featuredAcross } from '~/utils/featuredArtifact';
 import { highlightsOf } from '~/utils/highlights';
+import { playOnLoad } from '~/utils/settings';
 import { swapIndex } from '~/utils/swapSides';
 import {
   buildTimeline,
@@ -50,7 +51,7 @@ export function GameProvider({ children }: PropsWithChildren): ReactNode {
   }, [game]);
 
   const [position, setPosition] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(playOnLoad.get);
   const [scrubbing, setScrubbing] = useState(false);
   const [pin, setPin] = useState<number | null>(null);
   const shown = useDeferredValue(position);

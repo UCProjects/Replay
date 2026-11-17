@@ -2,14 +2,22 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   MenuItem,
   Stack,
+  Switch,
   TextField,
 } from '@mui/material';
-import { ChangeEvent, ReactNode, useCallback } from 'react';
+import {
+  ChangeEvent,
+  ReactNode,
+  useCallback,
+  useState,
+} from 'react';
 import { DIALOG_PAPER_PROPS } from '~/components/loginProviders';
 import { useLocale, useSetLocale } from '~/hooks/useTranslation';
 import { LANGUAGES } from '~/utils/languages';
+import { playOnLoad } from '~/utils/settings';
 
 const PAPER_PROPS = {
   sx: { ...DIALOG_PAPER_PROPS.sx, width: 320 },
@@ -27,6 +35,11 @@ export function SettingsDialog({ onClose, open }: SettingsDialogProps): ReactNod
     (event: ChangeEvent<HTMLInputElement>) => setLocale(event.target.value),
     [setLocale],
   );
+  const [autoplay, setAutoplay] = useState(playOnLoad.get);
+  const handleAutoplay = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    playOnLoad.set(event.target.checked);
+    setAutoplay(event.target.checked);
+  }, []);
 
   return (
     <Dialog
@@ -51,6 +64,10 @@ export function SettingsDialog({ onClose, open }: SettingsDialogProps): ReactNod
               <MenuItem key={code} value={code}>{name}</MenuItem>
             ))}
           </TextField>
+          <FormControlLabel
+            control={<Switch checked={autoplay} color="default" onChange={handleAutoplay} />}
+            label="Play on load"
+          />
         </Stack>
       </DialogContent>
     </Dialog>
