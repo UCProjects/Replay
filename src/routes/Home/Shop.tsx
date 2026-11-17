@@ -352,7 +352,7 @@ export default function Shop(): ReactNode {
             {' '}
             <a href="https://github.com/sponsors/feildmaster" rel="noreferrer" target="_blank">GitHub Sponsors</a>
             . Sponsor with the same GitHub account you have linked here.
-            Credits can take up to 6 hours to arrive.
+            Credits can take up to 12 hours to arrive.
           </Typography>
         </Box>
         <Typography sx={{ opacity: 0.7 }} variant="body2">

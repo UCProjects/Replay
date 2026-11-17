@@ -48,7 +48,7 @@ const PURCHASES: Item[] = [
   },
   'Buy Pro, favorite slots and gift vouchers in the shop tab.',
   {
-    sub: ['Sponsor with the same GitHub account you have linked here. Credits can take up to 6 hours to arrive.'],
+    sub: ['Sponsor with the same GitHub account you have linked here. Credits can take up to 12 hours to arrive.'],
     text: 'Purchases use FMC from your wallet, which comes from sponsoring on GitHub Sponsors.',
   },
   'Extra favorite slots can be bought, and they add to your limit with or without Pro.',
