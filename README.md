@@ -29,7 +29,7 @@ npm run build
 
 ## Images
 
-Card, artifact and other game images live in `public/images`. `npm run images` downloads new or changed ones from the game. It needs `UC_USER` and `UC_PASSWORD` in `.env`, and `ALL_PROXY` when the game blocks the network you are on.
+Card, artifact and other game images live in `public/images`. `npm run images` downloads new or changed ones from the game. It needs `UC_USER` and `UC_PASSWORD` in `.env`.
 
 ## Deploying
 
