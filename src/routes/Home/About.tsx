@@ -48,7 +48,7 @@ const PURCHASES: Item[] = [
   },
   'Buy Pro, favorite slots and gift vouchers in the shop tab.',
   {
-    sub: ['Sponsor with the same GitHub account you have linked here. Credits can take up to 12 hours to arrive.'],
+    sub: ['Link the GitHub account you sponsor with to receive FMC. Credits can take up to 12 hours to arrive.'],
     text: 'Purchases use FMC from your wallet, which comes from sponsoring on GitHub Sponsors.',
   },
   'Extra favorite slots can be bought, and they add to your limit with or without Pro.',
@@ -118,8 +118,11 @@ export default function About(): ReactNode {
       <Section title="Accounts">
         <Items items={['Sign in with Discord, GitHub or Google.']}>
           <li>
-            Link the ones you use from Linked accounts in the header, so they all open the same
-            account. The same account works on
+            Link sign-in methods from Linked accounts in the header to open your account with any
+            method.
+          </li>
+          <li>
+            The same account works on
             {' '}
             <a href="https://uc.feildmaster.com/" rel="noreferrer" target="_blank">uc.feildmaster.com</a>
             .

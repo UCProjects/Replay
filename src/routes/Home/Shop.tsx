@@ -351,7 +351,7 @@ export default function Shop(): ReactNode {
             FMC comes from sponsoring on
             {' '}
             <a href="https://github.com/sponsors/feildmaster" rel="noreferrer" target="_blank">GitHub Sponsors</a>
-            . Sponsor with the same GitHub account you have linked here.
+            . Link the GitHub account you sponsor with to receive it.
             Credits can take up to 12 hours to arrive.
           </Typography>
         </Box>
