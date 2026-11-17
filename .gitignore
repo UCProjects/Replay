@@ -27,3 +27,6 @@ dist-ssr
 serviceKey*.json
 .env
 .env.*
+
+# Firebase deploy cache
+.firebase
