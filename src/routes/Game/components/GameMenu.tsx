@@ -4,6 +4,7 @@ import {
   Favorite,
   FavoriteBorder,
   Home,
+  Settings,
 } from '@mui/icons-material';
 import {
   Box,
@@ -30,6 +31,7 @@ import {
 } from 'react';
 import { Link } from '~/components/Link';
 import { DIALOG_PAPER_PROPS } from '~/components/loginProviders';
+import { SettingsDialog } from '~/components/SettingsDialog';
 import { useFavorites } from '~/hooks/useFavorites';
 import { useGame } from '~/hooks/useGame';
 import { useDisplayName } from '~/hooks/useDisplayName';
@@ -60,6 +62,9 @@ export default function GameMenu({
   } = useGame();
   const [copied, setCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const handleOpenSettings = useCallback(() => setSettingsOpen(true), []);
+  const handleCloseSettings = useCallback(() => setSettingsOpen(false), []);
 
   useEffect(() => {
     if (!open) setCopied(false);
@@ -169,7 +174,15 @@ export default function GameMenu({
           <ListItemIcon sx={{ color: 'inherit' }}><ContentCopy /></ListItemIcon>
           <ListItemText primary={copied ? 'Link copied' : 'Copy link'} />
         </ListItemButton>
+        <ListItemButton
+          onClick={handleOpenSettings}
+          sx={{ color: 'inherit' }}
+        >
+          <ListItemIcon sx={{ color: 'inherit' }}><Settings /></ListItemIcon>
+          <ListItemText primary="Settings" />
+        </ListItemButton>
       </List>
+      <SettingsDialog onClose={handleCloseSettings} open={settingsOpen} />
       <Dialog
         fullWidth
         maxWidth="xs"
