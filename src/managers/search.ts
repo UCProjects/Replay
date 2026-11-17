@@ -13,7 +13,13 @@ import {
   QueryConstraint,
   where,
 } from 'firebase/firestore';
-import { converter, GameRecord } from '~/structures/GameRecord';
+import {
+  converter,
+  GameInfo,
+  GameRecord,
+  UnfinishedInfo,
+} from '~/structures/GameRecord';
+import { GameUnavailableError } from '~/structures/GameUnavailableError';
 import { MODE, GameMode } from '~/types/game';
 import { Soul } from '~/types/soul';
 import { searchToken } from '~/utils/searchToken';
@@ -96,15 +102,19 @@ export async function get(
   }
 
   await auth.authStateReady();
-  const ref = doc(db, 'gamehistory', key)
-    .withConverter(converter);
-  const result = await getDoc(ref);
+  const result = await getDoc(doc(db, 'gamehistory', key));
 
   if (!result.exists()) {
-    throw Error(`[${key}] Game not found`);
+    throw new GameUnavailableError(key, 'missing');
   }
 
-  return store(result.data());
+  const data = result.data() as GameInfo | UnfinishedInfo;
+  if (data.finished === false) {
+    const { ids, names } = data.playermeta;
+    throw new GameUnavailableError(key, data.errored ? 'errored' : 'live', { ids, names });
+  }
+
+  return store(new GameRecord(data, key));
 }
 
 function store(data: GameRecord) {

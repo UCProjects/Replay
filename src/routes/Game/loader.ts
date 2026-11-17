@@ -6,18 +6,26 @@ import load, { gamePreview } from '~/managers/game';
 import { loadAllCards } from '~/managers/cards';
 import { loadLanguage } from '~/managers/lang';
 import { get } from '~/managers/search';
+import { GameUnavailableError, UnavailableReason } from '~/structures/GameUnavailableError';
 import { GamePreview } from '~/utils/gamePreview';
 
 export type GateData = { gate: { id: string, preview: GamePreview } };
 
-async function gateOf(id: string): Promise<GateData | undefined> {
+export type UnavailableData = {
+  unavailable: { id: string, preview?: GamePreview, reason: UnavailableReason },
+};
+
+async function gateOf(id: string): Promise<GateData | UnavailableData | undefined> {
   try {
     await get(id);
     return undefined;
   } catch (error) {
+    if (error instanceof GameUnavailableError) {
+      return { unavailable: { id, preview: error.preview, reason: error.reason } };
+    }
     if (!(error instanceof FirebaseError) || error.code !== 'permission-denied') throw error;
     const preview = await gamePreview(id);
-    if (!preview) throw Error(`[${id}] Game not found`);
+    if (!preview) return { unavailable: { id, reason: 'missing' } };
     return { gate: { id, preview } };
   }
 }

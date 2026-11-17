@@ -11,12 +11,19 @@ export type GameInfo = {
   cards: DocumentKey;
   date: Timestamp;
   expireAt?: Timestamp;
+  finished?: true;
   id: number;
   playermeta: UserMeta;
   results: GameResult;
   start: Timestamp;
   translation: DocumentKey;
   type: GameType;
+};
+
+export type UnfinishedInfo = {
+  errored?: boolean;
+  finished: false;
+  playermeta: UserMeta;
 };
 
 const sources = new WeakMap<GameRecord, GameInfo>();

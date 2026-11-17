@@ -15,9 +15,10 @@ import ActiveCard from './components/ActiveCard';
 import { AnimationLayer } from './components/AnimationLayer';
 import Controls from './components/Controls';
 import GameGate from './components/GameGate';
+import GameUnavailable from './components/GameUnavailable';
 import Profile from './components/Profile';
 import { Slot } from './components/Slot';
-import { GateData } from './loader';
+import { GateData, UnavailableData } from './loader';
 import './game.css';
 
 function Render(): ReactNode {
@@ -76,7 +77,12 @@ function Render(): ReactNode {
 
 export default function Game(): ReactNode {
   const data = useLoaderData();
-  if (!Array.isArray(data)) return <GameGate {...(data as GateData).gate} />;
+  if (!Array.isArray(data)) {
+    if ('unavailable' in (data as object)) {
+      return <GameUnavailable {...(data as UnavailableData).unavailable} />;
+    }
+    return <GameGate {...(data as GateData).gate} />;
+  }
   return (
     <GameProvider>
       <Render />
