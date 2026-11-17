@@ -23,6 +23,7 @@ export type GameInfo = {
 export type UnfinishedInfo = {
   errored?: boolean;
   finished: false;
+  id: number;
   playermeta: UserMeta;
 };
 

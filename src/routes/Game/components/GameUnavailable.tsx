@@ -3,6 +3,7 @@ import {
   Button,
   Typography,
 } from '@mui/material';
+import { OpenInNew } from '@mui/icons-material';
 import { ReactNode, useCallback } from 'react';
 import { useRevalidator, useSearchParams } from 'react-router-dom';
 import { useDisplayName } from '~/hooks/useDisplayName';
@@ -10,9 +11,10 @@ import { usePageTitle } from '~/hooks/usePageTitle';
 import { UnavailableReason } from '~/structures/GameUnavailableError';
 import { RETENTION_DAYS } from '~/utils/favoriteRisk';
 import { GamePreview, matchup } from '~/utils/gamePreview';
+import { liveUrl } from '~/utils/liveUrl';
 
 export type GameUnavailableProps = {
-  id: string;
+  gameId?: number;
   preview?: GamePreview;
   reason: UnavailableReason;
 };
@@ -30,7 +32,7 @@ const TITLES: Record<UnavailableReason, string> = {
 };
 
 export default function GameUnavailable({
-  id,
+  gameId,
   preview,
   reason,
 }: GameUnavailableProps): ReactNode {
@@ -43,8 +45,7 @@ export default function GameUnavailable({
   usePageTitle(matchupName ?? TITLES[reason]);
 
   const handleCheck = useCallback(() => revalidate(), [revalidate]);
-  const user = params.get('user');
-  const live = `/spectate/${id}${user ? `?${new URLSearchParams({ user }).toString()}` : ''}`;
+  const live = liveUrl(gameId, preview?.ids, watched);
 
   return (
     <Box sx={{
@@ -61,9 +62,18 @@ export default function GameUnavailable({
       >
         {reason === 'live' && (
           <>
-            <Button color="inherit" href={live} variant="outlined">
-              Watch live on Undercards
-            </Button>
+            {live && (
+              <Button
+                color="inherit"
+                endIcon={<OpenInNew />}
+                href={live}
+                rel="noreferrer"
+                target="_blank"
+                variant="outlined"
+              >
+                Watch live on Undercards
+              </Button>
+            )}
             <Button
               color="inherit"
               disabled={state === 'loading'}

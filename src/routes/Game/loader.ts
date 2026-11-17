@@ -12,7 +12,11 @@ import { GamePreview } from '~/utils/gamePreview';
 export type GateData = { gate: { id: string, preview: GamePreview } };
 
 export type UnavailableData = {
-  unavailable: { id: string, preview?: GamePreview, reason: UnavailableReason },
+  unavailable: {
+    gameId?: number,
+    preview?: GamePreview,
+    reason: UnavailableReason,
+  },
 };
 
 async function gateOf(id: string): Promise<GateData | UnavailableData | undefined> {
@@ -21,11 +25,12 @@ async function gateOf(id: string): Promise<GateData | UnavailableData | undefine
     return undefined;
   } catch (error) {
     if (error instanceof GameUnavailableError) {
-      return { unavailable: { id, preview: error.preview, reason: error.reason } };
+      const { gameId, preview, reason } = error;
+      return { unavailable: { gameId, preview, reason } };
     }
     if (!(error instanceof FirebaseError) || error.code !== 'permission-denied') throw error;
     const preview = await gamePreview(id);
-    if (!preview) return { unavailable: { id, reason: 'missing' } };
+    if (!preview) return { unavailable: { reason: 'missing' } };
     return { gate: { id, preview } };
   }
 }

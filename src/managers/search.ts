@@ -111,7 +111,7 @@ export async function get(
   const data = result.data() as GameInfo | UnfinishedInfo;
   if (data.finished === false) {
     const { ids, names } = data.playermeta;
-    throw new GameUnavailableError(key, data.errored ? 'errored' : 'live', { ids, names });
+    throw new GameUnavailableError(key, data.errored ? 'errored' : 'live', { ids, names }, data.id);
   }
 
   return store(new GameRecord(data, key));
