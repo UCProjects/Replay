@@ -13,6 +13,7 @@ import {
   useState,
 } from 'react';
 import { DIALOG_PAPER_PROPS, LOGIN_PROVIDERS } from '~/components/loginProviders';
+import { UnavailableTip } from '~/components/UnavailableTip';
 import { LoginMethod, login } from '~/managers/identity';
 import { LoginCancelled } from '~/utils/discordPopup';
 
@@ -55,17 +56,23 @@ export function LoginDialog({
             Each sign-in method is a separate account until you link them. Sign in the way you
             did before, then link the others from Linked accounts.
           </Typography>
-          {LOGIN_PROVIDERS.map(({ icon, label, method }) => (
-            <Button
-              color="inherit"
-              disabled={busy}
-              key={method}
-              onClick={choose(method)}
-              startIcon={icon}
-              variant="outlined"
-            >
-              {label}
-            </Button>
+          {LOGIN_PROVIDERS.map(({
+            icon,
+            label,
+            method,
+            unavailable,
+          }) => (
+            <UnavailableTip key={method} reason={unavailable}>
+              <Button
+                color="inherit"
+                disabled={busy || Boolean(unavailable)}
+                onClick={choose(method)}
+                startIcon={icon}
+                variant="outlined"
+              >
+                {label}
+              </Button>
+            </UnavailableTip>
           ))}
           {error && <Alert severity="error">{error}</Alert>}
         </Stack>

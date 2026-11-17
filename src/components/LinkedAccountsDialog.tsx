@@ -16,6 +16,7 @@ import {
   useState,
 } from 'react';
 import { DIALOG_PAPER_PROPS, LOGIN_PROVIDERS } from '~/components/loginProviders';
+import { UnavailableTip } from '~/components/UnavailableTip';
 import {
   LinkedAccounts,
   LoginMethod,
@@ -94,17 +95,23 @@ export function LinkedAccountsDialog({
                 {' '}
                 Use an account you already sign in with here.
               </Typography>
-              {LOGIN_PROVIDERS.map(({ icon, label, method }) => (
-                <Button
-                  color="inherit"
-                  disabled={busy}
-                  key={method}
-                  onClick={handleSignIn(method)}
-                  startIcon={icon}
-                  variant="outlined"
-                >
-                  {label}
-                </Button>
+              {LOGIN_PROVIDERS.map(({
+                icon,
+                label,
+                method,
+                unavailable,
+              }) => (
+                <UnavailableTip key={method} reason={unavailable}>
+                  <Button
+                    color="inherit"
+                    disabled={busy || Boolean(unavailable)}
+                    onClick={handleSignIn(method)}
+                    startIcon={icon}
+                    variant="outlined"
+                  >
+                    {label}
+                  </Button>
+                </UnavailableTip>
               ))}
             </>
           )}
@@ -115,22 +122,29 @@ export function LinkedAccountsDialog({
                 {' '}
                 and they all open this same account.
               </Typography>
-              {LOGIN_PROVIDERS.map(({ icon, label, method }) => (
+              {LOGIN_PROVIDERS.map(({
+                icon,
+                label,
+                method,
+                unavailable,
+              }) => (
                 <Stack alignItems="center" direction="row" key={method} minHeight={38} spacing={1.5}>
                   {icon}
                   <Box flex={1}>{label}</Box>
                   {linked[method] ? (
                     <Typography color="text.secondary" variant="body2">Linked</Typography>
                   ) : (
-                    <Button
-                      color="inherit"
-                      disabled={busy}
-                      onClick={handleLink(method)}
-                      size="small"
-                      variant="outlined"
-                    >
-                      Link
-                    </Button>
+                    <UnavailableTip reason={unavailable}>
+                      <Button
+                        color="inherit"
+                        disabled={busy || Boolean(unavailable)}
+                        onClick={handleLink(method)}
+                        size="small"
+                        variant="outlined"
+                      >
+                        Link
+                      </Button>
+                    </UnavailableTip>
                   )}
                 </Stack>
               ))}

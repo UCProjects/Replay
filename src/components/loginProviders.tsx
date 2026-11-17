@@ -3,11 +3,13 @@ import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 import Discord from '~/assets/images/discord.svg';
 import { LoginMethod } from '~/managers/identity';
+import { previewBuild } from '~/utils/previewBuild';
 
 export type LoginProvider = {
   icon: ReactNode;
   label: string;
   method: LoginMethod;
+  unavailable?: string;
 };
 
 export const LOGIN_PROVIDERS: LoginProvider[] = [
@@ -15,6 +17,7 @@ export const LOGIN_PROVIDERS: LoginProvider[] = [
     icon: <Box alt="" component="img" src={Discord} sx={{ height: 20 }} />,
     label: 'Discord',
     method: 'discord',
+    unavailable: previewBuild ? 'Disabled on preview build' : undefined,
   },
   { icon: <GitHub />, label: 'GitHub', method: 'github' },
   { icon: <Google />, label: 'Google', method: 'google' },
