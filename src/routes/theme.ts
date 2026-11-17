@@ -24,6 +24,15 @@ export default createTheme({
         },
       },
     },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused': {
+            color: '#fff',
+          },
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
