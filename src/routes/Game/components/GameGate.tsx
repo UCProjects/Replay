@@ -14,6 +14,7 @@ import { useRevalidator, useSearchParams } from 'react-router-dom';
 import { LoginDialog } from '~/components/LoginDialog';
 import { useDisplayName } from '~/hooks/useDisplayName';
 import { useFavorites } from '~/hooks/useFavorites';
+import { usePageTitle } from '~/hooks/usePageTitle';
 import { useTranslation } from '~/hooks/useTranslation';
 import { useUser } from '~/hooks/useUser';
 import { loginAvailable } from '~/managers/identity';
@@ -60,6 +61,9 @@ export default function GameGate({
   const handleSignIn = useCallback(() => setSigningIn(true), []);
   const handleCloseSignIn = useCallback(() => setSigningIn(false), []);
 
+  const matchupName = players && `${displayName(players[0])} vs ${displayName(players[1])}`;
+  usePageTitle(matchupName);
+
   const mode = type && t(`game-type-${type.toLowerCase()}`, { fallback: type });
   const details = [mode && `[${mode}]`, date?.toLocaleDateString()].filter(Boolean).join(' ');
 
@@ -68,11 +72,7 @@ export default function GameGate({
       margin: '24px auto', maxWidth: 480, padding: '0 16px', textAlign: 'center',
     }}
     >
-      {players && (
-        <Typography variant="h6">
-          {`${displayName(players[0])} vs ${displayName(players[1])}`}
-        </Typography>
-      )}
+      {matchupName && <Typography variant="h6">{matchupName}</Typography>}
       {details && <Typography sx={{ opacity: 0.7 }}>{details}</Typography>}
       <Typography sx={{ marginY: 2, whiteSpace: 'pre-line' }}>
         {uid

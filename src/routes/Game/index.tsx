@@ -6,7 +6,9 @@ import {
 import { CardPreview } from '~/components/CardPreview';
 import { Flex } from '~/components/Flex';
 import { KeywordTip } from '~/components/KeywordTip';
-import { useGameState } from '~/hooks/useGame';
+import { useDisplayName } from '~/hooks/useDisplayName';
+import { useGame, useGameState } from '~/hooks/useGame';
+import { usePageTitle } from '~/hooks/usePageTitle';
 import { useLoaderData } from 'react-router-dom';
 import { GameProvider } from '~/providers/GameProvider';
 import ActiveCard from './components/ActiveCard';
@@ -20,6 +22,9 @@ import './game.css';
 
 function Render(): ReactNode {
   const state = useGameState();
+  const { users: [opponent, player] } = useGame();
+  const displayName = useDisplayName();
+  usePageTitle(`${displayName(player.name)} vs ${displayName(opponent.name)}`);
 
   const board = useMemo(
     () => state.board.map((slot, i) => (

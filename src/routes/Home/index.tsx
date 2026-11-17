@@ -24,6 +24,7 @@ import { Flex } from '~/components/Flex.tsx';
 import GameList from '~/components/GameList/index.tsx';
 import { GameRecords } from '~/structures/GameRecord.ts';
 import { useLoadLanguage } from '~/hooks/useTranslation.ts';
+import { usePageTitle } from '~/hooks/usePageTitle';
 import { useUser } from '~/hooks/useUser';
 import About from './About.tsx';
 import FavoriteGames from './FavoriteGames.tsx';
@@ -120,6 +121,14 @@ const TAB_SX = (theme: Theme) => ({
 
 const PUSH_RIGHT = { marginLeft: 'auto' };
 
+const TAB_TITLES: Record<TabName, string | undefined> = {
+  favorites: 'Favorites',
+  home: undefined,
+  info: 'Information',
+  search: 'Search',
+  shop: 'Shop',
+};
+
 export default function Home(): ReactNode {
   const { key, pathname, search } = useLocation();
   const navigate = useNavigate();
@@ -136,6 +145,7 @@ export default function Home(): ReactNode {
   const pathTab = tabOfPath(pathname);
   const shown = pathTab ?? selected;
   const tab = shown === 'favorites' && !user ? 'home' : shown;
+  usePageTitle(TAB_TITLES[tab]);
 
   useEffect(() => {
     const remembered = memory.tab && TAB_PATHS[memory.tab];
