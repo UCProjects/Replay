@@ -15,6 +15,7 @@ import {
 import { DIALOG_PAPER_PROPS, LOGIN_PROVIDERS } from '~/components/loginProviders';
 import { UnavailableTip } from '~/components/UnavailableTip';
 import { LoginMethod, login } from '~/managers/identity';
+import { signInErrorMessage } from '~/utils/authErrors';
 import { LoginCancelled } from '~/utils/discordPopup';
 
 export type LoginDialogProps = {
@@ -36,7 +37,7 @@ export function LoginDialog({
       .then(onClose)
       .catch((failure) => {
         if (failure instanceof LoginCancelled) return;
-        setError(failure instanceof Error ? failure.message : 'Sign in failed');
+        setError(signInErrorMessage(failure));
       })
       .finally(() => setBusy(false));
   }, [onClose]);

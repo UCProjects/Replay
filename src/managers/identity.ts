@@ -156,22 +156,3 @@ export async function linkAccount(method: LoginMethod): Promise<void> {
   }
   await linkWithPopup(user, PROVIDERS[method]());
 }
-
-const ALREADY_ATTACHED = 'That account is already attached to a different account.';
-const LINK_MESSAGES: Record<string, string> = {
-  'auth/credential-already-in-use': ALREADY_ATTACHED,
-  'functions/already-exists': ALREADY_ATTACHED,
-  'auth/provider-already-linked': 'That account type is already linked.',
-  'auth/popup-blocked': 'Your browser blocked the sign-in window.',
-  'functions/permission-denied': 'Discord did not accept that sign-in.',
-};
-const IGNORED = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'];
-
-export function linkErrorMessage(error: unknown): string {
-  const code = (error as { code?: unknown } | null)?.code;
-  if (typeof code === 'string') {
-    if (IGNORED.includes(code)) return '';
-    if (LINK_MESSAGES[code]) return LINK_MESSAGES[code];
-  }
-  return error instanceof Error && !code ? error.message : 'Could not link that account.';
-}

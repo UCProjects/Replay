@@ -21,10 +21,10 @@ import {
   LinkedAccounts,
   LoginMethod,
   linkAccount,
-  linkErrorMessage,
   linkedAccounts,
   login,
 } from '~/managers/identity';
+import { linkErrorMessage, signInErrorMessage } from '~/utils/authErrors';
 import { LoginCancelled } from '~/utils/discordPopup';
 
 export type LinkedAccountsDialogProps = {
@@ -51,24 +51,27 @@ export function LinkedAccountsDialog({
     refresh();
   }, [open, refresh]);
 
-  const run = useCallback((action: () => Promise<void>) => {
+  const run = useCallback((
+    action: () => Promise<void>,
+    messageOf: (failure: unknown) => string,
+  ) => {
     setBusy(true);
     setError('');
     action()
       .then(refresh)
       .catch((failure) => {
         if (failure instanceof LoginCancelled) return;
-        setError(linkErrorMessage(failure));
+        setError(messageOf(failure));
       })
       .finally(() => setBusy(false));
   }, [refresh]);
 
   const handleLink = useCallback(
-    (method: LoginMethod) => () => run(() => linkAccount(method)),
+    (method: LoginMethod) => () => run(() => linkAccount(method), linkErrorMessage),
     [run],
   );
   const handleSignIn = useCallback(
-    (method: LoginMethod) => () => run(() => login(method)),
+    (method: LoginMethod) => () => run(() => login(method), signInErrorMessage),
     [run],
   );
 
