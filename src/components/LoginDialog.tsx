@@ -14,6 +14,7 @@ import {
 } from 'react';
 import { DIALOG_PAPER_PROPS, LOGIN_PROVIDERS } from '~/components/loginProviders';
 import { UnavailableTip } from '~/components/UnavailableTip';
+import { useLoginBlocked } from '~/hooks/useLoginBlocked';
 import { LoginMethod, login } from '~/managers/identity';
 import { signInErrorMessage } from '~/utils/authErrors';
 import { LoginCancelled } from '~/utils/discordPopup';
@@ -29,6 +30,7 @@ export function LoginDialog({
 }: LoginDialogProps): ReactNode {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const blocked = useLoginBlocked();
 
   const choose = useCallback((method: LoginMethod) => () => {
     setBusy(true);
@@ -62,10 +64,10 @@ export function LoginDialog({
             method,
             unavailable,
           }) => (
-            <UnavailableTip key={method} reason={unavailable}>
+            <UnavailableTip key={method} reason={blocked ?? unavailable}>
               <Button
                 color="inherit"
-                disabled={busy || Boolean(unavailable)}
+                disabled={busy || Boolean(blocked ?? unavailable)}
                 onClick={choose(method)}
                 startIcon={icon}
                 variant="outlined"

@@ -14,6 +14,7 @@ import {
 } from 'firebase/auth';
 import { doc, getFirestore, onSnapshot } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
+import { isAuthorizedHost } from '~/utils/authorizedDomain';
 import { awaitDiscordLink, awaitDiscordToken } from '~/utils/discordPopup';
 import { exchangeToken } from '~/utils/exchangeToken';
 import { Wallet, parseWallet } from '~/utils/wallet';
@@ -31,6 +32,23 @@ export const identityConfig = {
 };
 
 export const loginAvailable = Boolean(identityConfig.apiKey && identityConfig.appId);
+
+const PROJECT_CONFIG = `https://identitytoolkit.googleapis.com/v1/projects?key=${identityConfig.apiKey}`;
+
+let domainCheck: Promise<boolean> | undefined;
+
+export function domainAuthorized(): Promise<boolean> {
+  domainCheck ??= fetch(PROJECT_CONFIG)
+    .then((response) => (response.ok ? response.json() : null) as Promise<unknown>)
+    .then((body) => {
+      const domains = (body as { authorizedDomains?: unknown } | null)?.authorizedDomains;
+      if (!Array.isArray(domains)) return true;
+      const names = domains.filter((domain): domain is string => typeof domain === 'string');
+      return isAuthorizedHost(window.location.hostname, names);
+    })
+    .catch(() => true);
+  return domainCheck;
+}
 
 const AUTH_ORIGIN = `https://${identityConfig.authDomain}`;
 const POPUP_FEATURES = 'height=800,width=400';

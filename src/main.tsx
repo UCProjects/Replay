@@ -12,6 +12,9 @@ import Home from './routes/Home';
 import Error from './routes/Error';
 import gameLoader from './routes/Game/loader';
 import { TAB_PATHS } from './routes/Home/rememberedTab';
+import { domainAuthorized, loginAvailable } from './managers/identity';
+
+if (loginAvailable) domainAuthorized().catch(() => undefined);
 
 const router = createBrowserRouter([{
   path: '/',

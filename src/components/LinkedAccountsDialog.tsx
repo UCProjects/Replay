@@ -17,6 +17,7 @@ import {
 } from 'react';
 import { DIALOG_PAPER_PROPS, LOGIN_PROVIDERS } from '~/components/loginProviders';
 import { UnavailableTip } from '~/components/UnavailableTip';
+import { useLoginBlocked } from '~/hooks/useLoginBlocked';
 import {
   LinkedAccounts,
   LoginMethod,
@@ -39,6 +40,7 @@ export function LinkedAccountsDialog({
   const [linked, setLinked] = useState<LinkedAccounts | null | undefined>(undefined);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const blocked = useLoginBlocked();
 
   const refresh = useCallback(() => linkedAccounts()
     .then(setLinked)
@@ -102,10 +104,10 @@ export function LinkedAccountsDialog({
                 method,
                 unavailable,
               }) => (
-                <UnavailableTip key={method} reason={unavailable}>
+                <UnavailableTip key={method} reason={blocked ?? unavailable}>
                   <Button
                     color="inherit"
-                    disabled={busy || Boolean(unavailable)}
+                    disabled={busy || Boolean(blocked ?? unavailable)}
                     onClick={handleSignIn(method)}
                     startIcon={icon}
                     variant="outlined"
@@ -133,10 +135,10 @@ export function LinkedAccountsDialog({
                   {linked[method] ? (
                     <Typography color="text.secondary" variant="body2">Linked</Typography>
                   ) : (
-                    <UnavailableTip reason={unavailable}>
+                    <UnavailableTip reason={blocked ?? unavailable}>
                       <Button
                         color="inherit"
-                        disabled={busy || Boolean(unavailable)}
+                        disabled={busy || Boolean(blocked ?? unavailable)}
                         onClick={handleLink(method)}
                         size="small"
                         variant="outlined"
