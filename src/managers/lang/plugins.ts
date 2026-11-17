@@ -35,7 +35,14 @@ export const plugins: Record<string, Plugin> = {
     const text = override || translate(getKey(`artifact${desc ? '' : '-name'}`, id));
     return getText(text, desc ? '' : `underlined${ex ? ' bold LEGENDARY' : ''}`);
   },
-  // quest(nodes, translate) {},
+  quest(nodes, translate) {
+    const { args: [rawId], override, empty } = parse(nodes);
+    if (empty) return '';
+    const id = Number(rawId);
+    if (!Number.isFinite(id)) return '';
+    const text = override || translate(getKey('artifact-name', `${id}`));
+    return getText(text, 'underlined');
+  },
   enchant(nodes, translate) {
     const { args: [key, quantity = '1'], override, empty } = parse(nodes);
     if (empty) return '';
