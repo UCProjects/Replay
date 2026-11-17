@@ -1,4 +1,5 @@
 import getOptional from '~/utils/getOptional';
+import { saveLanguage } from '~/utils/languages';
 import banana from './banana';
 import getFile from './getFile';
 import { plugins } from './plugins';
@@ -55,6 +56,8 @@ export function getLocale() {
 
 export function setLocale(locale: string) {
   banana.setLocale(locale);
+  saveLanguage(locale);
+  saveLanguage(locale, () => sessionStorage);
 }
 
 Object.keys(plugins).forEach((key) => {

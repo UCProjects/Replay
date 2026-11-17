@@ -35,6 +35,11 @@ export function useTranslation(): Translate {
   );
 }
 
+export function useLocale(): TranslationContent['locale'] {
+  const { locale } = useContent(TranslationContext);
+  return locale;
+}
+
 export function useSetLocale(): TranslationContent['setLocale'] {
   const { setLocale } = useContent(TranslationContext);
   return setLocale;

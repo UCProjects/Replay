@@ -1,4 +1,9 @@
-import { Login, Logout, ManageAccounts } from '@mui/icons-material';
+import {
+  Login,
+  Logout,
+  ManageAccounts,
+  Settings,
+} from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { ReactNode, useCallback, useState } from 'react';
 
@@ -6,6 +11,7 @@ import { Flex } from '~/components/Flex';
 import { LinkedAccountsDialog } from '~/components/LinkedAccountsDialog';
 import { Link } from '~/components/Link';
 import { LoginDialog } from '~/components/LoginDialog';
+import { SettingsDialog } from '~/components/SettingsDialog';
 import { Tip } from '~/components/Tip';
 import { useTranslation } from '~/hooks/useTranslation';
 import { useUser, useUserName } from '~/hooks/useUser';
@@ -23,6 +29,9 @@ export default function Header(): ReactNode {
   const [managingLinks, setManagingLinks] = useState(false);
   const handleOpenLinked = useCallback(() => setManagingLinks(true), []);
   const handleCloseLinked = useCallback(() => setManagingLinks(false), []);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const handleOpenSettings = useCallback(() => setSettingsOpen(true), []);
+  const handleCloseSettings = useCallback(() => setSettingsOpen(false), []);
   const handleLogout = useCallback(() => {
     logout().catch(() => undefined);
   }, []);
@@ -50,6 +59,11 @@ export default function Header(): ReactNode {
         <span>
           {t('replay-welcome', name)}
         </span>
+        <Tip title="Settings">
+          <IconButton aria-label="Settings" color="inherit" onClick={handleOpenSettings} sx={ICON_SX}>
+            <Settings />
+          </IconButton>
+        </Tip>
         {user && (
           <Tip title="Linked accounts">
             <IconButton aria-label="Linked accounts" color="inherit" onClick={handleOpenLinked} sx={ICON_SX}>
@@ -74,6 +88,7 @@ export default function Header(): ReactNode {
       </Flex>
       <LoginDialog onClose={handleClose} open={signingIn} />
       <LinkedAccountsDialog onClose={handleCloseLinked} open={managingLinks} />
+      <SettingsDialog onClose={handleCloseSettings} open={settingsOpen} />
     </Flex>
   );
 }
