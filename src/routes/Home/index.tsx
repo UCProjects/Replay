@@ -54,7 +54,6 @@ function RecentGames(): ReactNode {
   const [loaded, setLoaded] = useState(() => entries.length > 0);
   const [refresh, setRefresh] = useState(false);
   const loadLanguage = useLoadLanguage();
-  // TODO: Add refresh cooldown
 
   useEffect(() => {
     if (!refresh) return;

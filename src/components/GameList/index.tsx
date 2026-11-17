@@ -3,8 +3,10 @@ import { Refresh } from '@mui/icons-material';
 import {
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import { Flex } from '~/components/Flex';
 import { Paginator } from '~/components/Paginator';
@@ -12,6 +14,8 @@ import { GameRecords } from '~/structures/GameRecord';
 import { useTranslation } from '~/hooks/useTranslation';
 import { FocusQuery } from '~/utils/focusUser';
 import Entry from './Entry';
+
+const REFRESH_COOLDOWN_MS = 10_000;
 
 export type GameListParams = {
   title?: string;
@@ -40,8 +44,20 @@ export default function GameList({
     )),
     [entries, focus],
   );
-  // TODO: Ignore tab events
+  const [coolingDown, setCoolingDown] = useState(false);
+  const cooling = useRef(false);
+  useEffect(() => {
+    if (!coolingDown) return undefined;
+    const timer = setTimeout(() => {
+      cooling.current = false;
+      setCoolingDown(false);
+    }, REFRESH_COOLDOWN_MS);
+    return () => clearTimeout(timer);
+  }, [coolingDown]);
   const handleClick = useCallback(() => {
+    if (cooling.current) return;
+    cooling.current = true;
+    setCoolingDown(true);
     onRefresh?.();
   }, [
     onRefresh,
@@ -69,9 +85,10 @@ export default function GameList({
             :&nbsp;
           </span>
           <IconButton
+            aria-label="Refresh"
+            disabled={coolingDown}
             disableRipple
             onClick={handleClick}
-            onKeyUp={handleClick}
             sx={{
               border: '1px solid black',
               color: 'inherit',
