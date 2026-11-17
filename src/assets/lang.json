@@ -3,7 +3,6 @@
     "replay.deck": "Deck",
     "replay.gold": "Gold",
     "replay.hand": "Hand",
-    "replay-loading": "Loading, please wait...",
-    "replay-welcome": "Welcome, $1."
+    "replay-loading": "Loading, please wait..."
   }
 }
