@@ -5,27 +5,38 @@ import {
   GameStateExpanded,
 } from '~/types/game';
 import { User } from '~/types/user';
+import { legacySlots } from '~/utils/legacySlots';
 import { GameRecord } from './GameRecord';
 
-export type LoadedGame = GameRecord & Game;
+export type LoadedGame = GameRecord & Game & { flipped: boolean };
 
 const hash = /^[a-f0-9]{40}$/;
 
-export function loadGame(record: GameRecord, data: GameRaw): LoadedGame {
+export function loadGame(record: GameRecord, data: GameRaw, watched?: User['id']): LoadedGame {
   function getUser(userId: User['id']): User {
     return record.getUser(userId);
   }
-  const index: GameState[] = data.index.map((state, id) => ({
+  const scenes: GameState[] = data.index.map((state, id) => ({
     ...state,
     id,
     time: new Date(state.time),
     turnPlayer: getUser(state.turnPlayer),
   }));
+  const [opponent, player] = record.users;
+  const index = legacySlots(
+    scenes,
+    (extra) => expand(extra, data.cache),
+    opponent.id,
+    player.id,
+  );
+  const flipped = watched === opponent.id;
   return {
     ...record,
     ...data,
     index,
     getUser,
+    flipped,
+    users: flipped ? [player, opponent] : record.users,
   };
 }
 
@@ -52,7 +63,7 @@ export function expand(obj: unknown, cache: GameRaw['cache']): unknown {
     return obj.map((val) => expand(val, cache));
   }
 
-  if (typeof obj === 'object' && Object.keys(obj).length) {
+  if (typeof obj === 'object') {
     const o: Record<string, unknown> = {};
     Object.keys(obj).forEach((key) => {
       o[key] = expand(obj[key as keyof typeof obj], cache);

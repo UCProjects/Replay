@@ -1,19 +1,27 @@
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search } from '@mui/icons-material';
 import {
   Box,
   Divider,
+  IconButton,
   Stack,
   Typography,
 } from '@mui/material';
+import { useDisplayName } from '~/hooks/useDisplayName';
 import { useTranslation } from '~/hooks/useTranslation';
 import { GameRecord } from '~/structures/GameRecord';
 import { User } from '~/types/user';
 import { MODE } from '~/types/game';
 import { Link } from '~/components/Link';
+import { fightParams, playerParams } from '~/routes/Home/searchQuery';
+import { FocusQuery, focusLast } from '~/utils/focusUser';
+import { storyFightOf } from '~/utils/storyFight';
 
 import './style.css';
 
 export type EntryProps = {
+  focus?: FocusQuery;
   record: GameRecord;
 };
 
@@ -21,10 +29,12 @@ type UserDataProps = {
   user: User,
   opponent?: boolean,
   ranked?: boolean,
+  watch?: string,
 };
 
 function UserData({
   user: {
+    id,
     name,
     class: soul,
     level,
@@ -32,14 +42,42 @@ function UserData({
   },
   opponent = false,
   ranked = false,
+  watch = undefined,
 }: UserDataProps): ReactNode {
+  const navigate = useNavigate();
+  const displayName = useDisplayName();
+  const fight = storyFightOf(name);
+  const handleWatch = useCallback((event: MouseEvent) => {
+    const plain = event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+    if (!watch || !plain) return;
+    event.preventDefault();
+    event.stopPropagation();
+    navigate({ pathname: `/game/${watch}/`, search: `?user=${id}` });
+  }, [id, navigate, watch]);
+  const handleSearch = useCallback((event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const params = fight ? fightParams(fight) : playerParams({ id, name });
+    navigate({ pathname: '/', search: params.toString() });
+  }, [
+    fight,
+    id,
+    name,
+    navigate,
+  ]);
+
   return (
     <Box
-      alignContent="center"
+      alignItems="center"
       className={opponent ? 'opponent' : 'player'}
-      data-rank={ranked ? rank.substring(0, 1) : undefined}
+      data-rank={ranked && rank ? rank.substring(0, 1) : undefined}
+      display="flex"
       flex={1}
+      onClick={handleWatch}
       overflow="hidden"
+      sx={{
+        '&[data-rank]::before': { margin: '0 5px 0 0' },
+      }}
     >
       <Typography
         className="user"
@@ -47,52 +85,81 @@ function UserData({
         data-level={level}
         data-soul={soul}
       >
-        {name}
+        {displayName(name)}
       </Typography>
+      {(id !== 0 || fight) && (
+      <IconButton
+        aria-label={`Search games with ${displayName(name)}`}
+        component="span"
+        onClick={handleSearch}
+        size="small"
+        sx={{
+          color: 'inherit',
+          marginLeft: 'auto',
+          opacity: 0.6,
+          ':hover': { opacity: 1 },
+        }}
+        title={`Search games with ${displayName(name)}`}
+      >
+        <Search fontSize="inherit" />
+      </IconButton>
+      )}
     </Box>
   );
 }
 
+const subgrid = {
+  display: 'grid',
+  gridColumn: '1 / -1',
+  gridTemplateColumns: 'subgrid',
+};
+
 export default function Entry({
+  focus = undefined,
   record: {
     date,
     key,
     start,
     type,
-    users: [
-      player,
-      opponent,
-    ],
+    users,
   },
 }: EntryProps): ReactNode {
   const t = useTranslation();
+  const [opponent, player] = focusLast(users, focus);
   // TODO: Tippy
   const ranked = MODE[type] === MODE.RANKED;
   return (
     <>
-      <Divider />
+      <Divider sx={{ gridColumn: '1 / -1', marginY: 0.5 }} />
       <Link
+        style={subgrid}
         to={`/game/${key}/`}
       >
         <Stack
           data-date={date}
           data-start={start}
-          direction="row"
+          sx={subgrid}
         >
-          <UserData
-            ranked={ranked}
-            user={player}
-          />
-          <UserData
-            opponent
-            ranked={ranked}
-            user={opponent}
-          />
+          <Stack
+            direction={{ sm: 'row-reverse', xs: 'column' }}
+            minWidth={0}
+          >
+            <UserData
+              opponent
+              ranked={ranked}
+              user={opponent}
+              watch={key}
+            />
+            <UserData
+              ranked={ranked}
+              user={player}
+            />
+          </Stack>
           <Typography
             component="span"
             sx={{
               textAlign: 'center',
-              flexBasis: '200px',
+              paddingX: '10px',
               alignSelf: 'center',
             }}
           >

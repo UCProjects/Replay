@@ -6,12 +6,14 @@ export type Artifact = {
   image: string;
   custom?: string;
   disabled?: boolean;
+  goal?: number;
   legendary?: boolean;
+  progress?: number;
 };
 
 export type PlayerRaw = {
   id: User['id'];
-  artifacts: Artifact[];
+  artifacts?: Artifact[];
   deck: number;
   hand: number;
   health: number;
@@ -39,6 +41,15 @@ export type GameResult = {
 
 export type Slot = Card | null;
 
+export type Enchant = {
+  custom?: number;
+  duration?: number;
+  enchantType?: string;
+  name: string;
+};
+
+export type EnchantSlot = Enchant | null;
+
 export type WithSlot<W = unknown> = W & {
   data: Slot;
 };
@@ -55,6 +66,7 @@ export type GameStateRaw = {
   turnPlayer: User['id'];
   players: HASH;
   board: HASH;
+  slots?: HASH;
   extra: unknown;
 };
 
@@ -67,6 +79,7 @@ export type GameState = Modify<GameStateRaw, {
 export type GameStateExpanded = Modify<GameState, {
   board: GameBoard;
   players: Tuple<Player, 2>;
+  slots: Tuple<EnchantSlot, 8>;
 }>;
 
 export type GameRaw = {
@@ -81,10 +94,10 @@ export type Game = Modify<GameRaw, {
 
 type EventEffect = {
   trigger: Card | PlayerRaw;
-  affected: {
-    cards: [];
-    players: [];
-  }
+  affected?: {
+    cards?: Card[];
+    players?: Array<PlayerRaw | number>;
+  };
 };
 
 type EventAttack = {
@@ -101,8 +114,9 @@ export type Actions = {
   cardEffect: EventEffect;
   damaged: unknown;
   discard: Card;
+  enchantEffect: unknown;
   exposed: Card;
-  finished: never;
+  finish: never;
   gameTurn: never;
   healed: unknown;
   init: never;
@@ -119,9 +133,11 @@ export type Actions = {
 
 export const MODE = {
   ANY: 'Any',
-  STANDARD: 'Standard',
   RANKED: 'Ranked',
+  CPU: 'CPU',
+  STORY: 'Story',
   CUSTOM: 'Custom',
+  STANDARD: 'Standard',
   EVENT: 'Event',
   BOSS: 'Boss',
   TOURNAMENT: 'Tourny',

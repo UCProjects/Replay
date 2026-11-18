@@ -16,9 +16,10 @@ export default function UserProvider({
   const [user, setUser] = useState(auth.currentUser);
 
   useEffect(() => {
-    auth.onAuthStateChanged((newUser) => {
+    const unsubscribe = auth.onAuthStateChanged((newUser) => {
       setUser(newUser);
     });
+    return unsubscribe;
   }, []);
 
   return (

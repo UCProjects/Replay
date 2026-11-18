@@ -1,11 +1,18 @@
 import Banana from 'banana-i18n';
 
 import messages from '~/assets/lang.json';
+import { gameLanguage, savedLanguage } from '~/utils/languages';
+
+function storages() {
+  try {
+    return { local: localStorage, session: sessionStorage };
+  } catch {
+    return {};
+  }
+}
 
 function getLanguage(): string {
-  const lang = sessionStorage.getItem('language') || localStorage.getItem('language');
-  if (lang) return lang;
-  return window.navigator.language.substring(0, 2);
+  return savedLanguage(storages()) ?? gameLanguage(window.navigator.language);
 }
 
 export default new Banana(getLanguage(), { messages });

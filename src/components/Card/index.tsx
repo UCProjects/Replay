@@ -3,6 +3,7 @@ import { ReactNode, useMemo } from 'react';
 import { useTranslation } from '~/hooks/useTranslation';
 import { FitText } from '~/components/FitText';
 import { WithSlot } from '~/types/game';
+import { cardClasses, soulOf } from '~/utils/cardClasses';
 import { Status } from './Status';
 import { Tribes } from './Tribes';
 import { Footer } from './Footer';
@@ -11,8 +12,11 @@ import './card.css';
 // TODO: Resizable component for name/description
 export function Card({
   data,
-}: WithSlot): ReactNode {
+  full = false,
+  mark = '',
+}: WithSlot<{ full?: boolean; mark?: string }>): ReactNode {
   const t = useTranslation();
+  const soul = soulOf(data);
   const name = useMemo(() => {
     if (data?.fixedId) return t(`card-name-${data.fixedId}`, '1');
     return '';
@@ -24,27 +28,23 @@ export function Card({
   return (
     <Stack
       bgcolor="var(--bgcolor)"
-      className="card"
+      className={['card', full && 'card-full', mark, ...cardClasses(data)].filter(Boolean).join(' ')}
       visibility={data ? 'visible' : 'hidden'}
     >
       <Stack
         className="card-top"
         direction="row"
-        display={{
-          sm: 'flex',
-          xs: 'none',
-        }}
       >
         <FitText
-          className="card-name"
+          className={['card-name', 'black-bg', 'center-v', soul].filter(Boolean).join(' ')}
           fitHeight={false}
           size={15}
           textAlign="left"
         >
           {name}
         </FitText>
-        <div className="card-cost">
-          {data?.cost}
+        <div className="card-cost black-bg center-v center-h">
+          {data ? data.cost ?? 0 : null}
         </div>
       </Stack>
       <div className="card-image">
@@ -52,10 +52,10 @@ export function Card({
           alt="avatar"
           className="card-avatar"
           draggable="false"
-          src={data ? `/images/cards/${data.name.replace(/ /g, '_')}.png` : ''}
+          src={data ? `/images/cards/${data.image || data.name.replace(/ /g, '_')}.png` : ''}
         />
         <FitText
-          className="name outlined"
+          className={['name', 'outlined', soul].filter(Boolean).join(' ')}
           fitHeight={false}
           size={13}
         >
@@ -64,7 +64,7 @@ export function Card({
         <Status data={data} />
         <Tribes data={data} />
       </div>
-      <div className="card-description center-v center-h">
+      <div className="card-description black-bg center-v center-h">
         <FitText
           fitBoth
           html={data ? t(`card-${data.fixedId}`) : ''}

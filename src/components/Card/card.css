@@ -22,16 +22,16 @@
   margin: 0;
 }
 
-.card-top {
+.card-top > * {
   border-bottom: 2px solid var(--border);
 }
 
-.card-bottom {
+.card-bottom > * {
   border-top: 2px solid var(--border);
 }
 
 .card-top, .card-bottom {
-  align-items: center;
+  align-items: stretch;
   height: 30px;
 }
 
@@ -47,7 +47,7 @@
   width: 40px;
   border-left: 2px solid var(--border);
   font-size: 1.2rem;
-  color: rgb(52, 185, 254);
+  color: rgb(0, 208, 255);
   flex-shrink: 0;
 }
 
@@ -67,7 +67,7 @@
 .card-attack {
   width: 40px;
   border-right: 2px solid var(--border);
-  color: rgb(255, 0, 0);
+  color: rgb(240, 0, 60);
   font-size: 20px;
 }
 
@@ -79,7 +79,7 @@
 .card-health {
   width: 40px;
   border-left: 2px solid var(--border);
-  color: rgb(107, 204, 0);
+  color: rgb(13, 208, 0);
   font-size: 20px;
 }
 
@@ -135,6 +135,11 @@
 }
 
 /* Borders */
+.black-bg {
+  background-color: rgb(0, 0, 0);
+  background-clip: padding-box;
+}
+
 .card-shiny {
   background-color: rgb(255, 216, 89);
   background-image: linear-gradient(
@@ -243,11 +248,32 @@
   .card-full .card-description { display: flex; }
 }
 
-/* Remove header for tiny screens */
-@media only screen and (orientation: portrait) and (max-height: 700px),
-  only screen and (max-height: 400px) {
-  .card-top { display: none; }
+@media only screen and (max-width: 599px) {
+  .card .card-top { display: none; }
   .card-image > .name { display: block; }
   .card-full .card-top { display: flex; }
   .card-full .card-image > .name { display: none; }
+}
+
+/* Remove header for tiny screens */
+@media only screen and (orientation: portrait) and (max-height: 700px),
+  only screen and (max-height: 400px) {
+  .card .card-top { display: none; }
+  .card-image > .name { display: block; }
+  .card-full .card-top { display: flex; }
+  .card-full .card-image > .name { display: none; }
+}
+
+.card-status [data-overlay] {
+  position: relative;
+}
+
+.card-status [data-overlay]::before {
+  content: attr(data-overlay);
+  position: absolute;
+  font-family: monospace;
+  bottom: -2px;
+  right: 1px;
+  font-size: 11px;
+  text-shadow: -1px -1px var(--bgcolor), 1px 1px var(--bgcolor), -1px 1px var(--bgcolor), 1px -1px var(--bgcolor);
 }

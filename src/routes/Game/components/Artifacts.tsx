@@ -1,34 +1,43 @@
-import { Box, Divider, styled } from '@mui/material';
+import {
+  Box,
+  Divider,
+  styled,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { ReactNode } from 'react';
 import { Flex } from '~/components/Flex';
 import { Text } from '~/components/Text';
 import { useTranslation } from '~/hooks/useTranslation';
+import { useFeaturedArtifact } from '~/hooks/useGame';
 import { Artifact, Player } from '~/types/game';
+import { artifactCounter } from '~/utils/artifactCounter';
+import { ArtifactSummary } from './ArtifactSummary';
 import { ProfileIcon } from './ProfileIcon';
 
 const Image = styled('img')({
   height: 20,
 });
 
-export type ArtifactsProps = Pick<Player, 'artifacts' | 'isOpponent'>;
+export type ArtifactsProps = Pick<Player, 'artifacts' | 'isOpponent'> & {
+  active?: boolean;
+  playerId?: number;
+};
 type ArtProps = {
   art: Artifact;
   isOpponent: Player['isOpponent'];
 };
 
 function Art({
-  art: {
-    custom,
-    id,
-    image,
-    legendary,
-  },
-  isOpponent: _,
+  art,
+  isOpponent,
 }: ArtProps): ReactNode {
   const t = useTranslation();
+  const { id, image } = art;
   return (
     <ProfileIcon
-      badge={custom}
+      anchor={{ horizontal: 'right', vertical: isOpponent ? 'bottom' : 'top' }}
+      badge={artifactCounter(art)}
       props={{
         popper: {
           sx: {
@@ -38,9 +47,9 @@ function Art({
       }}
       tip={(
         <Box>
-          <Text html={t(`{{ARTIFACT:${id}${legendary ? '|LEGEND' : ''}}}`)} />
+          <Text html={t(`artifact-name-${id}`)} />
           <Divider />
-          <Text html={t(`{{ARTIFACT:${id}|desc}}`)} />
+          <Text html={t(`artifact-${id}`)} />
         </Box>
       )}
       tipAnchor="top"
@@ -51,11 +60,26 @@ function Art({
 }
 
 export function Artifacts({
-  artifacts,
+  active = false,
+  artifacts = [],
   isOpponent,
+  playerId = 0,
 }: ArtifactsProps): ReactNode {
+  const theme = useTheme();
+  const featured = useFeaturedArtifact(playerId);
+  const compact = useMediaQuery(theme.breakpoints.down('sm'));
+  if (compact && artifacts.length > 1) {
+    return (
+      <ArtifactSummary
+        active={active}
+        artifacts={artifacts}
+        featured={featured}
+        isOpponent={isOpponent}
+      />
+    );
+  }
   return (
-    <Flex>
+    <Flex className={active ? 'artifacts effectActive' : 'artifacts'}>
       {artifacts.map((art) => (
         <Art
           art={art}

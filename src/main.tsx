@@ -11,6 +11,10 @@ import Game from './routes/Game';
 import Home from './routes/Home';
 import Error from './routes/Error';
 import gameLoader from './routes/Game/loader';
+import { TAB_PATHS } from './routes/Home/rememberedTab';
+import { domainAuthorized, loginAvailable } from './managers/identity';
+
+if (loginAvailable) domainAuthorized().catch(() => undefined);
 
 const router = createBrowserRouter([{
   path: '/',
@@ -23,7 +27,10 @@ const router = createBrowserRouter([{
   }, {
     path: '',
     element: <Home />,
-  }],
+  }, ...Object.values(TAB_PATHS).map((path) => ({
+    path: path.slice(1),
+    element: <Home />,
+  }))],
 }]);
 
 createRoot(document.getElementById('root')!).render(

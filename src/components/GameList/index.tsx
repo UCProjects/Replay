@@ -3,24 +3,33 @@ import { Refresh } from '@mui/icons-material';
 import {
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import { Flex } from '~/components/Flex';
 import { Paginator } from '~/components/Paginator';
 import { GameRecords } from '~/structures/GameRecord';
 import { useTranslation } from '~/hooks/useTranslation';
+import { FocusQuery } from '~/utils/focusUser';
 import Entry from './Entry';
+
+const REFRESH_COOLDOWN_MS = 10_000;
 
 export type GameListParams = {
   title?: string;
   entries?: GameRecords;
+  emptyMessage?: ReactNode;
+  focus?: FocusQuery;
   onRefresh?: () => void;
 };
 
 export default function GameList({
   title = '',
   entries = [],
+  emptyMessage = undefined,
+  focus = undefined,
   onRefresh = undefined,
 }: GameListParams): ReactNode {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -28,14 +37,27 @@ export default function GameList({
   const list = useMemo(
     () => entries.map((entry) => (
       <Entry
+        focus={focus}
         key={entry.key}
         record={entry}
       />
     )),
-    [entries],
+    [entries, focus],
   );
-  // TODO: Ignore tab events
+  const [coolingDown, setCoolingDown] = useState(false);
+  const cooling = useRef(false);
+  useEffect(() => {
+    if (!coolingDown) return undefined;
+    const timer = setTimeout(() => {
+      cooling.current = false;
+      setCoolingDown(false);
+    }, REFRESH_COOLDOWN_MS);
+    return () => clearTimeout(timer);
+  }, [coolingDown]);
   const handleClick = useCallback(() => {
+    if (cooling.current) return;
+    cooling.current = true;
+    setCoolingDown(true);
     onRefresh?.();
   }, [
     onRefresh,
@@ -63,9 +85,10 @@ export default function GameList({
             :&nbsp;
           </span>
           <IconButton
+            aria-label="Refresh"
+            disabled={coolingDown}
             disableRipple
             onClick={handleClick}
-            onKeyUp={handleClick}
             sx={{
               border: '1px solid black',
               color: 'inherit',
@@ -83,7 +106,13 @@ export default function GameList({
       </Flex>
       <Paginator
         component={Box}
-        emptyMessage={t('replay-loading')}
+        componentProps={{
+          sx: {
+            display: 'grid',
+            gridTemplateColumns: '1fr auto',
+          },
+        }}
+        emptyMessage={emptyMessage ?? t('replay-loading')}
         items={list}
         itemsPerPage={20}
         paginateTopRef={ref}

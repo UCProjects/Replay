@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Never commit credentials to this public repo
+serviceKey*.json
+.env
+.env.*
+
+# Firebase deploy cache
+.firebase

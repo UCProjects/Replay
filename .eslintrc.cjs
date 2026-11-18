@@ -35,6 +35,7 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
+        project: `${__dirname}/tsconfig.json`,
       },
     },
   },
@@ -65,6 +66,7 @@ module.exports = {
       "devDependencies": [
         "vite.config.ts",
         "**/*.test.js",
+        "**/*.test.ts",
       ]}],
     'react/function-component-definition': [
         'error',
@@ -91,4 +93,18 @@ module.exports = {
     'no-use-before-define': 'off',
     'no-useless-constructor': 'off',
   },
+  overrides: [
+    {
+      files: ['scripts/**/*.js'],
+      env: {
+        node: true,
+      },
+      extends: ['plugin:@typescript-eslint/disable-type-checked'],
+      rules: {
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+        'no-console': 'off',
+        'no-await-in-loop': 'off',
+      },
+    },
+  ],
 }

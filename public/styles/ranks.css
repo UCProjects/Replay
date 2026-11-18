@@ -48,26 +48,6 @@
     0 0 40px var(--emerald);
 }
 
-[data-rank="S"]::before {
-  text-shadow:
-    0 0 10px var(--sapphire),
-    0 0 15px var(--sapphire),
-    0 0 30px var(--sapphire),
-    0 0 30px var(--sapphire),
-    0 0 30px var(--sapphire),
-    0 0 40px var(--sapphire);
-}
-
-[data-rank="R"]::before {
-  text-shadow:
-    0 0 10px var(--ruby),
-    0 0 15px var(--ruby),
-    0 0 30px var(--ruby),
-    0 0 30px var(--ruby),
-    0 0 30px var(--ruby),
-    0 0 40px var(--ruby);
-}
-
 [data-rank="D"]::before {
   text-shadow:
     0 0 10px var(--diamond),
@@ -76,26 +56,6 @@
     0 0 30px var(--diamond),
     0 0 30px var(--diamond),
     0 0 40px var(--diamond);
-}
-
-[data-rank="A"]::before {
-  text-shadow:
-    0 0 10px var(--amethyst),
-    0 0 15px var(--amethyst),
-    0 0 30px var(--amethyst),
-    0 0 30px var(--amethyst),
-    0 0 30px var(--amethyst),
-    0 0 40px var(--amethyst);
-}
-
-[data-rank="O"]::before {
-  text-shadow:
-    0 0 10px var(--onyx),
-    0 0 15px var(--onyx),
-    0 0 30px var(--onyx),
-    0 0 30px var(--onyx),
-    0 0 30px var(--onyx),
-    0 0 40px var(--onyx);
 }
 
 [data-rank="M"]::before {
@@ -108,7 +68,27 @@
     0 0 40px var(--master);
 }
 
-[dara-rank="L"]::before {
+[data-rank="H"]::before {
+  text-shadow:
+    0 0 10px var(--high-master),
+    0 0 15px var(--high-master),
+    0 0 30px var(--high-master),
+    0 0 30px var(--high-master),
+    0 0 30px var(--high-master),
+    0 0 40px var(--high-master);
+}
+
+[data-rank="U"]::before {
+  text-shadow:
+    0 0 10px var(--ultimate-master),
+    0 0 15px var(--ultimate-master),
+    0 0 30px var(--ultimate-master),
+    0 0 30px var(--ultimate-master),
+    0 0 30px var(--ultimate-master),
+    0 0 40px var(--ultimate-master);
+}
+
+[data-rank="L"]::before {
   animation-name: rainbowNeon;
   animation-duration: 5s;
   animation-timing-function: linear;

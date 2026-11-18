@@ -11,7 +11,6 @@ import { getType } from './utils';
 
 const Rarity = styled(Box)({
   alignItems: 'center',
-  className: 'card-rarity',
   display: 'flex',
   flexGrow: 1,
   justifyContent: 'center',
@@ -26,9 +25,9 @@ function MonsterBar({
 }: PropsWithChildren<{ monster: Monster }>) {
   return (
     <>
-      <div className="card-attack">{attack}</div>
+      <div className="card-attack black-bg center-v center-h">{attack}</div>
       {children}
-      <div className="card-health">{hp}</div>
+      <div className="card-health black-bg center-v center-h">{hp}</div>
     </>
   );
 }
@@ -40,7 +39,7 @@ export function Footer({
   const rarity = useMemo(() => {
     if (!data) return null;
     return (
-      <Rarity>
+      <Rarity className="card-rarity black-bg">
         <img
           alt={data.rarity}
           className="rarity"

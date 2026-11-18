@@ -26,7 +26,7 @@ export const plugins: Record<string, Plugin> = {
     const { args, override, empty } = parse(nodes);
     if (empty) return '';
     const text = override || translate(getKey('kw', args[0]));
-    return getText(text, 'underlined');
+    return getText(text, 'underlined helpPointer', { kw: getKey('kw', args[0]) });
   },
   artifact(nodes, translate) {
     const { args: [id, ex = false], override, empty } = parse(nodes);
@@ -34,6 +34,21 @@ export const plugins: Record<string, Plugin> = {
     const desc = ex === 'desc';
     const text = override || translate(getKey(`artifact${desc ? '' : '-name'}`, id));
     return getText(text, desc ? '' : `underlined${ex ? ' bold LEGENDARY' : ''}`);
+  },
+  quest(nodes, translate) {
+    const { args: [rawId], override, empty } = parse(nodes);
+    if (empty) return '';
+    const id = Number(rawId);
+    if (!Number.isFinite(id)) return '';
+    const text = override || translate(getKey('artifact-name', `${id}`));
+    return getText(text, 'underlined');
+  },
+  enchant(nodes, translate) {
+    const { args: [key, quantity = '1'], override, empty } = parse(nodes);
+    if (empty) return '';
+    const keyword = getKey('enchant', key);
+    const text = override || translate(keyword, quantity);
+    return getText(text, `${keyword} pointer helpPointer underlined`);
   },
   hp(nodes, translate) {
     const { args: [number], override } = parse(nodes);
@@ -55,15 +70,15 @@ export const plugins: Record<string, Plugin> = {
     const text = override || translate('stat-cost', number || '1');
     return `${number ? `${number} ` : ''}${getText(text, 'blue')}`;
   },
-  kr(nodes, translate) {
-    const { override } = parse(nodes);
-    const text = override || translate('stat-kr');
-    return getText(text, 'PERSEVERANCE');
-  },
   dmg(nodes, translate) {
     const { args: [number], override } = parse(nodes);
     const text = override || translate('stat-dmg', number || '1');
     return `${number ? `${number} ` : ''}${getText(text, 'JUSTICE')}`;
+  },
+  kr(nodes, translate) {
+    const { override } = parse(nodes);
+    const text = override || translate('stat-kr');
+    return getText(text, 'PERSEVERANCE');
   },
   card(nodes, translate) {
     const {
@@ -117,5 +132,9 @@ export const plugins: Record<string, Plugin> = {
       .slice(Math.max(0, 3 - nodes.length))
       .map((clazz, i) => args[i].replace(/\d+/, `<span class="${clazz}">$&</span>`))
       .join('/');
+  },
+  image(nodes) {
+    const { args: [img, alt, width = 64, height = 16, card = 0] } = parse(nodes);
+    return `<img style="width: ${width}px; height: ${height}px;" class="inserted-img" src="/images/inserted/${img}.png" alt="${alt}" ${card ? `data-card="${card}"` : ''}/>`;
   },
 };
